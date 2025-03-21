@@ -17,9 +17,10 @@ import {
 } from "../../api/api";
 import TableHead from "../DataTable/MyTableHead";
 import TableBody from "../DataTable/MyTableBody";
-import useTable from "../../hooks/useTable";
+import useTable from "../../hooks/useTable2";
 import TableToolbar from "./TableToolbar";
-import PersonForm from "../Forms/PersonForm";
+import PersonForm from "../Forms/PersonForm2";
+import { Dimension, Person } from "../../types";
 // import { HeadCell, Person, ApiResponse } from './types';
 interface HeadCell {
   id: string;
@@ -28,32 +29,9 @@ interface HeadCell {
   label: string;
 }
 
-// Definir la interfaz para los datos de las dimensiones
-interface DimensionData {
-  [key: string]: number | string | null; // Las dimensiones pueden ser números, cadenas o nulas
-}
 
-// Definir la interfaz para los datos de una persona
-interface Person {
-  id: number;
-  name: string;
-  dimensions: DimensionData;
-}
-// Definir el tipo para una dimensión
-interface Dimension {
-  id: number;
-  name: string;
-  initial: string;
-}
-
-// Definir el tipo para la lista de dimensiones
 type Dimensions = Dimension[];
 
-// Definir la interfaz para la respuesta de la API
-interface ApiResponse {
-  dimensions: string[]; // Lista de todas las dimensiones
-  persons: Person[]; // Lista de personas con sus mediciones
-}
 interface MyTableProps {
   dim: string[]; // Lista de todas las dimensiones
   persons: Person[]; // Lista de personas con sus mediciones
@@ -64,8 +42,7 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
   const [dimensions, setDimensions] = useState<string[]>([]);
   const [openPersonForm, setOpenPersonForm] = useState(false); // Estado para controlar el diálogo
   const [editPerson, setEditPerson] = useState(false);
-  const [people, setPeople] = useState<any[]>([]); // Almacenar las personas
-  const [measurements, setMeasurements] = useState<any[]>([]); // Almacenar las mediciones
+  const [selectedPerson, setSelectedPerson] = useState<Person | null >(null);
   const [dimensionsMap, setDimensionsMap] = useState<Record<string, number>>(
     {}
   ); // Mapa de dimensiones
@@ -105,12 +82,7 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
   } = useTable(rows);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const response = await getData("/study-data/1");
-    //   const data = response as ApiResponse;
-    //   setDimensions(data.dimensions);
-    //   setRows(data.persons);
-    // };
+   
     const fetchDimensions = async () => {
       try {
         const dimensions: Dimensions = await getData("/dimension"); // Especificar el tipo
@@ -125,7 +97,6 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
     };
 
     fetchDimensions();
-    // fetchData();
   }, []);
 
   useEffect(() => {
@@ -143,7 +114,16 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
     setOpenPersonForm(true); // Abrir el diálogo
   };
   const handleEditPerson = () => {
-    setEditPerson(true); // Abrir el diálogo
+    // setEditPerson(true); // Abrir el diálogo
+    if (selected.length === 1) { // Solo permitir editar si hay una fila seleccionada
+      const personToEdit = rows.find((row) => row.id === selected[0]);
+      if (personToEdit) {
+        setSelectedPerson(personToEdit); // Guardar la persona seleccionada
+        setEditPerson(true); // Abrir el diálogo en modo edición
+      }
+    } else {
+      alert("Selecciona una sola fila para editar.");
+    }
   };
   const handleDeletePerson = async () => {
     console.log(persons)
@@ -162,7 +142,7 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
   // Función para cerrar el diálogo
   const handleClosePersonForm = () => {
     setOpenPersonForm(false);
-    setEditPerson;
+    setEditPerson(false);
   };
 
   const handleSave = async (
@@ -254,9 +234,6 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
         }
         label="Dense padding"
       />
-      <pre>{JSON.stringify(people, null, 2)}</pre>
-      <pre>{JSON.stringify(measurements, null, 2)}</pre>
-      {/* <pre>{rows}</pre> */}
 
       {/* Diálogo para añadir una nueva persona */}
       <PersonForm
@@ -267,6 +244,17 @@ const MyTable2: React.FC<MyTableProps> = ({ dim, persons }) => {
         dimensions={dimensions}
         studyId={1}
         // personData={rows[0]}
+        // personData={editPerson ? selectedPerson : undefined} // Pasar los datos de la persona en modo edición
+        // personData={editPerson && selectedPerson ? selectedPerson : undefined} // Pasar solo si selectedPerson no es null o undefined
+        personData={
+          editPerson && selectedPerson
+            ? selectedPerson
+            : {
+                id: -1, // Default ID for "add" mode
+                name: "", // Default name for "add" mode
+                dimensions: {}, // Default empty dimensions for "add" mode
+              }
+        }
       />
     </Box>
   );

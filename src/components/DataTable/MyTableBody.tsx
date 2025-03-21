@@ -1,6 +1,7 @@
 // TableBody.tsx
 import React from 'react';
 import { TableBody, TableRow, TableCell, Checkbox } from '@mui/material';
+import { Person } from '../../types';
 // import { Person } from './types';
 
 interface TableBodyProps {
@@ -11,16 +12,13 @@ interface TableBodyProps {
 }
 
 // Definir la interfaz para los datos de las dimensiones
-interface DimensionData {
-  [key: string]: number | string | null; // Las dimensiones pueden ser números, cadenas o nulas
-}
 
 // Definir la interfaz para los datos de una persona
-interface Person {
-  id: number;
-  name: string;
-  dimensions: DimensionData;
-}
+// interface Person {
+//   id: number;
+//   name: string;
+//   dimensions: DimensionData;
+// }
 
 const MyTableBody: React.FC<TableBodyProps> = ({
   visibleRows,

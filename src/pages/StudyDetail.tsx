@@ -1,41 +1,23 @@
 import { useLocation } from "react-router-dom";
-import EnhancedTable from "../components/DataTable/dataTable";
-import { studyDataProps } from "../types";
-import MyTable from "../components/DataTable/MyTable";
-import MyTable2 from "../components/DataTable/MyTable2";
+import { Dimension, Person, studyDataProps } from "../types";
 import { getData } from "../api/api";
 import React, { useEffect, useState } from "react";
-
-// Definir la interfaz para los datos de las dimensiones
-interface DimensionData {
-  [key: string]: number | string | null; // Las dimensiones pueden ser números, cadenas o nulas
-}
-// Definir la interfaz para los datos de una persona
-interface Person {
-  id: number;
-  name: string;
-  dimensions: DimensionData;
-}
-// Definir el tipo para una dimensión
-interface Dimension {
-  id: number;
-  name: string;
-  initial: string;
-}
+import { TableComponent } from "../components/TableData/Table";
+// import { MyTable } from "../components/TableData/Table";
 
 // Definir la interfaz para la respuesta de la API
 interface ApiResponse {
-  dimensions: string[]; // Lista de todas las dimensiones
+  dimensions: Dimension[]; // Lista de todas las dimensiones
   persons: Person[]; // Lista de personas con sus mediciones
 }
 
 
-// Definir el tipo para la lista de dimensiones
-type Dimensions = Dimension[];
+// // Definir el tipo para la lista de dimensiones
+// type Dimensions = Dimension[];
 
 const StudyDetail: React.FC = () => {
-  const [rows, setRows] = useState<Person[]>([]);
-  const [dimensions, setDimensions] = useState<string[]>([]);
+  const [persons, setPersons] = useState<Person[]>([]);
+  const [dimensions, setDimensions] = useState<Dimension[]>([]);
 
   const location = useLocation();
   const study = location.state as studyDataProps; // Obtener los datos del estudio
@@ -47,12 +29,17 @@ const StudyDetail: React.FC = () => {
       const data = response as ApiResponse;
       setDimensions(data.dimensions);
      
-      setRows(data.persons);
-     
+      setPersons(data.persons);
+      
     };
   
     fetchData();
   }, []);
+  useEffect(() => {
+      console.log("Aqui")
+      console.log(dimensions)
+      // console.log(persons)
+  }, [dimensions,persons]);
 
    // Verificar el estado actualizado
   //  useEffect(() => {
@@ -76,8 +63,13 @@ const StudyDetail: React.FC = () => {
       <p>
         <strong>País:</strong> {study.country}
       </p>
+      {/* <MyTable dimensions={dimensions} persons={persons}></MyTable> */}
       {/* <EnhancedTable></EnhancedTable> */}
-      <MyTable2 dim={dimensions} persons={rows}></MyTable2>
+      {/* <MyTable2 dim={dimensions} persons={persons}></MyTable2> */}
+      {/* <MyTable></MyTable> */}
+       <TableComponent dimensions={dimensions} persons={persons}></TableComponent>
+       {/* <pre>{JSON.stringify(persons)}</pre>
+       <pre>{JSON.stringify(dimensions)}</pre> */}
     </>
   );
 };

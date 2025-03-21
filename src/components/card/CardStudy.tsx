@@ -7,10 +7,16 @@ import {
   Button,
   Collapse,
   Tooltip,
+  Container,
 } from "@mui/material";
 import PublicIcon from "@mui/icons-material/Public"; // Icono para "Región"
 import FlagIcon from "@mui/icons-material/Flag"; // Icono para "País
 import useNavigation from "../../hooks/useNavigation";
+import CustomMarks from "../Slider";
+import ChipsArray from "../Chips";
+import CustomizedMenus from "../Menu";
+import LongMenu from "../Menu";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 const CardStudy: React.FC<studyDataProps> = ({
   id,
   name,
@@ -30,12 +36,26 @@ const CardStudy: React.FC<studyDataProps> = ({
     });
   };
   return (
-    <Card
-      sx={{ width: 345, margin: "20px auto" }}
-      onClick={handleClick}
-    >
+    <Card sx={{ width: "100%", margin: "0 ", padding:'5px'}} onClick={handleClick}>
       <CardContent>
-        <Tooltip title={description}>
+        <Typography>
+          MARZO 20, 2020
+        </Typography>
+        {/* <Container
+          sx={{
+            // display: "flex",
+            // alignItems: "center",
+            // justifyContent: "space-between",
+            }}
+            > */}
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+             {location} / {country}
+             
+            </Typography>
           <Typography
             gutterBottom
             variant="h5"
@@ -46,13 +66,32 @@ const CardStudy: React.FC<studyDataProps> = ({
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              minHeight: "64px",
+              // padding:'2px',
+              marginTop: "5px",
+              fontWeight:'bold',
+              marginLeft: "0px",
+              
+              // minHeight: "64px",
             }}
           >
             {name}
-            {id}
+            {/* {id} */}
           </Typography>
-        </Tooltip>
+       
+            
+          <Tooltip title="Miembros">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+             Tamaño de la muestra: 20/45 "  Estado del estudio: 60%completado                                                    "         
+          </Typography>
+        </Tooltip> 
+          {/* <Tooltip title={description}> */}
+          {/* </Tooltip> */}
+          {/* <LongMenu></LongMenu> */}
+        {/* </Container> */}
         <Typography
           sx={
             {
@@ -67,25 +106,30 @@ const CardStudy: React.FC<studyDataProps> = ({
         >
           {description}
         </Typography>
-        <Tooltip title="Región">
+
+       
+
+        {/* <Tooltip title="Sexo">
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
-            <PublicIcon fontSize="small" /> {location}
+            <FlagIcon fontSize="small" /> Mixto
           </Typography>
         </Tooltip>
 
-        <Tooltip title="País">
+        <Tooltip title="Miembros">
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
-            <FlagIcon fontSize="small" /> {country}
+            <FlagIcon fontSize="small" /> 20/45
           </Typography>
-        </Tooltip>
+        </Tooltip> */}
+
+        {/* <ChipsArray></ChipsArray> */}
       </CardContent>
     </Card>
   );

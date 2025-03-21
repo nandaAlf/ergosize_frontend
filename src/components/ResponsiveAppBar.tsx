@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import pagesRoutes from "../routes/routes"
 
-const pages = ['Tablas', 'Estudios','Opciones'];
+const pages = ['Tablas', 'Estudios','Opciones','Help'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {

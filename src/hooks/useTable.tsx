@@ -1,32 +1,16 @@
 // useTable.ts
-import { useState, useMemo } from 'react';
+import * as React from 'react';
+import { Dimension, Person } from '../types';
 
-type Order = 'asc' | 'desc';
+export const useTable = (persons: Person[]) => {
+  const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
+  const [orderBy, setOrderBy] = React.useState<string>('name');
+  const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(true);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-interface DimensionData {
-    [key: string]: number | string | null; // Las dimensiones pueden ser números, cadenas o nulas
-  }
-  
-  // Definir la interfaz para los datos de una persona
-  interface Person {
-    id: number;
-    name: string;
-    dimensions: DimensionData;
-  }
-  
-
-const useTable = (initialData: Person[], initialOrderBy = 'name') => {
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<string>(initialOrderBy);
-  const [selected, setSelected] = useState<readonly number[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [dense, setDense] = useState(false);
-
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: string
-  ) => {
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -34,14 +18,14 @@ const useTable = (initialData: Person[], initialOrderBy = 'name') => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = initialData.map((n) => n.id);
+      const newSelected = persons.map((person) => person.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (id: number) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
@@ -52,45 +36,55 @@ const useTable = (initialData: Person[], initialOrderBy = 'name') => {
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
     setSelected(newSelected);
   };
 
-  const visibleRows = useMemo(() => {
-    return [...initialData]
-      .sort((a, b) => {
-        if (orderBy === 'name') {
-          return order === 'asc'
-            ? a.name.localeCompare(b.name)
-            : b.name.localeCompare(a.name);
-        } else {
-          const aValue = Number(a.dimensions[orderBy]) || 0;
-          const bValue = Number(b.dimensions[orderBy]) || 0;
-          return order === 'asc' ? aValue - bValue : bValue - aValue;
-        }
-      })
-      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  }, [order, orderBy, page, rowsPerPage, initialData]);
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDense(event.target.checked);
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - persons.length) : 0;
+
+  const visibleRows = React.useMemo(
+    () =>
+      [...persons]
+        .sort((a, b) => {
+          if (orderBy === 'name') {
+            return order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+          }
+          const aValue = a.dimensions[orderBy] || 0;
+          const bValue = b.dimensions[orderBy] || 0;
+          return order === 'asc' ? (aValue > bValue ? 1 : -1) : bValue > aValue ? 1 : -1;
+        })
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, persons],
+  );
 
   return {
     order,
     orderBy,
     selected,
     page,
-    rowsPerPage,
     dense,
-    visibleRows,
+    rowsPerPage,
     handleRequestSort,
     handleSelectAllClick,
     handleClick,
-    setPage,
-    setRowsPerPage,
-    setDense,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleChangeDense,
+    emptyRows,
+    visibleRows,
   };
 };
-
-export default useTable;

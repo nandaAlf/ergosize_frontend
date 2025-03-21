@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
+import Container from '@mui/material/Container';
 
 interface ChipData {
   key: number;
@@ -30,7 +31,7 @@ export default function ChipsArray() {
   };
 
   return (
-    <Paper
+    <Container
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -55,6 +56,6 @@ export default function ChipsArray() {
           </ListItem>
         );
       })}
-    </Paper>
+    </Container>
   );
 }
