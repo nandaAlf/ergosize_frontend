@@ -4,36 +4,39 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
+import Container from "@mui/material/Container";
 
 // Definir el tipo de las props
 interface SearchProps {
   text: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 }
 
 // Definición del componente con TypeScript
-const Search: React.FC<SearchProps> = ({ text ,onChange}) => {
+const Search: React.FC<SearchProps> = ({ text, onChange, value }) => {
   return (
-<>
-    <TextField
-    id="search-input"
-    label={text}
-    variant="outlined"
-    onChange={onChange}
-    // fullWidth
-    size="small"
-    slotProps={{
-      input: {
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton type="button" aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      },
-    }}
-    />
+    <>
+      <TextField
+        id="search-input"
+        label={text}
+        variant="outlined"
+        onChange={onChange}
+        value={value}
+        // fullWidth
+        size="small"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton type="button" aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
+      />
     </>
     // <Paper
     //   component="form"
@@ -45,7 +48,7 @@ const Search: React.FC<SearchProps> = ({ text ,onChange}) => {
     //   </IconButton>
     //   <TextField id="standard-basic" label={text}  variant="outlined"  onChange={onChange} />
     //   {/* <InputBase
-        
+
     //     sx={{ ml: 1, flex: 1,  }}
     //     placeholder={text}
     //     inputProps={{ "aria-label": "search google maps" }}
@@ -53,7 +56,6 @@ const Search: React.FC<SearchProps> = ({ text ,onChange}) => {
     //   /> */}
     // // </>
     // </Paper>
-    
   );
 };
 

@@ -4,33 +4,34 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-interface SelectProps {
-  text: string;
-  onChange: (value: string) => void;
+interface SelectFilterProps {
+  text: string; // Texto del label
+  value: string; // Valor seleccionado
+  onChange: (value: string) => void; // Función para manejar cambios
+  items: { value: string; label: string }[]; // Lista de opciones
 }
 
-const SelectFilter: React.FC<SelectProps> = ({ text, onChange }) => {
-  const [sex, setSex] = React.useState(""); // Valor por defecto: "mixto"
-
+const SelectFilter: React.FC<SelectFilterProps> = ({ text, value, onChange, items }) => {
   const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value as string;
-    setSex(value);
-    onChange(value); // Notificar al componente padre
+    const selectedValue = event.target.value as string;
+    onChange(selectedValue); // Notificar al componente padre
   };
 
   return (
-    <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 } }  size="small">
-      <InputLabel id="sex-select-label">{text}</InputLabel>
+    <FormControl variant="outlined" sx={{ m: 1, minWidth: 120, backgroundColor: "#fff", color: "black" }} size="small">
+      <InputLabel id="select-label">{text}</InputLabel>
       <Select
-        labelId="sex-select-label"
-        id="sex-select"
-        value={sex}
+        labelId="select-label"
+        id="select"
+        value={value}
         label={text}
         onChange={handleChange}
       >
-        <MenuItem value="">Mixto</MenuItem>
-        <MenuItem value="M">Masculino</MenuItem>
-        <MenuItem value="F">Femenino</MenuItem>
+        {items.map((item) => (
+          <MenuItem key={item.value} value={item.value}>
+            {item.label}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

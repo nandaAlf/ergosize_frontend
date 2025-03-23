@@ -2,19 +2,29 @@ import { useEffect, useState } from "react";
 import { getData } from "../api/api";
 import { studyDataProps } from "../types";
 import CardStudy from "../components/card/CardStudy";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add"; // Importar el ícono de añadir
 import Grid from "@mui/material/Grid2";
 import Search from "../components/filtros/Search";
 import SelectFilter from "../components/filtros/Selct";
 import { SwitchFilter } from "../components/filtros/Switch";
 import Paper from "@mui/material/Paper";
+import { ActionButton } from "../components/Button/AddButton";
+import React from "react";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button/Button";
 const Studies: React.FC = () => {
   // const [studiesData, setStudiesData] = useState(null);
   const [studiesData, setStudiesData] = useState<studyDataProps[] | null>(null); //
   const [searchName, setSearchName] = useState<string>(""); // Estado para el término de búsqueda
   const [searchCountry, setSearchCountry] = useState<string>(""); // Estado para el término de búsqueda
   const [searchSex, setSearchSex] = useState<string>(""); // Estado para el filtro de sexo
-
+  const [selectedCard, setSelectedCard] = React.useState(-1);
+  const [sex, setSex] = useState("");
+  const [searchType, setSearchType] = useState<"name" | "location">("name"); // Estado para el tipo de búsqueda
+  const [FilterType, setFilterType] = useState<"date" | "estatus">("date"); // Estado para el tipo de búsqueda
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     const fetchStudis = async () => {
       try {
@@ -47,78 +57,112 @@ const Studies: React.FC = () => {
   }, []);
 
   // Función para manejar cambios en el campo de búsqueda
-  const handleSearchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    type: string
-  ) => {
-    if (type == "name") setSearchName(event.target.value);
-    if (type == "country") setSearchCountry(event.target.value);
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
-  // Función para manejar cambios en el filtro de sexo
-  const handleSexChange = (value: string) => {
-    setSearchSex(value);
+  // Función para manejar cambios en el tipo de búsqueda
+  const handleSearchTypeChange = (value: string) => {
+    setSearchType(value as "name" | "location");
+    setSearchTerm(""); // Limpiar el término de búsqueda al cambiar el tipo
   };
-  // Filtrar los estudios en función del término de búsqueda
-  const filteredStudies = studiesData?.filter(
-    (study) =>
-      study.name.toLowerCase().includes(searchName.toLowerCase()) &&
-      study.country.toLowerCase().includes(searchCountry.toLowerCase())
-    // (searchSex === "mixto" || study.gender === searchSex)
-  );
+
+  const filteredStudies = studiesData?.filter((study) => {
+    if (searchType === "name") {
+      return study.name.toLowerCase().includes(searchTerm.toLowerCase());
+    } else if (searchType === "location") {
+      return (
+        study.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        study.country.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return true;
+  });
+  const searchTypeItems = [
+    { value: "name", label: "Nombre" },
+    { value: "location", label: "Ubicación" },
+  ];
+  const orderItemsBy = [
+    { value: "date", label: "Más recientes" },
+    { value: "estatus", label: "Finalizados" },
+    // { value: "estatus", label: "Finalizados" },
+  ];
 
   return (
     <section>
-      {/* <div
-        style={{
-          backgroundColor: "#f0f0f0ff",
+      <Box
+        component="form"
+        sx={{
+          p: "2px 4px",
+          display: "flex",
+          alignItems: "center",
+          width: "99%",
           marginTop: "20px",
-          marginBottom: "10px",
+          marginLeft: "20px",
+          // marginBottom: "10px",
+          // backgroundColor: "#f0f0f0ff",
+          // justifyContent:"center"
         }}
-      > */}
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            // width: '99%',
-            marginTop:'20px',
-            marginBottom:"10px",
-            backgroundColor: "#f0f0f0ff",
-         
-          }}
-        >
-          <div style={{marginLeft:"25px"}}>
-
-          <Search
-            text={"Nombre"}
-            onChange={(event) => handleSearchChange(event, "name")}
-            ></Search>
-            </div>
-          <Search
-            text={"Pais"}
-            onChange={(event) => handleSearchChange(event, "country")}
-          ></Search>
-          {/* Componente de selección de sexo */}
-          <SelectFilter text="Sexo" onChange={handleSexChange} />
-          <SwitchFilter></SwitchFilter>
-        </Paper>
-      {/* </div> */}
-      <Grid
-        container
-        spacing={2}
-        sx={{ padding: "25px", backgroundColor: "#f0f0f0ff" }}
       >
-        {filteredStudies?.map((study) => (
-          <Grid size={{ xs: 12, sm: 6 }} key={study.id}>
+        <Box>
+          <Search
+            text={`Buscar por ${
+              searchType === "name" ? "nombre" : "ubicación"
+            }`}
+            onChange={handleSearchChange}
+            value={searchTerm}
+          />
+        </Box>
+
+        <SelectFilter
+          text=""
+          value={searchType}
+          items={searchTypeItems}
+          onChange={handleSearchTypeChange}
+        />
+        <SelectFilter
+          text=""
+          value={FilterType}
+          items={orderItemsBy} onChange={function (value: string): void {
+            throw new Error("Function not implemented.");
+          } }        
+        />
+
+        <div>
+          {/* Botón con ícono de añadir */}
+          {/* <ActionButton
+            title="Añadir"
+            // onAction={handleAdd}
+            icon={<AddIcon />}
+            onAction={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          /> */}
+
+          <Button variant="contained">Nuevo Estudio</Button>
+          {/* Botón con ícono de eliminar
+          <ActionButton
+            title="Eliminar"
+            // onAction={handleDelete}
+            icon={<DeleteIcon />}
+            onAction={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          /> */}
+        </div>
+      </Box>
+
+      <Grid container spacing={3} sx={{ padding: "25px" }}>
+        {filteredStudies?.map((study, index) => (
+          <Grid
+            size={{ xs: 12, sm: 4 }}
+            key={study.id}
+            sx={{ minHeight: "65%" }}
+          >
             <CardStudy
-              name={study.name}
-              description={study.description}
-              location={study.location}
-              country={study.country}
-              id={study.id}
-              start_date={"1/2/2025"}
-              end_date={""}
+              {...study}
+              selectedCard={selectedCard}
+              setSelectedCard={setSelectedCard}
+              index={index}
             />
           </Grid>
         ))}
