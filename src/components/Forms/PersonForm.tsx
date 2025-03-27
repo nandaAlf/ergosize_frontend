@@ -218,14 +218,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
             onChange={(e) => setState(e.target.value)}
             size="small"
           />
-          <TextField
-            margin="dense"
-            label="Provincia"
-            fullWidth
-            value={province}
-            onChange={(e) => setProvince(e.target.value)}
-            size="small"
-          />
+          const [name, setName] = useState(personData?.name || "");
           {/* Campos para las mediciones de cada dimensión */}
           {dimensions.map((dimension) => (
             <TextField

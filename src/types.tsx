@@ -1,3 +1,41 @@
+import { Dayjs } from "dayjs";
+
+// types.ts (o donde tengas tus tipos)
+type Classification = 'L' | 'T' | 'E' | 'A' | 'AD' | 'ADM';
+type Gender = 'F' | 'M' | 'MF';
+
+export interface Dimension {
+  id_dimension: number;
+  name?: string;
+  initial?: string;
+}
+
+// export interface StudyDimension {
+//   id_dimension: number;
+//   name?: string;
+//   initial?: string;
+// }
+
+export interface StudyData {
+  id?: number;
+  name: string;
+ classification: Classification |'';
+  gender: Gender | '';
+  country: string;
+  location: string;
+  description: string;
+  size: number | null;
+  age_min: number;
+  age_max: number;
+  start_date: string| Dayjs| null ;
+  end_date: string | Dayjs |null ;
+  dimensions: Dimension[] ;
+}
+
+
+
+
+
 export interface InformacionTarjeta {
     id: any;
     nombre: string;
@@ -12,18 +50,18 @@ export interface InformacionTarjeta {
     fechaFin: string;
   }
 
-  export interface studyDataProps {
-    id: number;
-    name: string;
-    description: string;
-    location: string;
-    country: string;
-    start_date: string;
-    end_date: string;
-    // status:boolean;
-    // size:number;
-    // gender:string;
-  }
+  // export interface studyDataProps {
+  //   id: number;
+  //   name: string;
+  //   description: string;
+  //   location: string;
+  //   country: string;
+  //   start_date: string;
+  //   end_date: string;
+  //   // status:boolean;
+  //   // size:number;
+  //   // gender:string;
+  // }
   // export interface Person {
   //   id: number;
   //   name: string;
@@ -43,11 +81,11 @@ export interface InformacionTarjeta {
   //   value: number | null;
   // }
   
-  export interface Dimension {
-    id: number;
-    name: string;
-    initial: string;
-  }
+  // export interface Dimension {
+  //   id: number;
+  //   name: string;
+  //   initial: string;
+  // }
 
   export interface Person {
     id: number;

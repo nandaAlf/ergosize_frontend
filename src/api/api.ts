@@ -1,4 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
+import dayjs, { Dayjs } from "dayjs";
+import { Dimension, StudyData } from "../types";
 
 // Configuración de Axios
 const api = axios.create({
@@ -95,5 +97,46 @@ export const deleteMeasurements = async (studyId: number, personId: number) => {
     throw error; // Relanzar el error para manejarlo en el componente que llama a esta función
   }
 };
+// export interface CreateStudyPayload {
+//   name: string;
+//   classification: string;
+//   gender: string;
+//   country: string;
+//   location: string;
+//   description: string;
+//   size: number |null;
+//   age_min: number;
+//   age_max: number;
+//   start_date:  null |Dayjs;
+//   end_date:  null|Dayjs;
+//   dimensions: { id_dimension: number }[];
+// }
 
+export const createStudy = async (studyData: StudyData) => {
+  try {
+    // const payload = {
+    //   ...studyData,
+    //   start_date: studyData.start_date?.format("YYYY-MM-DD") || null,
+    //   end_date: studyData.end_date?.format("YYYY-MM-DD") || null,
+    //   // dimensions: formData.dimensions.map((id) => ({ id_dimension: id })),
+    //   dimensions:  studyData.dimensions.map(d => ({ id_dimension: d.id_dimension })),
+    // };
+    const response = await api.post('studies/', studyData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating study:', error);
+    throw error;
+  }
+};
+export const getDimension = async () => {
+  try {
+    
+    const response = await api.get('dimension/');
+    return response.data; // Asegúrate de que la respuesta sea del tipo esperado
+  
+  } catch (error) {
+    console.error('Error creating study:', error);
+    throw error;
+  }
+};
 export default api;

@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
-import { getData } from "../api/api";
-import { studyDataProps } from "../types";
+import { createStudy, getData } from "../api/api";
+import { StudyData } from "../types";
 import CardStudy from "../components/card/CardStudy";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add"; // Importar el ícono de añadir
 import Grid from "@mui/material/Grid2";
 import Search from "../components/filtros/Search";
 import SelectFilter from "../components/filtros/Selct";
-import { SwitchFilter } from "../components/filtros/Switch";
-import Paper from "@mui/material/Paper";
-import { ActionButton } from "../components/Button/AddButton";
 import React from "react";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button/Button";
+import StudyForm from "../components/Forms/StudyForm";
+// import StudyForm from "../components/Forms/StudyForm2";
 const Studies: React.FC = () => {
   // const [studiesData, setStudiesData] = useState(null);
-  const [studiesData, setStudiesData] = useState<studyDataProps[] | null>(null); //
-  const [searchName, setSearchName] = useState<string>(""); // Estado para el término de búsqueda
-  const [searchCountry, setSearchCountry] = useState<string>(""); // Estado para el término de búsqueda
-  const [searchSex, setSearchSex] = useState<string>(""); // Estado para el filtro de sexo
+  const [studiesData, setStudiesData] = useState<StudyData[] | null>(null); //
   const [selectedCard, setSelectedCard] = React.useState(-1);
-  const [sex, setSex] = useState("");
   const [searchType, setSearchType] = useState<"name" | "location">("name"); // Estado para el tipo de búsqueda
   const [FilterType, setFilterType] = useState<"date" | "estatus">("date"); // Estado para el tipo de búsqueda
   const [searchTerm, setSearchTerm] = useState("");
+  const [openStudyForm, setOpenStudyForm] = useState(false);
+  const [selectedStudy, setSelectedStudy] = useState(null);
+  const [editingStudy, setEditingStudy] = useState<StudyData | null>(null);
   useEffect(() => {
     const fetchStudis = async () => {
       try {
@@ -41,7 +36,7 @@ const Studies: React.FC = () => {
               typeof item.country === "string"
           )
         ) {
-          setStudiesData(response as studyDataProps[]); // Convertir y guardar los datos
+          setStudiesData(response as StudyData[]); // Convertir y guardar los datos
         } else {
           throw new Error(
             "La respuesta de la API no tiene la estructura esperada."
@@ -65,7 +60,6 @@ const Studies: React.FC = () => {
     setSearchType(value as "name" | "location");
     setSearchTerm(""); // Limpiar el término de búsqueda al cambiar el tipo
   };
-
   const filteredStudies = studiesData?.filter((study) => {
     if (searchType === "name") {
       return study.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -87,6 +81,35 @@ const Studies: React.FC = () => {
     // { value: "estatus", label: "Finalizados" },
   ];
 
+  const handleCloseStudyForm = () => {
+    setOpenStudyForm(false);
+  };
+  const handleEditStudy = (study: StudyData) => {
+    setEditingStudy(study);
+    setOpenStudyForm(true);
+  };
+  const handleSubmitStudy = async (data: StudyData) => {
+    alert("wowo");
+    try {
+      if (editingStudy) {
+        console.log("editar",data)
+        // Lógica para actualizar estudio
+        // await updateStudy(data);
+      } else {
+        // Lógica para crear nuevo estudio
+        alert("Creando");
+        console.log("crear", data);
+        await createStudy(data);
+      }
+      // Refrescar datos
+      const response = await getData("studies/");
+      setStudiesData(response as StudyData[]);
+      setOpenStudyForm(false);
+      setEditingStudy(null);
+    } catch (error) {
+      console.error("Error saving study:", error);
+    }
+  };
   return (
     <section>
       <Box
@@ -98,9 +121,6 @@ const Studies: React.FC = () => {
           width: "99%",
           marginTop: "20px",
           marginLeft: "20px",
-          // marginBottom: "10px",
-          // backgroundColor: "#f0f0f0ff",
-          // justifyContent:"center"
         }}
       >
         <Box>
@@ -122,32 +142,16 @@ const Studies: React.FC = () => {
         <SelectFilter
           text=""
           value={FilterType}
-          items={orderItemsBy} onChange={function (value: string): void {
+          items={orderItemsBy}
+          onChange={function (): void {
             throw new Error("Function not implemented.");
-          } }        
+          }}
         />
 
         <div>
-          {/* Botón con ícono de añadir */}
-          {/* <ActionButton
-            title="Añadir"
-            // onAction={handleAdd}
-            icon={<AddIcon />}
-            onAction={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-          /> */}
-
-          <Button variant="contained">Nuevo Estudio</Button>
-          {/* Botón con ícono de eliminar
-          <ActionButton
-            title="Eliminar"
-            // onAction={handleDelete}
-            icon={<DeleteIcon />}
-            onAction={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-          /> */}
+          <Button variant="contained" onClick={() => setOpenStudyForm(true)}>
+            Nuevo Estudio
+          </Button>
         </div>
       </Box>
 
@@ -159,14 +163,26 @@ const Studies: React.FC = () => {
             sx={{ minHeight: "65%" }}
           >
             <CardStudy
-              {...study}
+              // {...study}
+              study={study}
               selectedCard={selectedCard}
               setSelectedCard={setSelectedCard}
               index={index}
+              onEdit={() => handleEditStudy(study)}
             />
           </Grid>
         ))}
       </Grid>
+
+      <StudyForm
+        open={openStudyForm}
+        onClose={() => setOpenStudyForm(false)}
+        onSubmit={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        initialData={editingStudy ? editingStudy : undefined}
+        mode={editingStudy ? 'edit' : 'add'}
+      ></StudyForm>
     </section>
   );
 };
