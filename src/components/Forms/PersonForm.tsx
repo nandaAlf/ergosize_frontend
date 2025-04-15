@@ -9,10 +9,13 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Dimension, Person } from "../../types";
 import axios from "axios";
+import Grid from "@mui/material/Grid2";
 
 interface PersonFormProps {
   open: boolean;
@@ -25,6 +28,7 @@ interface PersonFormProps {
 interface Measurement {
   dimension_id: number;
   value: number | null;
+  position: "P" | "S";
 }
 const PersonForm: React.FC<PersonFormProps> = ({
   open,
@@ -41,10 +45,29 @@ const PersonForm: React.FC<PersonFormProps> = ({
   const [state, setState] = useState("");
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const [province, setProvince] = useState("");
+  const [dateOfMeasurement, setDateOfMeasurement] = useState<string | null>(
+    null
+  );
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const handleSave = async () => {
+    // Validaciones
+    const newErrors: { [key: string]: string } = {};
+    if (!name) newErrors.name = "El nombre es requerido";
+    if (!gender) newErrors.gender = "El sexo es requerido";
+    if (!dateOfBirth)
+      newErrors.dateOfBirth = "La fecha de nacimiento es requerida";
+    if (!country) newErrors.country = "El país es requerido";
+    if (!state) newErrors.state = "El estado es requerido";
+    if (!dateOfMeasurement)
+      newErrors.dateOfMeasurement = "La fecha de medición es requerida";
+
+    // Si hay errores, se detiene el envío
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     const personDataToSave = {
       name,
       gender,
@@ -55,44 +78,20 @@ const PersonForm: React.FC<PersonFormProps> = ({
       measurements: measurements.map((m) => ({
         dimension_id: m.dimension_id,
         value: m.value,
-        position: "P", // Puedes agregar un campo para seleccionar la posición si es necesario
+        position: m.position, // Puedes agregar un campo para seleccionar la posición si es necesario
         study_id: studyId,
       })),
     };
 
     try {
-      console.log("Save")
-      console.log(personDataToSave)
+      setIsLoading(true);
+      console.log("Save");
+      console.log(personDataToSave);
       if (mode === "add") {
         await axios.post(
           "http://127.0.0.1:8000/api/persons/",
           personDataToSave
         );
-        // await axios.post(
-        //   "http://127.0.0.1:8000/api/persons/",
-        //   {
-        //     "name": "Juan Pérez",
-        //     "gender": "M",
-        //     "date_of_birth": "1990-01-01",
-        //     "country": "México",
-        //     "state": "Ciudad de México",
-        //     "province": "Iztapalapa",
-        //     "measurements": [
-        //         {
-        //             "study_id": 1,
-        //             "dimension_id": 1,
-        //             "value": 180,
-        //             "position": "P"
-        //         },
-        //         {
-        //             "study_id": 1,
-        //             "dimension_id": 2,
-        //             "value": 80,
-        //             "position": "P"
-        //         }
-        //     ]
-        // }
-        // );
       } else if (mode === "edit" && personData?.id) {
         await axios.put(
           `http://127.0.0.1:8000/api/persons/${personData.id}/`,
@@ -102,66 +101,97 @@ const PersonForm: React.FC<PersonFormProps> = ({
       onClose(); // Cerrar el formulario después de guardar
     } catch (error) {
       console.error("Error al guardar la persona:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     if (mode === "edit" && personData?.id) {
-      //   setIsLoading(true);
-      //   // Obtener los datos adicionales de la persona desde la API
-      //   axios.get(`http://127.0.0.1:8000/api/persons/${personData.id}/`)
-      //     .then((response) => {
-      //       const fullPersonData = response.data;
-      //       setGender(fullPersonData.gender);
-      //       setDateOfBirth(fullPersonData.date_of_birth);
-      //       setCountry(fullPersonData.country);
-      //       setState(fullPersonData.state);
-      //       setProvince(fullPersonData.province);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error al obtener los datos de la persona:", error);
-      //     })
-      //     .finally(() => {
-      //       setIsLoading(false);
-      //     });
+        setIsLoading(true);
+        // Obtener los datos adicionales de la persona desde la API
+        axios.get(`http://127.0.0.1:8000/api/persons/${personData.id}/`)
+          .then((response) => {
+            const fullPersonData = response.data;
+            setName(fullPersonData.name);
+            setGender(fullPersonData.gender);
+            setDateOfBirth(fullPersonData.date_of_birth);
+            setCountry(fullPersonData.country);
+            setState(fullPersonData.state);
+            setProvince(fullPersonData.province);
+          })
+          .catch((error) => {
+            console.error("Error al obtener los datos de la persona:", error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
     }
     if (personData) {
+      console.log("personData", personData);
       setName(personData.name);
       // Mapear las medidas de personData al estado measurements
       const initialMeasurements = Object.entries(personData.dimensions)
         .map(([dimensionName, value]) => {
           const dimension = dimensions.find((d) => d.name === dimensionName);
           return {
-            dimension_id: dimension ? dimension.id : -1, // Obtener el ID de la dimensión
+            dimension_id: dimension ? dimension.id_dimension : -1, // Obtener el ID de la dimensión
             value: value,
+            position: "P" as "P" | "S",
           };
         })
         .filter((m) => m.dimension_id !== -1); // Filtrar dimensiones no encontradas
 
       setMeasurements(initialMeasurements);
     }
-    console.log("aaa", personData?.dimensions);
   }, [personData, dimensions]);
 
   const handleMeasurementChange = (dimensionId: number, value: string) => {
+    // const numericValue = value === "" ? null : parseFloat(value);
+    // setMeasurements((prev) => {
+    //   const existingIndex = prev.findIndex(
+    //     (m) => m.dimension_id === dimensionId
+    //   );
+    //   if (existingIndex !== -1) {
+    //     // Si la medición ya existe, actualiza su valor
+    //     const updatedMeasurements = [...prev];
+    //     updatedMeasurements[existingIndex] = {
+    //       dimension_id: dimensionId,
+    //       value: numericValue,
+    //     };
+    //     return updatedMeasurements;
+    //   } else {
+    //     // Si la medición no existe, agrega una nueva
+    //     return [...prev, { dimension_id: dimensionId, value: numericValue }];
+    //   }
+    // });
+
     const numericValue = value === "" ? null : parseFloat(value);
     setMeasurements((prev) => {
       const existingIndex = prev.findIndex(
         (m) => m.dimension_id === dimensionId
       );
       if (existingIndex !== -1) {
-        // Si la medición ya existe, actualiza su valor
-        const updatedMeasurements = [...prev];
-        updatedMeasurements[existingIndex] = {
-          dimension_id: dimensionId,
-          value: numericValue,
-        };
-        return updatedMeasurements;
+        const updated = [...prev];
+        updated[existingIndex].value = numericValue;
+        return updated;
       } else {
-        // Si la medición no existe, agrega una nueva
-        return [...prev, { dimension_id: dimensionId, value: numericValue }];
+        return [
+          ...prev,
+          { dimension_id: dimensionId, value: numericValue, position: "P" },
+        ];
       }
     });
+  };
+
+  const handlePositionToggle = (dimensionId: number) => {
+    setMeasurements((prev) =>
+      prev.map((m) =>
+        m.dimension_id === dimensionId
+          ? { ...m, position: m.position === "P" ? "S" : "P" }
+          : m
+      )
+    );
   };
   return (
     <>
@@ -179,6 +209,9 @@ const PersonForm: React.FC<PersonFormProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             size="small"
+            required
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <FormControl fullWidth margin="dense">
             <InputLabel>Sexo</InputLabel>
@@ -187,10 +220,23 @@ const PersonForm: React.FC<PersonFormProps> = ({
               onChange={(e) => setGender(e.target.value as string)}
               label="Sexo"
               size="small"
+              error={!!errors.gender}
             >
               <MenuItem value="M">Masculino</MenuItem>
               <MenuItem value="F">Femenino</MenuItem>
             </Select>
+            {errors.gender && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "13px",
+                  marginLeft: "12px",
+                  marginTop: "4px",
+                }}
+              >
+                {errors.gender}
+              </p>
+            )}
           </FormControl>
           <TextField
             margin="dense"
@@ -200,6 +246,9 @@ const PersonForm: React.FC<PersonFormProps> = ({
             value={dateOfBirth || ""}
             onChange={(e) => setDateOfBirth(e.target.value)}
             size="small"
+            required
+            error={!!errors.dateOfBirth}
+            helperText={errors.dateOfBirth}
             InputLabelProps={{ shrink: true }}
           />
           <TextField
@@ -209,6 +258,8 @@ const PersonForm: React.FC<PersonFormProps> = ({
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             size="small"
+            error={!!errors.country}
+            helperText={errors.country}
           />
           <TextField
             margin="dense"
@@ -217,16 +268,30 @@ const PersonForm: React.FC<PersonFormProps> = ({
             value={state}
             onChange={(e) => setState(e.target.value)}
             size="small"
+            error={!!errors.state}
+            helperText={errors.state}
           />
-          const [name, setName] = useState(personData?.name || "");
+          <TextField
+            margin="dense"
+            label="Fecha de medición"
+            type="date"
+            fullWidth
+            value={dateOfMeasurement || ""}
+            onChange={(e) => setDateOfMeasurement(e.target.value)}
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            error={!!errors.dateOfMeasurement}
+            helperText={errors.dateOfMeasurement}
+          />
           {/* Campos para las mediciones de cada dimensión */}
-          {dimensions.map((dimension) => (
+          {/* {dimensions.map((dimension) => (
             <TextField
-              key={dimension.id}
+              key={dimension.id_dimension}
               margin="dense"
               label={`${dimension.name}`}
               type="number"
               fullWidth
+              size="small"
               // value={
               //   measurements.find((m) => m.dimension_id === dimension.id)
               //     ?.value || ""
@@ -234,10 +299,62 @@ const PersonForm: React.FC<PersonFormProps> = ({
               // onChange={(e) =>
               // handleMeasurementChange(dimension.id, e.target.value)
               // }
-              value={measurements.find((m) => m.dimension_id === dimension.id)?.value || ""}
-              onChange={(e) => handleMeasurementChange(dimension.id, e.target.value)}
+              value={
+                measurements.find(
+                  (m) => m.dimension_id === dimension.id_dimension
+                )?.value || ""
+              }
+              onChange={(e) =>
+                handleMeasurementChange(dimension.id_dimension, e.target.value)
+              }
             />
-          ))}
+          ))} */}
+
+          {dimensions.map((dimension) => {
+            const measurement = measurements.find(
+              (m) => m.dimension_id === dimension.id_dimension
+            );
+            return (
+              <Grid
+                container
+                spacing={1}
+                alignItems="center"
+                key={dimension.id_dimension}
+              >
+                {/* <Grid item xs={8}> */}
+                <TextField
+                  margin="dense"
+                  label={dimension.name}
+                  type="number"
+                  fullWidth
+                  size="small"
+                  value={measurement?.value ?? ""}
+                  onChange={(e) =>
+                    handleMeasurementChange(
+                      dimension.id_dimension,
+                      e.target.value
+                    )
+                  }
+                />
+                {/* </Grid> */}
+
+                {/* <Grid item xs={4}> */}
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={measurement?.position === "P"}
+                      onChange={() =>
+                        handlePositionToggle(dimension.id_dimension)
+                      }
+                      color="primary"
+                    />
+                  }
+                  label={measurement?.position === "P" ? "Parado" : "Sentado"}
+                />
+                {/* </Grid> */}
+              </Grid>
+            );
+          })}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancelar</Button>

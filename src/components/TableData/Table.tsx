@@ -24,11 +24,13 @@ import { deleteMeasurements } from "../../api/api";
 interface TableProps {
   dimensions: Dimension[];
   persons: Person[];
+  study_id: number;
 }
 
 export const TableComponent: React.FC<TableProps> = ({
   dimensions,
   persons,
+  study_id
 }) => {
   const {
     order,
@@ -55,7 +57,7 @@ export const TableComponent: React.FC<TableProps> = ({
       label: "Name",
     },
     ...dimensions.map((dimension) => ({
-      id: dimension.name,
+      id: dimension.name || "default_id",
       numeric: true,
       disablePadding: false,
       label: `${dimension.name} (${dimension.initial})`,
@@ -109,6 +111,7 @@ export const TableComponent: React.FC<TableProps> = ({
           onAddPerson={handleAddPerson}
           onEditPerson={handleEditPerson}
           onDeletePerson={handleDeletePerson}
+          title={"TITULO DE LA TABLA"}
         />
         <TableContainer>
           <Table
@@ -153,8 +156,8 @@ export const TableComponent: React.FC<TableProps> = ({
                       {person.name}
                     </TableCell>
                     {dimensions.map((dimension) => (
-                      <TableCell key={dimension.id} align="right">
-                        {person.dimensions[dimension.name] || "N/A"}
+                      <TableCell key={dimension.id_dimension} align="right">
+                        {dimension.name? person.dimensions[dimension.name] : ""}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -187,7 +190,7 @@ export const TableComponent: React.FC<TableProps> = ({
         onClose={handleClosePersonForm}
         mode={editPerson ? "edit" : "add"}
         dimensions={dimensions}
-        studyId={1} //cambiar
+        studyId={study_id} 
         personData={editPerson && selectedPerson ? selectedPerson : undefined}
       ></PersonForm>
       {/* {/* <pre>{JSON.stringify(persons)}</pre> */}

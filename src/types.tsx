@@ -8,7 +8,10 @@ export interface Dimension {
   id_dimension: number;
   name?: string;
   initial?: string;
+  value?:number;
 }
+
+
 
 // export interface StudyDimension {
 //   id_dimension: number;

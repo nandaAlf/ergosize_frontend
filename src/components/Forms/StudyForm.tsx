@@ -20,23 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { Dimension, StudyData } from "../../types";
-import { getDimension } from "../../api/api";
-
-// interface StudyData {
-//   id?: number;
-//   name: string;
-//   classification: Classification;
-//   gender: Gender;
-//   country: string;
-//   location: string;
-//   description: string;
-//   size: number | null;
-//   age_min: number;
-//   age_max: number;
-//   start_date: Dayjs | null;
-//   end_date: Dayjs | null;
-//   dimensions: any[]; // Ajusta este tipo según tu necesidad
-// }
+import { createStudy, getDimension, updateStudy } from "../../api/api";
 
 interface StudyFormProps {
   open: boolean;
@@ -212,7 +196,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
       const value = ["size"].includes(field)
         ? parseInt(e.target.value) || null
         : e.target.value;
-
+      // alert(`${field},${value}`)
       setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
@@ -269,7 +253,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const dataToSubmit = {
       ...formData,
@@ -283,6 +267,12 @@ const StudyForm: React.FC<StudyFormProps> = ({
     };
     if (validateForm()) {
       console.log("enviando", dataToSubmit);
+      if(mode=='add'){
+           await createStudy(dataToSubmit);
+      }
+      else{
+        await updateStudy(dataToSubmit)
+      }
       // onSubmit(formData);
       onClose();
     }

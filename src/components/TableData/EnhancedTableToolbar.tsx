@@ -9,6 +9,7 @@ interface EnhancedTableToolbarProps {
   onAddPerson: () => void;
   onEditPerson:()=>void;
   onDeletePerson:()=>void;
+  title: string;
 }
 
 export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
@@ -16,6 +17,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
   onAddPerson,
   onEditPerson,
   onDeletePerson,
+  title
 }) => {
   return (
     <Toolbar
@@ -47,7 +49,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
           id="tableTitle"
           component="div"
         >
-          Persons
+          {title}
         </Typography>
       )}
        {numSelected == 1 ? (

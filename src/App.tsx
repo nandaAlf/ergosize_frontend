@@ -1,3 +1,4 @@
+
 import ResponsiveAppBar from "./components/ResponsiveAppBar";
 import { AppRouter } from "./routes/AppRouter";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -31,6 +32,7 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <ResponsiveAppBar></ResponsiveAppBar>
+          {/* <ManiquiViewer /> */}
           <AppRouter />
           {/* <Footer /> */}
         </ThemeProvider>

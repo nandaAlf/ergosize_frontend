@@ -1,5 +1,5 @@
-import { useLocation } from "react-router-dom";
-import { Dimension, Person, studyDataProps } from "../types";
+import { useLocation, useParams } from "react-router-dom";
+import { Dimension, Person, StudyData } from "../types";
 import { getData } from "../api/api";
 import React, { useEffect, useState } from "react";
 import { TableComponent } from "../components/TableData/Table";
@@ -11,42 +11,34 @@ interface ApiResponse {
   persons: Person[]; // Lista de personas con sus mediciones
 }
 
-
-// // Definir el tipo para la lista de dimensiones
-// type Dimensions = Dimension[];
-
 const StudyDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const study = location.state?.study as StudyData | undefined; // Obtener los datos del estudio
   const [persons, setPersons] = useState<Person[]>([]);
   const [dimensions, setDimensions] = useState<Dimension[]>([]);
 
-  const location = useLocation();
-  const study = location.state as studyDataProps; // Obtener los datos del estudio
-
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getData(`/study-data/${study.id}`);
-      console.log(response)
+      const response = await getData(`/study-data/${id}`);
+      console.log(response);
       const data = response as ApiResponse;
-      setDimensions(data.dimensions);
-     
+      setDimensions((study?.dimensions as Dimension[]) || []);
       setPersons(data.persons);
-      
     };
-  
+
     fetchData();
   }, []);
   useEffect(() => {
-      console.log("Aqui")
-      console.log(dimensions)
-      // console.log(persons)
-  }, [dimensions,persons]);
+    console.log("st", study);
+    console.log("nm", study?.name);
+  }, [study]);
 
-   // Verificar el estado actualizado
+  // Verificar el estado actualizado
   //  useEffect(() => {
   //   console.log("Dimensiones actualizadas:", dimensions);
   //   console.log("Filas actualizadas:", rows);
   // }, [dimensions, rows]); // Este efecto se ejecutará cuando dimensions o rows cambien
-
 
   if (!study) {
     return <div>Estudio no encontrado</div>;
@@ -54,22 +46,11 @@ const StudyDetail: React.FC = () => {
 
   return (
     <>
-      heyyy
-      <h1>{study.name}</h1>
-      <p>{study.description}</p>
-      <p>
-        <strong>Región:</strong> {study.location}
-      </p>
-      <p>
-        <strong>País:</strong> {study.country}
-      </p>
-      {/* <MyTable dimensions={dimensions} persons={persons}></MyTable> */}
-      {/* <EnhancedTable></EnhancedTable> */}
-      {/* <MyTable2 dim={dimensions} persons={persons}></MyTable2> */}
-      {/* <MyTable></MyTable> */}
-       <TableComponent dimensions={dimensions} persons={persons}></TableComponent>
-       {/* <pre>{JSON.stringify(persons)}</pre>
-       <pre>{JSON.stringify(dimensions)}</pre> */}
+      <TableComponent
+        dimensions={dimensions}
+        persons={persons}
+        study_id={study.id || 0}
+      ></TableComponent>
     </>
   );
 };

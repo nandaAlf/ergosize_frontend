@@ -9,6 +9,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button/Button";
 import StudyForm from "../components/Forms/StudyForm";
+import TableForm from "../components/Forms/TableForm";
 // import StudyForm from "../components/Forms/StudyForm2";
 const Studies: React.FC = () => {
   // const [studiesData, setStudiesData] = useState(null);
@@ -20,6 +21,12 @@ const Studies: React.FC = () => {
   const [openStudyForm, setOpenStudyForm] = useState(false);
   const [selectedStudy, setSelectedStudy] = useState(null);
   const [editingStudy, setEditingStudy] = useState<StudyData | null>(null);
+  
+   // Estados para el TableForm
+  const [openTableForm, setOpenTableForm] = useState(false);
+  const [selectedStudyForTable, setSelectedStudyForTable] = useState<StudyData | null>(null);
+ 
+  
   useEffect(() => {
     const fetchStudis = async () => {
       try {
@@ -83,16 +90,22 @@ const Studies: React.FC = () => {
 
   const handleCloseStudyForm = () => {
     setOpenStudyForm(false);
+    setEditingStudy(null);
   };
   const handleEditStudy = (study: StudyData) => {
     setEditingStudy(study);
     setOpenStudyForm(true);
   };
+  const handleOpenTableDialog = (study: StudyData) => {
+    setSelectedStudyForTable(study);
+    setOpenTableForm(true);
+  };
+
   const handleSubmitStudy = async (data: StudyData) => {
     alert("wowo");
     try {
       if (editingStudy) {
-        console.log("editar",data)
+        console.log("editar", data);
         // Lógica para actualizar estudio
         // await updateStudy(data);
       } else {
@@ -110,6 +123,7 @@ const Studies: React.FC = () => {
       console.error("Error saving study:", error);
     }
   };
+
   return (
     <section>
       <Box
@@ -169,6 +183,7 @@ const Studies: React.FC = () => {
               setSelectedCard={setSelectedCard}
               index={index}
               onEdit={() => handleEditStudy(study)}
+              handleOpenTableDialog={handleOpenTableDialog} // Pasar la función al componente
             />
           </Grid>
         ))}
@@ -176,13 +191,23 @@ const Studies: React.FC = () => {
 
       <StudyForm
         open={openStudyForm}
-        onClose={() => setOpenStudyForm(false)}
+        onClose={handleCloseStudyForm}
         onSubmit={function (): void {
           throw new Error("Function not implemented.");
         }}
         initialData={editingStudy ? editingStudy : undefined}
-        mode={editingStudy ? 'edit' : 'add'}
+        mode={editingStudy ? "edit" : "add"}
       ></StudyForm>
+
+       {/* Integración del TableForm a nivel global en la página Studies */}
+       {selectedStudyForTable && (
+        <TableForm
+          open={openTableForm}
+          onClose={() => setOpenTableForm(false)}
+          study={selectedStudyForTable}
+        />
+      )}
+
     </section>
   );
 };

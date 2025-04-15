@@ -13,11 +13,12 @@ import {
 import useNavigation from "../../hooks/useNavigation";
 import LongMenu from "../Menu";
 interface CardStudyProps {
-  study:StudyData
+  study: StudyData;
   selectedCard: number;
   setSelectedCard: (index: number) => void;
   index: number;
-  onEdit: (study:StudyData) => void;
+  onEdit: (study: StudyData) => void;
+  handleOpenTableDialog: (study: StudyData) => void;
 }
 
 const CardStudy: React.FC<CardStudyProps> = ({
@@ -31,27 +32,25 @@ const CardStudy: React.FC<CardStudyProps> = ({
   setSelectedCard,
   index,
   onEdit,
+  handleOpenTableDialog,
 }) => {
+  const { goToPage } = useNavigation();
   const handleMenuAction = (action: string) => {
     if (action === "Editar") {
       onEdit(study);
     } else if (action === "Eliminar") {
-      alert("Delete")
+      alert("Delete");
       // Lógica para eliminar
+    } else if (action === "Ver mediciones") {
+      // Pasar los datos del estudio como estado
+      goToPage(`/studies/${study.id}`, {
+        study,
+      });
     }
   };
-  const { goToPage } = useNavigation();
   const handleClick = () => {
-    // Pasar los datos del estudio como estado
-    // goToPage(`/studies/${id}`, {
-    //   id,
-    //   name,
-    //   description,
-    //   location,
-    //   country,
-    // });
+    alert("Ver detalles");
   };
-  const items = Array.from({ length: 10 }, (_, index) => `Caja ${index + 1}`);
   return (
     <Card
       sx={{
@@ -110,7 +109,10 @@ const CardStudy: React.FC<CardStudyProps> = ({
               marginLeft: "-15px",
             }}
           >
-            <LongMenu onAction={handleMenuAction} />
+            <LongMenu
+              onAction={handleMenuAction}
+              options={["Editar", "Eliminar", "Ver mediciones"]}
+            />
           </Box>
           <Box sx={{ width: "85%" }}>
             <Typography
@@ -129,7 +131,7 @@ const CardStudy: React.FC<CardStudyProps> = ({
                 // backgroundColor: "blue",
               }}
             >
-              {study.name} 
+              {study.name}
               {/* {id} */}
             </Typography>
           </Box>
@@ -140,16 +142,11 @@ const CardStudy: React.FC<CardStudyProps> = ({
         <Box
           sx={{
             margin: "15px",
-            // marginLeft: "0",
-            // marginRight: "0",
-            // padding: "0",
-            // backgroundColor: "red",
-            // width: "100%", // Asegura que ocupe todo el ancho disponible
             maxWidth: "none", // Desactiva el ancho máximo predeterminado del Box
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            Marzo 20, 2020
+            {study.start_date as string} {study.end_date as string}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {study.location} / {study.country}
@@ -160,7 +157,7 @@ const CardStudy: React.FC<CardStudyProps> = ({
               color="text.secondary"
               // sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
-              20/45
+              {study.size}
             </Typography>
           </Tooltip>
         </Box>
@@ -189,15 +186,15 @@ const CardStudy: React.FC<CardStudyProps> = ({
             margin: "15px",
             display: "flex",
             gap: 1,
-            justifyContent: "center", // Centrar contenido
+            // justifyContent: "center", // Centrar contenido
             flexWrap: "wrap",
           }}
         >
           {/* <ChipsArray items={["Caja 1", "Caja 2", "Caja 3"]} /> */}
 
-          {items.map((item, index) => (
+          {study.dimensions?.map((dim) => (
             <Box
-              key={index}
+              key={dim.id_dimension}
               // elevation={3}
               sx={{
                 display: "flex",
@@ -208,13 +205,15 @@ const CardStudy: React.FC<CardStudyProps> = ({
                 borderRadius: "50px",
               }}
             >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                {item}
-              </Typography>
+              <Tooltip title={dim.name}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                >
+                  {dim.initial}
+                </Typography>
+              </Tooltip>
             </Box>
           ))}
         </Box>
@@ -226,7 +225,14 @@ const CardStudy: React.FC<CardStudyProps> = ({
             margin: "15px",
           }}
         >
-          {/* <Button onClick={handleClick}>Ver detalles {">"}</Button> */}
+          {/* Botón para generar la tabla antropométrica */}
+          <Button
+            variant="contained"
+            onClick={() => handleOpenTableDialog(study)}
+          >
+            Generar Tabla
+          </Button>
+          {/* <Button onAction={handleClick()}>Tabla {">"}</Button> */}
         </Box>
       </CardContent>
       {/* </CardActionArea> */}

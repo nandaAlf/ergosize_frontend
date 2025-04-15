@@ -7,11 +7,12 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 interface LongMenuProps {
   onAction: (action: string) => void;
+  options: string[]
 }
 
-const options = ['Editar', 'Eliminar'];
+// const options = ['Editar', 'Eliminar'];
 const ITEM_HEIGHT = 48;
-const LongMenu: React.FC<LongMenuProps> = ({ onAction }) => {
+const LongMenu: React.FC<LongMenuProps> = ({ onAction ,options}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
