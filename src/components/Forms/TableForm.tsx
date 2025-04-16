@@ -90,7 +90,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value)}
             >
-              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value="">Mixto</MenuItem>
               <MenuItem value="M">Masculino</MenuItem>
               <MenuItem value="F">Femenino</MenuItem>
             </Select>
