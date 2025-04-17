@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Box, Typography } from '@mui/material';
 import ButtonGroup from '../components/ButtonGroup';
 import RecentItems from '../components/RecentItems';
+import ExcelUploade from '../components/ExcelUploade';
 
 const Home: React.FC = () => {
   const handleGroupsClick = () => {
@@ -14,6 +15,7 @@ const Home: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+       <ExcelUploade/>
       <Typography variant="h4" gutterBottom>
         Bienvenido a la Gestión Antropométrica
       </Typography>

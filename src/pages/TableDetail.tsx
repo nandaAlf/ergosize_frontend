@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 import {
   alpha,
   Box,
@@ -20,11 +20,11 @@ import {
   Tooltip,
   Switch,
   FormControlLabel,
-} from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-
+} from "@mui/material";
+import { visuallyHidden } from "@mui/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import LongMenu from "../components/Menu";
 interface PercentileMap {
   [key: string]: number;
 }
@@ -46,8 +46,8 @@ interface AnthropometricTableProps {
   percentilesList: number[];
 }
 
-type Order = 'asc' | 'desc';
-
+type Order = "asc" | "desc";
+const params = new URLSearchParams();
 interface HeadCell {
   id: string;
   label: string;
@@ -61,40 +61,32 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-// function getComparator(
-//   order: Order,
-//   orderBy: string,
-// ): (a: ResultRow, b: ResultRow) => number {
-//   return order === 'desc'
-//     ? (a, b) => descendingComparator(a, b, orderBy  as keyof ResultRow)
-//     : (a, b) => -descendingComparator(a, b, orderBy  as keyof ResultRow);
-// }
 function getComparator(
   order: Order,
   orderBy: string,
-  percentilesList: number[],
+  percentilesList: number[]
 ): (a: ResultRow, b: ResultRow) => number {
   return (a, b) => {
     let valueA: any;
     let valueB: any;
 
-    if (orderBy.startsWith('percentile_')) {
-      const percentile = orderBy.replace('percentile_', '');
+    if (orderBy.startsWith("percentile_")) {
+      const percentile = orderBy.replace("percentile_", "");
       valueA = a.percentiles[percentile] || 0;
       valueB = b.percentiles[percentile] || 0;
     } else {
       // Validamos que orderBy sea una clave de ResultRow
-      const validKeys: (keyof ResultRow)[] = ['dimension', 'mean', 'sd'];
-      const safeOrderBy = validKeys.includes(orderBy as keyof ResultRow) 
-        ? orderBy as keyof ResultRow 
-        : 'dimension';
-      
+      const validKeys: (keyof ResultRow)[] = ["dimension", "mean", "sd"];
+      const safeOrderBy = validKeys.includes(orderBy as keyof ResultRow)
+        ? (orderBy as keyof ResultRow)
+        : "dimension";
+
       valueA = a[safeOrderBy];
       valueB = b[safeOrderBy];
     }
 
     const compareResult = valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
-    return order === 'desc' ? compareResult : -compareResult;
+    return order === "desc" ? compareResult : -compareResult;
   };
 }
 interface EnhancedTableHeadProps {
@@ -137,19 +129,19 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -162,10 +154,44 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  studyId: number;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, studyId } = props;
+  const handleMenuAction = async (action: string) => {
+    const baseUrl = `http://127.0.0.1:8000/api/export`;
+    const url = `${baseUrl}/${
+      action.includes("Excel") ? "excel" : "pdf"
+    }/${studyId}/?${params.toString()}`;
+
+    try {
+      const response = await axios.get(url, {
+        responseType: "blob", // 👈 necesario para archivos
+      });
+
+      // Crear un blob y un enlace para forzar la descarga
+      const fileType = action.includes("Excel")
+        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        : "application/pdf";
+
+      const extension = action.includes("Excel") ? "xlsx" : "pdf";
+
+      const blob = new Blob([response.data], { type: fileType });
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = `percentiles_study_${studyId}.${extension}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(downloadUrl); // Limpieza
+    } catch (err) {
+      console.error(`Error al descargar archivo ${action}:`, err);
+    }
+  };
 
   return (
     <Toolbar
@@ -174,13 +200,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.activatedOpacity
+            ),
         }),
       }}
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -189,7 +218,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           variant="h6"
           id="tableTitle"
           component="div"
@@ -197,19 +226,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Resultados del Estudio
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Eliminar">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filtrar lista">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+
+      <Tooltip title="Eliminar">
+        <LongMenu
+          onAction={handleMenuAction}
+          options={["Exportar a Excel", "Exportar a PDF"]}
+        />
+      </Tooltip>
     </Toolbar>
   );
 }
@@ -225,30 +248,30 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<ResultRow[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<string>('dimension');
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<string>("dimension");
   const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dense, setDense] = useState(false);
-
+  // const params = new URLSearchParams();
   const headCells: HeadCell[] = useMemo(
     () => [
       {
-        id: 'dimension',
+        id: "dimension",
         numeric: false,
         disablePadding: true,
-        label: 'Dimensión',
+        label: "Dimensión",
       },
       {
-        id: 'mean',
+        id: "mean",
         numeric: true,
-        label: 'Media',
+        label: "Media",
       },
       {
-        id: 'sd',
+        id: "sd",
         numeric: true,
-        label: 'SD',
+        label: "SD",
       },
       ...percentilesList.map((p) => ({
         id: `percentile_${p.toFixed(1)}`,
@@ -256,7 +279,7 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
         label: `${p}%`,
       })),
     ],
-    [percentilesList],
+    [percentilesList]
   );
 
   useEffect(() => {
@@ -265,13 +288,15 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
       setError(null);
       setResults([]);
 
-      const params = new URLSearchParams();
+      // const params = new URLSearchParams();
       if (gender) params.append("gender", gender);
       if (ageMin) params.append("age_min", ageMin);
       if (ageMax) params.append("age_max", ageMax);
-      if (dimensions.length > 0) params.append("dimensions", dimensions.join(","));
-      if (percentilesList.length > 0) params.append("percentiles", percentilesList.join(","));
-      
+      if (dimensions.length > 0)
+        params.append("dimensions", dimensions.join(","));
+      if (percentilesList.length > 0)
+        params.append("percentiles", percentilesList.join(","));
+
       try {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/test-percentiles/${studyId}/?${params.toString()}`
@@ -291,10 +316,10 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: string,
+    property: string
   ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -320,7 +345,7 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
     setSelected(newSelected);
@@ -330,7 +355,9 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -348,18 +375,14 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
   //   [results, order, orderBy],
   // );
   const sortedResults = useMemo(
-    () =>
-      [...results].sort(getComparator(order, orderBy, percentilesList)),
-    [results, order, orderBy, percentilesList],
+    () => [...results].sort(getComparator(order, orderBy, percentilesList)),
+    [results, order, orderBy, percentilesList]
   );
 
   const visibleRows = useMemo(
     () =>
-      sortedResults.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [sortedResults, page, rowsPerPage],
+      sortedResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [sortedResults, page, rowsPerPage]
   );
 
   if (loading) {
@@ -381,20 +404,19 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
   if (results.length === 0) {
     return (
       <Box mt={4}>
-        <Typography>No hay resultados disponibles para los filtros seleccionados.</Typography>
+        <Typography>
+          No hay resultados disponibles para los filtros seleccionados.
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length} studyId={studyId} />
         <TableContainer>
-          <Table
-            size={dense ? 'small' : 'medium'}
-            aria-labelledby="tableTitle"
-          >
+          <Table size={dense ? "small" : "medium"} aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -418,13 +440,13 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
                     tabIndex={-1}
                     key={row.dimension}
                     selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: "pointer" }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
-                        inputProps={{ 'aria-labelledby': labelId }}
+                        inputProps={{ "aria-labelledby": labelId }}
                       />
                     </TableCell>
                     <TableCell
@@ -469,8 +491,6 @@ const TableDetail: React.FC<AnthropometricTableProps> = ({
 };
 
 export default TableDetail;
-
-
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -532,7 +552,7 @@ export default TableDetail;
 //       if (ageMax) params.append("age_max", ageMax);
 //       if (dimensions.length > 0) params.append("dimensions", dimensions.join(","));
 //       if (percentilesList.length > 0) params.append("percentiles", percentilesList.join(","));
-      
+
 //       try {
 //         const response = await axios.get(
 //           `http://127.0.0.1:8000/api/test-percentiles/${studyId}/?${params.toString()}`

@@ -2,6 +2,7 @@
 import React from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import TableDetail from "./TableDetail";
+import ExcelUploade from "../components/ExcelUploade";
 
 const Tables = () => {
 //   const { studyId } = useParams();
@@ -23,7 +24,8 @@ const Tables = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-     
+    
+
       <TableDetail
         studyId={parseInt(studyId!)}
         gender={gender}

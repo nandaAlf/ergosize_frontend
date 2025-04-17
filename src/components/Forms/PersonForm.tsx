@@ -29,6 +29,7 @@ interface Measurement {
   dimension_id: number;
   value: number | null;
   position: "P" | "S";
+  date: string;
 }
 const PersonForm: React.FC<PersonFormProps> = ({
   open,
@@ -45,9 +46,11 @@ const PersonForm: React.FC<PersonFormProps> = ({
   const [state, setState] = useState("");
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const [province, setProvince] = useState("");
-  const [dateOfMeasurement, setDateOfMeasurement] = useState<string | null>(
-    null
-  );
+  // const [dateOfMeasurement, setDateOfMeasurement] = useState<string | null>(
+  //   null
+  // );
+   // Single measurement date for all dimensions
+   const [dateOfMeasurement, setDateOfMeasurement] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -80,6 +83,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
         value: m.value,
         position: m.position, // Puedes agregar un campo para seleccionar la posición si es necesario
         study_id: studyId,
+        date: dateOfMeasurement, // Fecha de medición
       })),
     };
 
@@ -138,6 +142,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
             dimension_id: dimension ? dimension.id_dimension : -1, // Obtener el ID de la dimensión
             value: value,
             position: "P" as "P" | "S",
+            date:""
           };
         })
         .filter((m) => m.dimension_id !== -1); // Filtrar dimensiones no encontradas
@@ -147,24 +152,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   }, [personData, dimensions]);
 
   const handleMeasurementChange = (dimensionId: number, value: string) => {
-    // const numericValue = value === "" ? null : parseFloat(value);
-    // setMeasurements((prev) => {
-    //   const existingIndex = prev.findIndex(
-    //     (m) => m.dimension_id === dimensionId
-    //   );
-    //   if (existingIndex !== -1) {
-    //     // Si la medición ya existe, actualiza su valor
-    //     const updatedMeasurements = [...prev];
-    //     updatedMeasurements[existingIndex] = {
-    //       dimension_id: dimensionId,
-    //       value: numericValue,
-    //     };
-    //     return updatedMeasurements;
-    //   } else {
-    //     // Si la medición no existe, agrega una nueva
-    //     return [...prev, { dimension_id: dimensionId, value: numericValue }];
-    //   }
-    // });
+   
 
     const numericValue = value === "" ? null : parseFloat(value);
     setMeasurements((prev) => {
@@ -178,7 +166,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       } else {
         return [
           ...prev,
-          { dimension_id: dimensionId, value: numericValue, position: "P" },
+          { dimension_id: dimensionId, value: numericValue, position: "P", date:dateOfMeasurement }, // Cambia "P" a "S" si es necesario
         ];
       }
     });
@@ -283,33 +271,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
             error={!!errors.dateOfMeasurement}
             helperText={errors.dateOfMeasurement}
           />
-          {/* Campos para las mediciones de cada dimensión */}
-          {/* {dimensions.map((dimension) => (
-            <TextField
-              key={dimension.id_dimension}
-              margin="dense"
-              label={`${dimension.name}`}
-              type="number"
-              fullWidth
-              size="small"
-              // value={
-              //   measurements.find((m) => m.dimension_id === dimension.id)
-              //     ?.value || ""
-              // }
-              // onChange={(e) =>
-              // handleMeasurementChange(dimension.id, e.target.value)
-              // }
-              value={
-                measurements.find(
-                  (m) => m.dimension_id === dimension.id_dimension
-                )?.value || ""
-              }
-              onChange={(e) =>
-                handleMeasurementChange(dimension.id_dimension, e.target.value)
-              }
-            />
-          ))} */}
-
           {dimensions.map((dimension) => {
             const measurement = measurements.find(
               (m) => m.dimension_id === dimension.id_dimension
