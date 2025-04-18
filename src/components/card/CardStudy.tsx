@@ -22,11 +22,6 @@ interface CardStudyProps {
 }
 
 const CardStudy: React.FC<CardStudyProps> = ({
-  // id,
-  // name,
-  // description,
-  // location,
-  // country,
   study,
   selectedCard,
   setSelectedCard,
@@ -42,7 +37,7 @@ const CardStudy: React.FC<CardStudyProps> = ({
       alert("Delete");
       // Lógica para eliminar
     } else if (action === "Ver mediciones") {
-      // Pasar los datos del estudio como estado
+      console.log("Ver dim",study.dimensions);
       goToPage(`/studies/${study.id}`, {
         study,
       });

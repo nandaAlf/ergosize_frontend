@@ -3,13 +3,10 @@ import { Dimension, Person, StudyData } from "../types";
 import { getData } from "../api/api";
 import React, { useEffect, useState } from "react";
 import { TableComponent } from "../components/TableData/Table";
+import { getPersonStudyData } from "../service/service";
 // import { MyTable } from "../components/TableData/Table";
 
 // Definir la interfaz para la respuesta de la API
-interface ApiResponse {
-  dimensions: Dimension[]; // Lista de todas las dimensiones
-  persons: Person[]; // Lista de personas con sus mediciones
-}
 
 const StudyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,25 +17,19 @@ const StudyDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getData(`/study-data/${id}`);
-      console.log(response);
-      const data = response as ApiResponse;
-      setDimensions((study?.dimensions as Dimension[]) || []);
-      setPersons(data.persons);
+      try {
+        if (id) {
+          const data = await getPersonStudyData(id);
+          setDimensions((study?.dimensions as Dimension[]) || []);
+          setPersons(data.persons);
+        }
+      } catch (error) {
+        console.error("Error al obtener datos del estudio:", error);
+      }
     };
 
     fetchData();
   }, []);
-  useEffect(() => {
-    console.log("st", study);
-    console.log("nm", study?.name);
-  }, [study]);
-
-  // Verificar el estado actualizado
-  //  useEffect(() => {
-  //   console.log("Dimensiones actualizadas:", dimensions);
-  //   console.log("Filas actualizadas:", rows);
-  // }, [dimensions, rows]); // Este efecto se ejecutará cuando dimensions o rows cambien
 
   if (!study) {
     return <div>Estudio no encontrado</div>;

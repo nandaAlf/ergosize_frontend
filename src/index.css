@@ -1,8 +1,7 @@
-@import url('@fontsource/roboto/300.css');
-@import url('@fontsource/roboto/400.css');
-@import url('@fontsource/roboto/500.css');
-@import url('@fontsource/roboto/700.css');
-
+@import url("@fontsource/roboto/300.css");
+@import url("@fontsource/roboto/400.css");
+@import url("@fontsource/roboto/500.css");
+@import url("@fontsource/roboto/700.css");
 
 :root {
   /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
@@ -10,10 +9,18 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(0, 0, 0, 0.8);
-  background-color: #ffffff;
-  font-family: Segoe UI,roboto;
 
+  color: rgba(0, 0, 0, 0.8);
+  background: #f3f8fa;
+  background: linear-gradient(
+    0deg,
+    rgba(243, 248, 250, 1) 0%,
+    rgba(241, 246, 249, 1) 100%,
+    rgba(240, 245, 249, 1) 89%,
+    rgba(238, 242, 248, 1) 100%,
+    rgba(230, 230, 247, 1) 99%
+  );
+  font-family: Segoe UI, roboto;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

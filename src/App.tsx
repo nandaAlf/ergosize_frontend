@@ -1,4 +1,6 @@
 
+import Navbar from "./components/AppBar/AppBar";
+import ManiquiViewer from "./components/ManiquiViewer";
 import ResponsiveAppBar from "./components/ResponsiveAppBar";
 import { AppRouter } from "./routes/AppRouter";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -6,12 +8,13 @@ import { BrowserRouter } from "react-router-dom";
 // import NavBar from './components/NavBar';
 // Define tu tema personalizado
 const theme = createTheme({
+  
   palette: {
     primary: {
-      main: "#A3D1C6",
-      light: "B3D8A8",
-      dark: "#3D8D7A",
-      contrastText: "#FBFFE4",
+      main: "##8992a3ff", //grey
+      light: "#000",
+      dark: "#000",
+      contrastText: "#000",
     },
     secondary: {
       main: "#fff", // Color secundario personalizado (verde)
@@ -31,7 +34,9 @@ function App() {
     <>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-          <ResponsiveAppBar></ResponsiveAppBar>
+            <Navbar/>
+        
+          {/* <ResponsiveAppBar></ResponsiveAppBar> */}
           {/* <ManiquiViewer /> */}
           <AppRouter />
           {/* <Footer /> */}

@@ -53,11 +53,18 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         </Typography>
       )}
        {numSelected == 1 ? (
+        <>
         <Tooltip title="Editar">
           <IconButton onClick={onEditPerson}>
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+         <Tooltip title="Ficha">
+         <IconButton >
+           F
+         </IconButton>
+       </Tooltip>
+        </>
       ) : (
         <></>
       )}

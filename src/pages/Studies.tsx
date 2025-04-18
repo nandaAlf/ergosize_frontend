@@ -10,6 +10,20 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button/Button";
 import StudyForm from "../components/Forms/StudyForm";
 import TableForm from "../components/Forms/TableForm";
+import ApiService from "../api/ApiService";
+import CircularProgress, {
+  CircularProgressProps,
+} from "@mui/material/CircularProgress";
+import { getAllStudies } from "../service/service";
+import { Container, Typography } from "@mui/material";
+import FilterPanelLayout from "../components/prueba";
+import dayjs, { Dayjs } from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+// import { isSameOrAfter, isSameOrBefore } from 'dayjs'
 // import StudyForm from "../components/Forms/StudyForm2";
 const Studies: React.FC = () => {
   // const [studiesData, setStudiesData] = useState(null);
@@ -21,41 +35,29 @@ const Studies: React.FC = () => {
   const [openStudyForm, setOpenStudyForm] = useState(false);
   const [selectedStudy, setSelectedStudy] = useState(null);
   const [editingStudy, setEditingStudy] = useState<StudyData | null>(null);
-  
-   // Estados para el TableForm
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sexoFilter, setSexoFilter] = useState("");
+  const [ordenFilter, setOrdenFilter] = useState("");
+  const [fechaDesde, setFechaDesde] = useState<Dayjs | null>(null);
+  const [fechaHasta, setFechaHasta] = useState<Dayjs | null>(null);
+  // Estados para el TableForm
   const [openTableForm, setOpenTableForm] = useState(false);
-  const [selectedStudyForTable, setSelectedStudyForTable] = useState<StudyData | null>(null);
- 
-  
-  useEffect(() => {
-    const fetchStudis = async () => {
-      try {
-        const response = await getData("studies/"); // Usar la función getData
-        // setStudiesData(response as studyDataProps[]); // Casteo aquí
+  const [selectedStudyForTable, setSelectedStudyForTable] =
+    useState<StudyData | null>(null);
 
-        if (
-          Array.isArray(response) &&
-          response.every(
-            (item) =>
-              typeof item.name === "string" &&
-              typeof item.description === "string" &&
-              typeof item.location === "string" &&
-              typeof item.country === "string"
-          )
-        ) {
-          setStudiesData(response as StudyData[]); // Convertir y guardar los datos
-        } else {
-          throw new Error(
-            "La respuesta de la API no tiene la estructura esperada."
-          );
-        }
-      } catch (error) {
-        // setError(error.message);
+  useEffect(() => {
+    const fetchStudies = async () => {
+      try {
+        const data = await getAllStudies();
+        setStudiesData(data);
+      } catch (err: any) {
+        setError("No se pudieron obtener los estudios");
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     };
-    fetchStudis();
+    fetchStudies();
   }, []);
 
   // Función para manejar cambios en el campo de búsqueda
@@ -67,17 +69,55 @@ const Studies: React.FC = () => {
     setSearchType(value as "name" | "location");
     setSearchTerm(""); // Limpiar el término de búsqueda al cambiar el tipo
   };
-  const filteredStudies = studiesData?.filter((study) => {
-    if (searchType === "name") {
-      return study.name.toLowerCase().includes(searchTerm.toLowerCase());
-    } else if (searchType === "location") {
-      return (
-        study.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        study.country.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    return true;
-  });
+  // const filteredStudies = studiesData?.filter((study) => {
+  //   if (searchType === "name") {
+  //     return study.name.toLowerCase().includes(searchTerm.toLowerCase());
+  //   } else if (searchType === "location") {
+  //     return (
+  //       study.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       study.country.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+  //   return true;
+  // });
+  const filteredStudies = studiesData
+    ?.filter((study) => {
+      // 1) Búsqueda por nombre o ubicación
+      const term = searchTerm.trim().toLowerCase();
+      const matchesSearch =
+        !term ||
+        study.name.toLowerCase().includes(term) ||
+        study.location.toLowerCase().includes(term) ||
+        study.country.toLowerCase().includes(term);
+
+      if (!matchesSearch) return false;
+
+      // 2) Filtrar por sexo
+      if (sexoFilter && study.gender !== sexoFilter) return false;
+
+      // 3) Filtrar por rango de fecha (start_date / end_date)
+      const start = fechaDesde ? dayjs(study.start_date) : null;
+      const end = fechaHasta ? dayjs(study.end_date) : null;
+
+      if (fechaDesde && (!start || !start.isSameOrAfter(fechaDesde, "day")))
+        return false;
+      if (fechaHasta && (!end || !end.isSameOrBefore(fechaHasta, "day")))
+        return false;
+
+      return true;
+    })
+    // 4) Ordenar según ordenFilter
+    .sort((a, b) => {
+      if (ordenFilter === "reciente") {
+        // más reciente primero (por start_date)
+        return dayjs(b.start_date).diff(dayjs(a.start_date));
+      }
+      if (ordenFilter === "antiguo") {
+        // más antiguo primero
+        return dayjs(a.start_date).diff(dayjs(b.start_date));
+      }
+      return 0; // sin orden
+    });
   const searchTypeItems = [
     { value: "name", label: "Nombre" },
     { value: "location", label: "Ubicación" },
@@ -101,32 +141,29 @@ const Studies: React.FC = () => {
     setOpenTableForm(true);
   };
 
-  const handleSubmitStudy = async (data: StudyData) => {
-    alert("wowo");
-    try {
-      if (editingStudy) {
-        console.log("editar", data);
-        // Lógica para actualizar estudio
-        // await updateStudy(data);
-      } else {
-        // Lógica para crear nuevo estudio
-        alert("Creando");
-        console.log("crear", data);
-        await createStudy(data);
-      }
-      // Refrescar datos
-      const response = await getData("studies/");
-      setStudiesData(response as StudyData[]);
-      setOpenStudyForm(false);
-      setEditingStudy(null);
-    } catch (error) {
-      console.error("Error saving study:", error);
-    }
-  };
-
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "70vh",
+          width: "100%",
+        }}
+      >
+        <CircularProgress size={60} />
+        <Typography variant="body2" mt={3}>
+          Cargando estudios...
+        </Typography>
+      </Box>
+    );
+  }
+  if (error) return <p>{error}</p>;
   return (
     <section>
-      <Box
+      {/* <Box
         component="form"
         sx={{
           p: "2px 4px",
@@ -167,8 +204,20 @@ const Studies: React.FC = () => {
             Nuevo Estudio
           </Button>
         </div>
-      </Box>
+      </Box> */}
 
+      <FilterPanelLayout
+        search={searchTerm}
+        onSearchChange={setSearchTerm}
+        sexo={sexoFilter}
+        onSexoChange={setSexoFilter}
+        orden={ordenFilter}
+        onOrdenChange={setOrdenFilter}
+        fechaDesde={fechaDesde}
+        onFechaDesdeChange={setFechaDesde}
+        fechaHasta={fechaHasta}
+        onFechaHastaChange={setFechaHasta}
+      />
       <Grid container spacing={3} sx={{ padding: "25px" }}>
         {filteredStudies?.map((study, index) => (
           <Grid
@@ -177,7 +226,6 @@ const Studies: React.FC = () => {
             sx={{ minHeight: "65%" }}
           >
             <CardStudy
-              // {...study}
               study={study}
               selectedCard={selectedCard}
               setSelectedCard={setSelectedCard}
@@ -199,15 +247,14 @@ const Studies: React.FC = () => {
         mode={editingStudy ? "edit" : "add"}
       ></StudyForm>
 
-       {/* Integración del TableForm a nivel global en la página Studies */}
-       {selectedStudyForTable && (
+      {/* Integración del TableForm a nivel global en la página Studies */}
+      {selectedStudyForTable && (
         <TableForm
           open={openTableForm}
           onClose={() => setOpenTableForm(false)}
           study={selectedStudyForTable}
         />
       )}
-
     </section>
   );
 };
