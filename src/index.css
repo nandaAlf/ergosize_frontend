@@ -11,15 +11,16 @@
   color-scheme: light dark;
 
   color: rgba(0, 0, 0, 0.8);
-  background: #f3f8fa;
-  background: linear-gradient(
+  background: #fff;
+  
+  /* background: linear-gradient(
     0deg,
     rgba(243, 248, 250, 1) 0%,
     rgba(241, 246, 249, 1) 100%,
     rgba(240, 245, 249, 1) 89%,
     rgba(238, 242, 248, 1) 100%,
     rgba(230, 230, 247, 1) 99%
-  );
+  ); */
   font-family: Segoe UI, roboto;
 
   font-synthesis: none;

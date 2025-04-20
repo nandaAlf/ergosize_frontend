@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { Dimension, Person } from "../../types";
 import axios from "axios";
 import Grid from "@mui/material/Grid2";
+import DateSelect from "../filtros/date";
+import dayjs, { Dayjs } from "dayjs";
 
 interface PersonFormProps {
   open: boolean;
@@ -23,7 +25,7 @@ interface PersonFormProps {
   mode: "add" | "edit";
   dimensions: Dimension[]; // Lista de dimensiones del grupo
   studyId: number;
-  personData?: Person; // Datos visibles de la persona (nombre, mediciones, etc.)
+  personId?: number; // ID de la persona (si se está editando)
 }
 interface Measurement {
   dimension_id: number;
@@ -37,11 +39,11 @@ const PersonForm: React.FC<PersonFormProps> = ({
   mode,
   dimensions,
   studyId,
-  personData,
+  personId,
 }) => {
-  const [name, setName] = useState(personData?.name || "");
+  const [name, setName] = useState("");
   const [gender, setGender] = useState<string | null>(null);
-  const [dateOfBirth, setDateOfBirth] = useState<string | null>(null);
+  // const [dateOfBirth, setDateOfBirth] = useState<string | null>(null);
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
@@ -49,11 +51,16 @@ const PersonForm: React.FC<PersonFormProps> = ({
   // const [dateOfMeasurement, setDateOfMeasurement] = useState<string | null>(
   //   null
   // );
-   // Single measurement date for all dimensions
-   const [dateOfMeasurement, setDateOfMeasurement] = useState<string>("");
+  // Single measurement date for all dimensions
+  //  const [dateOfMeasurement, setDateOfMeasurement] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(null);
+  const [dateOfMeasurement, setDateOfMeasurement] = useState<Dayjs | null>(
+    null
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   const handleSave = async () => {
     // Validaciones
     const newErrors: { [key: string]: string } = {};
@@ -71,89 +78,144 @@ const PersonForm: React.FC<PersonFormProps> = ({
       setErrors(newErrors);
       return;
     }
-    const personDataToSave = {
+
+    // 2) Preparar sólo las mediciones con valor
+    const validMeasurements = measurements
+      .filter((m) => m.value !== null)
+      .map((m) => ({
+        dimension_id: m.dimension_id,
+        value: m.value!,
+        position: m.position,
+        study_id: studyId,
+        date: dateOfMeasurement ? dateOfMeasurement.format("YYYY-MM-DD") : "",
+      }));
+
+    // const personDataToSave = {
+    //   name,
+    //   gender,
+    //   date_of_birth: dateOfBirth?.format("YYYY-MM-DD") || "",
+    //   country,
+    //   state,
+    //   province,
+    //   measurements: measurements.map((m) => ({
+    //     dimension_id: m.dimension_id,
+    //     value: m.value,
+    //     position: m.position, // Puedes agregar un campo para seleccionar la posición si es necesario
+    //     study_id: studyId,
+    //     date: dateOfMeasurement?.format("YYYY-MM-DD") || "", // Fecha de medición
+    //   })),
+    // };
+
+    // 3) Construir el payload de forma condicional
+    const payload: any = {
       name,
       gender,
-      date_of_birth: dateOfBirth,
+      date_of_birth: dateOfBirth ? dateOfBirth.format("YYYY-MM-DD") : "",
       country,
       state,
       province,
-      measurements: measurements.map((m) => ({
-        dimension_id: m.dimension_id,
-        value: m.value,
-        position: m.position, // Puedes agregar un campo para seleccionar la posición si es necesario
-        study_id: studyId,
-        date: dateOfMeasurement, // Fecha de medición
-      })),
     };
-
+    if (validMeasurements.length > 0) {
+      payload.measurements = validMeasurements;
+    }
     try {
       setIsLoading(true);
-      console.log("Save");
-      console.log(personDataToSave);
+
       if (mode === "add") {
-        await axios.post(
-          "http://127.0.0.1:8000/api/persons/",
-          personDataToSave
-        );
-      } else if (mode === "edit" && personData?.id) {
+        await axios.post("http://127.0.0.1:8000/api/persons/", payload);
+      } else if (mode === "edit" && personId) {
+        // PATCH en lugar de PUT para no borrar las mediciones faltantes
         await axios.put(
-          `http://127.0.0.1:8000/api/persons/${personData.id}/`,
-          personDataToSave
+          `http://127.0.0.1:8000/api/persons/${personId}/`,
+          payload
         );
+        console.log("edit", payload);
       }
-      onClose(); // Cerrar el formulario después de guardar
+
+      onClose();
     } catch (error) {
       console.error("Error al guardar la persona:", error);
     } finally {
       setIsLoading(false);
     }
+    // try {
+    //   setIsLoading(true);
+    //   console.log("Save");
+    //   console.log(personDataToSave);
+    //   if (mode === "add") {
+    //     alert("agregando")
+    //     await axios.post(
+    //       "http://127.0.0.1:8000/api/persons/",
+    //       personDataToSave
+    //     );
+    //   } else if (mode === "edit" && personData?.id) {
+    //     alert("editando")
+    //     await axios.put(
+    //       `http://127.0.0.1:8000/api/persons/${personData.id}/`,
+    //       personDataToSave
+    //     );
+    //   }
+    //   onClose(); // Cerrar el formulario después de guardar
+    // } catch (error) {
+    //   console.error("Error al guardar la persona:", error);
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   useEffect(() => {
-    if (mode === "edit" && personData?.id) {
-        setIsLoading(true);
-        // Obtener los datos adicionales de la persona desde la API
-        axios.get(`http://127.0.0.1:8000/api/persons/${personData.id}/`)
-          .then((response) => {
-            const fullPersonData = response.data;
-            setName(fullPersonData.name);
-            setGender(fullPersonData.gender);
-            setDateOfBirth(fullPersonData.date_of_birth);
-            setCountry(fullPersonData.country);
-            setState(fullPersonData.state);
-            setProvince(fullPersonData.province);
-          })
-          .catch((error) => {
-            console.error("Error al obtener los datos de la persona:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-    }
-    if (personData) {
-      console.log("personData", personData);
-      setName(personData.name);
-      // Mapear las medidas de personData al estado measurements
-      const initialMeasurements = Object.entries(personData.dimensions)
-        .map(([dimensionName, value]) => {
-          const dimension = dimensions.find((d) => d.name === dimensionName);
-          return {
-            dimension_id: dimension ? dimension.id_dimension : -1, // Obtener el ID de la dimensión
-            value: value,
-            position: "P" as "P" | "S",
-            date:""
-          };
+    if (mode === "edit" && personId) {
+      setIsLoading(true);
+      // Obtener los datos adicionales de la persona desde la API
+      axios
+        .get(`http://127.0.0.1:8000/api/persons/${personId}/`)
+        .then((response) => {
+          const fullPersonData = response.data;
+          setName(fullPersonData.name);
+          setGender(fullPersonData.gender);
+          setDateOfBirth(dayjs(fullPersonData.date_of_birth));
+          setCountry(fullPersonData.country);
+          setState(fullPersonData.state);
+          setProvince(fullPersonData.province);
+          setDateOfMeasurement(dayjs(fullPersonData.measurements[0]?.date));
+          console.log(response.data);
+          const initialMeasurements: Measurement[] =
+            fullPersonData.measurements.map((m: any) => ({
+              dimension_id: m.dimension_id,
+              value: m.value,
+              position: m.position, // "P" o "S"
+              date: m.date.split("T")[0], // "YYYY-MM-DD"
+            }));
+          setMeasurements(initialMeasurements);
         })
-        .filter((m) => m.dimension_id !== -1); // Filtrar dimensiones no encontradas
-
-      setMeasurements(initialMeasurements);
+        .catch((error) => {
+          console.error("Error al obtener los datos de la persona:", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
-  }, [personData, dimensions]);
+    // if (personData) {
+    //   console.log("personData", personData);
+    //   // setName(personData.name);
+    //   // Mapear las medidas de personData al estado measurements
+    //   const initialMeasurements = Object.entries(personData.dimensions)
+    //     .map(([dimensionName, value]) => {
+    //       const dimension = dimensions.find((d) => d.name === dimensionName);
+    //       return {
+    //         dimension_id: dimension ? dimension.id_dimension : -1, // Obtener el ID de la dimensión
+    //         value: value,
+    //         position: "P" as "P" | "S",
+    //         date: dayjs("2020-02-02").format("YYYY-MM-DD"), // Cambia esto según sea necesario
+    //       };
+    //     })
+    //     .filter((m) => m.dimension_id !== -1); // Filtrar dimensiones no encontradas
+
+    //   setMeasurements(initialMeasurements);
+    // }
+  }, [personId, dimensions]);
 
   const handleMeasurementChange = (dimensionId: number, value: string) => {
-   
-
     const numericValue = value === "" ? null : parseFloat(value);
     setMeasurements((prev) => {
       const existingIndex = prev.findIndex(
@@ -166,7 +228,12 @@ const PersonForm: React.FC<PersonFormProps> = ({
       } else {
         return [
           ...prev,
-          { dimension_id: dimensionId, value: numericValue, position: "P", date:dateOfMeasurement }, // Cambia "P" a "S" si es necesario
+          {
+            dimension_id: dimensionId,
+            value: numericValue,
+            position: "P",
+            date: dateOfMeasurement?.format("YYYY-MM-DD") || "",
+          }, // Cambia "P" a "S" si es necesario
         ];
       }
     });
@@ -226,7 +293,19 @@ const PersonForm: React.FC<PersonFormProps> = ({
               </p>
             )}
           </FormControl>
-          <TextField
+
+          <DateSelect
+            value={dateOfBirth}
+            onDateChange={setDateOfBirth}
+            label="Fecha de nacimiento"
+          />
+          {errors.dateOfBirth && (
+            <p style={{ color: "red", fontSize: "13px", marginLeft: "12px" }}>
+              {errors.dateOfBirth}
+            </p>
+          )}
+
+          {/* <TextField
             margin="dense"
             label="Fecha de nacimiento"
             type="date"
@@ -238,7 +317,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
             error={!!errors.dateOfBirth}
             helperText={errors.dateOfBirth}
             InputLabelProps={{ shrink: true }}
-          />
+          /> */}
           <TextField
             margin="dense"
             label="País"
@@ -259,7 +338,17 @@ const PersonForm: React.FC<PersonFormProps> = ({
             error={!!errors.state}
             helperText={errors.state}
           />
-          <TextField
+          <DateSelect
+            label="Fecha de medición"
+            value={dateOfMeasurement}
+            onDateChange={setDateOfMeasurement}
+          />
+          {errors.dateOfMeasurement && (
+            <p style={{ color: "red", fontSize: "13px", marginLeft: "12px" }}>
+              {errors.dateOfMeasurement}
+            </p>
+          )}
+          {/* <TextField
             margin="dense"
             label="Fecha de medición"
             type="date"
@@ -270,7 +359,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
             InputLabelProps={{ shrink: true }}
             error={!!errors.dateOfMeasurement}
             helperText={errors.dateOfMeasurement}
-          />
+          /> */}
           {dimensions.map((dimension) => {
             const measurement = measurements.find(
               (m) => m.dimension_id === dimension.id_dimension

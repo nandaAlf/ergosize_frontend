@@ -33,6 +33,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         }),
       }}
     >
+      
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: "1 1 100%" }}
@@ -59,11 +60,11 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
             <FilterListIcon />
           </IconButton>
         </Tooltip>
-         <Tooltip title="Ficha">
+         {/* <Tooltip title="Ficha">
          <IconButton >
            F
          </IconButton>
-       </Tooltip>
+       </Tooltip> */}
         </>
       ) : (
         <></>
@@ -75,11 +76,12 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Insertar">
-           <IconButton onClick={onAddPerson} >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
+        <></>
+        // <Tooltip title="Insertar">
+        //    <IconButton onClick={onAddPerson} >
+        //     <AddIcon />
+        //   </IconButton>
+        // </Tooltip>
       )}
      
     </Toolbar>

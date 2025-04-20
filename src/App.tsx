@@ -11,18 +11,18 @@ const theme = createTheme({
   
   palette: {
     primary: {
-      main: "##8992a3ff", //grey
-      light: "#000",
-      dark: "#000",
-      contrastText: "#000",
+      main: "#2563eb", //grey
+      light: "#f0f0f0",
+      dark: "#0088ffff",
+      contrastText: "#fff",
     },
     secondary: {
       main: "#fff", // Color secundario personalizado (verde)
-      light: "#ebeef2ff", //gray
+      light: "#fff", //gray
       // dark
     },
     error: {
-      main: "#f44336", // Color de error personalizado (rojo)
+      main: "#db3027ff", // Color de error personalizado (rojo)
     },
   },
 });

@@ -4,6 +4,8 @@ import { getData } from "../api/api";
 import React, { useEffect, useState } from "react";
 import { TableComponent } from "../components/TableData/Table";
 import { getPersonStudyData } from "../service/service";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 // import { MyTable } from "../components/TableData/Table";
 
 // Definir la interfaz para la respuesta de la API

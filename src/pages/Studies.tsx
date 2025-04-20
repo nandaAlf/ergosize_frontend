@@ -15,8 +15,9 @@ import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import { getAllStudies } from "../service/service";
-import { Container, Typography } from "@mui/material";
-import FilterPanelLayout from "../components/prueba";
+import { Container, IconButton, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import FilterPanelLayout from "../components/FilterPanelStudies";
 import dayjs, { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -162,63 +163,23 @@ const Studies: React.FC = () => {
   }
   if (error) return <p>{error}</p>;
   return (
-    <section>
-      {/* <Box
-        component="form"
-        sx={{
-          p: "2px 4px",
-          display: "flex",
-          alignItems: "center",
-          width: "99%",
-          marginTop: "20px",
-          marginLeft: "20px",
-        }}
-      >
-        <Box>
-          <Search
-            text={`Buscar por ${
-              searchType === "name" ? "nombre" : "ubicación"
-            }`}
-            onChange={handleSearchChange}
-            value={searchTerm}
-          />
-        </Box>
-
-        <SelectFilter
-          text=""
-          value={searchType}
-          items={searchTypeItems}
-          onChange={handleSearchTypeChange}
-        />
-        <SelectFilter
-          text=""
-          value={FilterType}
-          items={orderItemsBy}
-          onChange={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
-
-        <div>
-          <Button variant="contained" onClick={() => setOpenStudyForm(true)}>
-            Nuevo Estudio
-          </Button>
-        </div>
-      </Box> */}
-
-      <FilterPanelLayout
-        search={searchTerm}
-        onSearchChange={setSearchTerm}
-        sexo={sexoFilter}
-        onSexoChange={setSexoFilter}
-        orden={ordenFilter}
-        onOrdenChange={setOrdenFilter}
-        fechaDesde={fechaDesde}
-        onFechaDesdeChange={setFechaDesde}
-        fechaHasta={fechaHasta}
-        onFechaHastaChange={setFechaHasta}
-      />
-      <Grid container spacing={3} sx={{ padding: "25px" }}>
+    <Box  sx={{ width: "100%" }} >
+        <FilterPanelLayout
+          search={searchTerm}
+          onSearchChange={setSearchTerm}
+          sexo={sexoFilter}
+          onSexoChange={setSexoFilter}
+          orden={ordenFilter}
+          onOrdenChange={setOrdenFilter}
+          fechaDesde={fechaDesde}
+          onFechaDesdeChange={setFechaDesde}
+          fechaHasta={fechaHasta}
+          onFechaHastaChange={setFechaHasta} 
+          openStudyForm={openStudyForm} 
+          onOpenStudyForm={setOpenStudyForm}        />
+      
+      {/* </Box> */}
+      <Grid container spacing={3} sx={{ padding: "25px"}}>
         {filteredStudies?.map((study, index) => (
           <Grid
             size={{ xs: 12, sm: 4 }}
@@ -255,7 +216,7 @@ const Studies: React.FC = () => {
           study={selectedStudyForTable}
         />
       )}
-    </section>
+    </Box>
   );
 };
 

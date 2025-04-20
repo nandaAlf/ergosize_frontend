@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
 // Definir el tipo de las props
 interface SearchProps {
@@ -16,19 +17,31 @@ interface SearchProps {
 // Definición del componente con TypeScript
 const Search: React.FC<SearchProps> = ({ text, onChange, value }) => {
   return (
-    <>
+    <Box >
       <TextField
+        sx={{
+          borderRadius: "999px", // súper redondeado
+          '& .MuiOutlinedInput-root': {
+            borderRadius: "999px", // borde del input
+            paddingRight: 0,
+          },
+          '& .MuiOutlinedInput-input': {
+            padding: '8px 14px', // ajusta esto según te guste
+          },
+          backgroundColor: "#fff",
+        }}
         id="search-input"
-        label={text}
-        variant="outlined"
+        // label={text}
+        placeholder={text + " ..."}
+        //  variant="inlined"
         onChange={onChange}
         value={value}
-        // fullWidth
+        fullWidth
         size="small"
         slotProps={{
           input: {
-            endAdornment: (
-              <InputAdornment position="end">
+            startAdornment: (
+              <InputAdornment position="start">
                 <IconButton type="button" aria-label="search">
                   <SearchIcon />
                 </IconButton>
@@ -37,25 +50,7 @@ const Search: React.FC<SearchProps> = ({ text, onChange, value }) => {
           },
         }}
       />
-    </>
-    // <Paper
-    //   component="form"
-    //   sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-    // >
-    // <>
-    //   <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-    //     <SearchIcon />
-    //   </IconButton>
-    //   <TextField id="standard-basic" label={text}  variant="outlined"  onChange={onChange} />
-    //   {/* <InputBase
-
-    //     sx={{ ml: 1, flex: 1,  }}
-    //     placeholder={text}
-    //     inputProps={{ "aria-label": "search google maps" }}
-    //     onChange={onChange} // Pasar la función onChange
-    //   /> */}
-    // // </>
-    // </Paper>
+    </Box>
   );
 };
 

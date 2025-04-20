@@ -20,6 +20,7 @@ import { Dimension, Person } from "../../types";
 import { useState } from "react";
 import PersonForm from "../Forms/PersonForm";
 import { deleteMeasurements } from "../../api/api";
+import { FilterPanelToobar } from "./FilterPanelToolbar";
 
 interface TableProps {
   dimensions: Dimension[];
@@ -72,8 +73,10 @@ export const TableComponent: React.FC<TableProps> = ({
   const handleEditPerson = () => {
     // setEditPerson(true); // Abrir el diálogo
     if (selected.length === 1) {
+      alert("Editando persona");
       // Solo permitir editar si hay una fila seleccionada
       const personToEdit = persons.find((p) => p.id === selected[0]);
+      console.log("personToEdit",personToEdit);
       if (personToEdit) {
         setSelectedPerson(personToEdit); // Guardar la persona seleccionada
         setEditPerson(true); // Abrir el diálogo en modo edición
@@ -104,8 +107,17 @@ export const TableComponent: React.FC<TableProps> = ({
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <Box   sx={{
+      // width: "100%",
+      width: "calc(100% - 40px)", // evitar overflow horizontal
+      boxSizing: "border-box",
+      padding: "25px",
+      borderRadius: "30px",
+      margin: "40px 20px",
+      border: "1px solid rgba(37, 100, 235, 0.2)",
+      backgroundColor: "white", // opcional para mejor contraste
+    }}>
+      {/* <Paper sx={{ mb: 2 }}> */}
         <EnhancedTableToolbar
           numSelected={selected.length}
           onAddPerson={handleAddPerson}
@@ -113,6 +125,7 @@ export const TableComponent: React.FC<TableProps> = ({
           onDeletePerson={handleDeletePerson}
           title={"TITULO DE LA TABLA"}
         />
+      {/* <FilterPanelToobar/> */}
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -180,7 +193,7 @@ export const TableComponent: React.FC<TableProps> = ({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      {/* </Paper> */}
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -191,10 +204,10 @@ export const TableComponent: React.FC<TableProps> = ({
         mode={editPerson ? "edit" : "add"}
         dimensions={dimensions}
         studyId={study_id} 
-        personData={editPerson && selectedPerson ? selectedPerson : undefined}
+        personId={editPerson && selectedPerson ?  selectedPerson.id : undefined}
       ></PersonForm>
       {/* {/* <pre>{JSON.stringify(persons)}</pre> */}
-      {editPerson ? <pre>{JSON.stringify(selectedPerson)}</pre> : <></>}
+      {/* {editPerson ? <pre>{JSON.stringify(selectedPerson)}</pre> : <></>} */}
     </Box>
   );
 };

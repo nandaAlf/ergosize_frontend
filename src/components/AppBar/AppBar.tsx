@@ -8,6 +8,8 @@ import {
   SvgIcon,
   Toolbar,
 } from '@mui/material';
+import pagesRoutes from '../../routes/routes';
+import { Link } from "react-router-dom";
 
 // SVG tal como lo tienes en tu HTML original
 const CustomLogo: React.FC = () => (
@@ -43,16 +45,22 @@ const Navbar: React.FC = () => {
     <AppBar
       position="sticky"
       color="transparent"
-      elevation={0}
+      elevation={1}
       sx={{
         top: 0,
         marginLeft: "20px",
-        marginRight: "20px",
+        // marginRight: "20px",
         width: "calc(100% - 40px)",
         borderRadius: 5,
-        // backgroundColor: 'rgba(255,255,255,0.8)',
+
+        backgroundColor: 'rgba(37, 100, 235, 0.02)',
+          
+ 
+        // backgroundColor: '#fff',
+        
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(0,0,0,0.05)',
+        // border: '1px solid rgba(0,0,0,0.05)',
+        border: " 1px solid rgba(0, 0, 0, 0.12)",
         // zIndex: theme => theme.zIndex.drawer + 1,
       }}
     >
@@ -69,8 +77,10 @@ const Navbar: React.FC = () => {
               <Button
                 key={item}
                 variant="text"
-                // color="info"
+                color="contrastText"
                 sx={{ textTransform: 'none', fontWeight: 500 }}
+                component={Link}
+                to={pagesRoutes[item]}
               >
                 {item}
               </Button>

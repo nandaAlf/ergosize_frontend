@@ -12,6 +12,9 @@ import {
 } from "@mui/material";
 import useNavigation from "../../hooks/useNavigation";
 import LongMenu from "../Menu";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 interface CardStudyProps {
   study: StudyData;
   selectedCard: number;
@@ -37,10 +40,12 @@ const CardStudy: React.FC<CardStudyProps> = ({
       alert("Delete");
       // Lógica para eliminar
     } else if (action === "Ver mediciones") {
-      console.log("Ver dim",study.dimensions);
+      console.log("Ver dim", study.dimensions);
       goToPage(`/studies/${study.id}`, {
         study,
       });
+    } else {
+      handleOpenTableDialog(study);
     }
   };
   const handleClick = () => {
@@ -48,14 +53,21 @@ const CardStudy: React.FC<CardStudyProps> = ({
   };
   return (
     <Card
+      elevation={0}
       sx={{
         width: "100%",
         margin: "0 ",
         height: "100%",
-        border: " 1px solid rgba(0, 0, 0, 0.12)",
-        // backgroundColor: "red",
+        border: " 1px solid rgba(37, 100, 235, 0.2)",
+        backgroundColor: "transparent",
+        // backgroundColor: "",
         display: "flex", // Añadido para que el CardActionArea ocupe todo el espacio
         flexDirection: "column", // Añadido para que el contenido se organice verticalmente
+        borderRadius: "30px",
+        "&:hover": {
+          backgroundColor: "#f5f5f5ff",
+          // cursor: "pointer",
+        },
       }}
       //  onClick={handleClick}
     >
@@ -106,7 +118,7 @@ const CardStudy: React.FC<CardStudyProps> = ({
           >
             <LongMenu
               onAction={handleMenuAction}
-              options={["Editar", "Eliminar", "Ver mediciones"]}
+              options={["Editar", "Eliminar", "Ver mediciones", "Tablas"]} // Añadido "Ver detalles"
             />
           </Box>
           <Box sx={{ width: "85%" }}>
@@ -123,6 +135,7 @@ const CardStudy: React.FC<CardStudyProps> = ({
                 marginTop: "0",
                 fontWeight: "200px",
                 marginLeft: "0px",
+
                 // backgroundColor: "blue",
               }}
             >
@@ -130,8 +143,6 @@ const CardStudy: React.FC<CardStudyProps> = ({
               {/* {id} */}
             </Typography>
           </Box>
-
-          {/* <CircularProgressWithLabel count={60} total={60} /> */}
         </Box>
         <Divider></Divider>
         <Box
@@ -140,25 +151,50 @@ const CardStudy: React.FC<CardStudyProps> = ({
             maxWidth: "none", // Desactiva el ancho máximo predeterminado del Box
           }}
         >
-          <Typography variant="body2" color="text.secondary">
-            {study.start_date as string} {study.end_date as string}
+          <Typography variant="body2" color="gray">
+          <CalendarMonthOutlinedIcon
+              fontSize="small"
+              sx={{
+                verticalAlign: "middle",
+                color: "gray",
+                mr: 0.5,
+              }}
+            />
+            {study.start_date as string}  / {study.end_date as string}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="gray">
+            <LocationOnOutlinedIcon
+              fontSize="small"
+              sx={{
+                verticalAlign: "middle",
+                color: "gray",
+                mr: 0.5,
+              }}
+            />
             {study.location} / {study.country}
           </Typography>
           <Tooltip title="Miembros">
             <Typography
               variant="body2"
-              color="text.secondary"
+              color="gray"
               // sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
+              <GroupsOutlinedIcon
+                fontSize="small"
+                sx={{
+                  verticalAlign: "middle",
+                  color: "gray",
+                  mr: 0.5,
+                }}
+              />
               {study.size}
             </Typography>
           </Tooltip>
         </Box>
-
-        <Divider></Divider>
-
+        {/* <Divider></Divider> */}
+        <Divider textAlign="left" sx={{ color: "gray" }}>
+          Descripción
+        </Divider>
         <Box
           sx={{
             margin: "15px",
@@ -166,12 +202,20 @@ const CardStudy: React.FC<CardStudyProps> = ({
         >
           <Typography
             variant="body2"
-            color="text.secondary"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            color="gray"
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              minHeight: "3.2em", // <-- Mantiene altura aunque solo haya 1 línea
+            }}
           >
             {study.description}
           </Typography>
         </Box>
+
         <Divider textAlign="left" sx={{ color: "gray" }}>
           Dimensiones
         </Divider>
@@ -195,15 +239,17 @@ const CardStudy: React.FC<CardStudyProps> = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#f0f0f0",
+                // backgroundColor: "#2563eb",
+                backgroundColor: 'rgba(37, 100, 235, 0.1)',
                 padding: "7px",
                 borderRadius: "50px",
+                minWidth: "50px",
               }}
             >
               <Tooltip title={dim.name}>
                 <Typography
                   variant="body2"
-                  color="text.secondary"
+                  color="gray"
                   sx={{ display: "flex", alignItems: "center", gap: 1 }}
                 >
                   {dim.initial}
@@ -213,22 +259,22 @@ const CardStudy: React.FC<CardStudyProps> = ({
           ))}
         </Box>
 
-        <Divider> </Divider>
+        {/* <Divider> </Divider> */}
 
-        <Box
+        {/* <Box
           sx={{
             margin: "15px",
           }}
         >
           {/* Botón para generar la tabla antropométrica */}
-          <Button
+        {/* <Button
             variant="contained"
             onClick={() => handleOpenTableDialog(study)}
           >
             Generar Tabla
           </Button>
           {/* <Button onAction={handleClick()}>Tabla {">"}</Button> */}
-        </Box>
+        {/* </Box> */}
       </CardContent>
       {/* </CardActionArea> */}
     </Card>
