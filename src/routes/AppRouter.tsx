@@ -5,7 +5,7 @@ import Studies from "../pages/Studies";;
 import StudyDetail from "../pages/StudyDetail";
 import Help from "../pages/Help";
 import Tables from "../pages/Tables";
-import TableDetail from "../pages/TableDetail";
+import TableDetail from "../pages/AnthropometricTable";
 
 
 export function AppRouter() {

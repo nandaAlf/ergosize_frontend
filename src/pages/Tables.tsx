@@ -1,8 +1,9 @@
 // pages/AnthropometricTablePage.tsx
 import React from "react";
 import { useSearchParams, useParams } from "react-router-dom";
-import TableDetail from "./TableDetail";
+
 import ExcelUploade from "../components/ExcelUploade";
+import AnthropometricTable from "./AnthropometricTable";
 
 const Tables = () => {
 //   const { studyId } = useParams();
@@ -23,10 +24,10 @@ const Tables = () => {
 
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "1rem" }}>
     
 
-      <TableDetail
+      <AnthropometricTable
         studyId={parseInt(studyId!)}
         gender={gender}
         ageMin={ageMin}

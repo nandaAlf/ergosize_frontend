@@ -18,12 +18,13 @@ import {
   FormGroup,
   FormControlLabel,
   Typography,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import SelectFilter from "../filtros/Selct";
 import { StudyData } from "../../types";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const availablePercentiles = [5, 10, 25, 50, 75, 90, 95];
-
 
 interface TableFormProps {
   open: boolean;
@@ -62,9 +63,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
       target: { value },
     } = event;
     setSelectedDimensions(
-      typeof value === "string"
-        ? value.split(",").map(Number)
-        : value
+      typeof value === "string" ? value.split(",").map(Number) : value
     );
   };
 
@@ -91,7 +90,8 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
     const params = new URLSearchParams();
     if (!study.id) return;
     params.append("studyId", study.id.toString());
-    if (genderFilter !== undefined && genderFilter !="MF") params.append("gender", genderFilter);
+    if (genderFilter !== undefined && genderFilter != "MF")
+      params.append("gender", genderFilter);
     if (ageMin !== "") params.append("age_min", ageMin);
     if (ageMax !== "") params.append("age_max", ageMax);
     if (selectedDimensions.length)
@@ -113,13 +113,13 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
         >
           {/* Filtro de género */}
           <FormControl fullWidth>
-          <SelectFilter
-            text="Género"
-            value={genderFilter}
-            items={genderOptions}
-            onChange={(value: string) => setGenderFilter(value)}
-          />
-            </FormControl>
+            <SelectFilter
+              text="Género"
+              value={genderFilter}
+              items={genderOptions}
+              onChange={(value: string) => setGenderFilter(value)}
+            />
+          </FormControl>
           {/* Filtro de edad */}
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
@@ -128,7 +128,9 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               value={ageMin}
               onChange={(e) => setAgeMin(e.target.value)}
               size="small"
-              slotProps={{ htmlInput: { min: study.age_min, max: study.age_max } }}
+              slotProps={{
+                htmlInput: { min: study.age_min, max: study.age_max },
+              }}
               fullWidth
             />
             <TextField
@@ -137,19 +139,30 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               value={ageMax}
               size="small"
               onChange={(e) => setAgeMax(e.target.value)}
-              slotProps={{ htmlInput: { min: study.age_min, max: study.age_max } }}
+              slotProps={{
+                htmlInput: { min: study.age_min, max: study.age_max },
+              }}
               fullWidth
             />
           </Box>
 
           {/* Select all dimensions */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Button size="small" onClick={selectAllDimensions}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={selectAllDimensions}
+            >
               Todas las dimensiones
             </Button>
-            <Button size="small" onClick={clearDimensions}>
-              Limpiar
-            </Button>
+            <Tooltip title="Limpiar" arrow>
+              <IconButton color="primary" onClick={clearDimensions}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            {/* <Button size="small" onClick={clearDimensions}>
+              <DeleteIcon /> Limpiar
+            </Button> */}
           </Box>
 
           {/* Selección de dimensiones */}
@@ -176,9 +189,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               {study.dimensions?.map((dim) => (
                 <MenuItem key={dim.id_dimension} value={dim.id_dimension}>
                   <Checkbox
-                    checked={
-                      selectedDimensions.indexOf(dim.id_dimension) > -1
-                    }
+                    checked={selectedDimensions.indexOf(dim.id_dimension) > -1}
                   />
                   <ListItemText primary={dim.name} />
                 </MenuItem>
@@ -217,8 +228,6 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
 };
 
 export default TableForm;
-
-
 
 // import React, { useState } from "react";
 // import {

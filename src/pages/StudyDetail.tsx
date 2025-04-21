@@ -16,7 +16,16 @@ const StudyDetail: React.FC = () => {
   const study = location.state?.study as StudyData | undefined; // Obtener los datos del estudio
   const [persons, setPersons] = useState<Person[]>([]);
   const [dimensions, setDimensions] = useState<Dimension[]>([]);
-
+  //  ← Nuevo estado para búsqueda
+  const [searchTerm, setSearchTerm] = useState("");
+   //  ← Filtra las personas aquí
+   const filteredPersons = React.useMemo(
+    () =>
+      persons.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+      ),
+    [persons, searchTerm]
+  );
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,8 +50,10 @@ const StudyDetail: React.FC = () => {
     <>
       <TableComponent
         dimensions={dimensions}
-        persons={persons}
+        persons={filteredPersons}
+        searchTerm={searchTerm} // Pasa el término de búsqueda al componente
         study_id={study.id || 0}
+        onSearchTermChange={setSearchTerm} // Pasa la función de cambio de búsqueda
       ></TableComponent>
     </>
   );

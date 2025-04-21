@@ -26,12 +26,16 @@ interface TableProps {
   dimensions: Dimension[];
   persons: Person[];
   study_id: number;
+  searchTerm: string; // Término de búsqueda
+  onSearchTermChange: (value: string) => void;
 }
 
 export const TableComponent: React.FC<TableProps> = ({
   dimensions,
   persons,
-  study_id
+  study_id,
+  searchTerm,
+  onSearchTermChange
 }) => {
   const {
     order,
@@ -76,7 +80,7 @@ export const TableComponent: React.FC<TableProps> = ({
       alert("Editando persona");
       // Solo permitir editar si hay una fila seleccionada
       const personToEdit = persons.find((p) => p.id === selected[0]);
-      console.log("personToEdit",personToEdit);
+      console.log("personToEdit", personToEdit);
       if (personToEdit) {
         setSelectedPerson(personToEdit); // Guardar la persona seleccionada
         setEditPerson(true); // Abrir el diálogo en modo edición
@@ -107,92 +111,98 @@ export const TableComponent: React.FC<TableProps> = ({
   };
 
   return (
-    <Box   sx={{
-      // width: "100%",
-      width: "calc(100% - 40px)", // evitar overflow horizontal
-      boxSizing: "border-box",
-      padding: "25px",
-      borderRadius: "30px",
-      margin: "40px 20px",
-      border: "1px solid rgba(37, 100, 235, 0.2)",
-      backgroundColor: "white", // opcional para mejor contraste
-    }}>
+    <Box
+      sx={{
+        // width: "100%",
+        width: "calc(100% - 40px)", // evitar overflow horizontal
+        boxSizing: "border-box",
+        padding: "25px",
+        borderRadius: "30px",
+        margin: "40px 20px",
+        border: "1px solid rgba(37, 100, 235, 0.2)",
+        backgroundColor: "white", // opcional para mejor contraste
+      }}
+    >
       {/* <Paper sx={{ mb: 2 }}> */}
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          onAddPerson={handleAddPerson}
-          onEditPerson={handleEditPerson}
-          onDeletePerson={handleDeletePerson}
-          title={"TITULO DE LA TABLA"}
-        />
-      {/* <FilterPanelToobar/> */}
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={persons.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {visibleRows.map((person, index) => {
-                const isItemSelected = selected.includes(person.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+      <EnhancedTableToolbar
+        numSelected={selected.length}
+        onAddPerson={handleAddPerson}
+        onEditPerson={handleEditPerson}
+        onDeletePerson={handleDeletePerson}
+        title={"TITULO DE LA TABLA"}
+      />
+      <FilterPanelToobar
+        onOpenPersonForm={setOpenPersonForm}
+        searchTerm={searchTerm}
+        onSearchChange={onSearchTermChange}
+      />
+      <TableContainer>
+        <Table
+          sx={{ minWidth: 750 }}
+          aria-labelledby="tableTitle"
+          size={dense ? "small" : "medium"}
+        >
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={persons.length}
+            headCells={headCells}
+          />
+          <TableBody>
+            {visibleRows.map((person, index) => {
+              const isItemSelected = selected.includes(person.id);
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, person.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={person.id}
-                    selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
+              return (
+                <TableRow
+                  hover
+                  onClick={(event) => handleClick(event, person.id)}
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={person.id}
+                  selected={isItemSelected}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox color="primary" checked={isItemSelected} />
+                  </TableCell>
+                  <TableCell
+                    component="th"
+                    id={labelId}
+                    scope="row"
+                    padding="none"
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isItemSelected} />
+                    {person.name}
+                  </TableCell>
+                  {dimensions.map((dimension) => (
+                    <TableCell key={dimension.id_dimension} align="right">
+                      {dimension.name ? person.dimensions[dimension.name] : ""}
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {person.name}
-                    </TableCell>
-                    {dimensions.map((dimension) => (
-                      <TableCell key={dimension.id_dimension} align="right">
-                        {dimension.name? person.dimensions[dimension.name] : ""}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={dimensions.length + 2} />
+                  ))}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={persons.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+              );
+            })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableCell colSpan={dimensions.length + 2} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={persons.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
       {/* </Paper> */}
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
@@ -203,8 +213,8 @@ export const TableComponent: React.FC<TableProps> = ({
         onClose={handleClosePersonForm}
         mode={editPerson ? "edit" : "add"}
         dimensions={dimensions}
-        studyId={study_id} 
-        personId={editPerson && selectedPerson ?  selectedPerson.id : undefined}
+        studyId={study_id}
+        personId={editPerson && selectedPerson ? selectedPerson.id : undefined}
       ></PersonForm>
       {/* {/* <pre>{JSON.stringify(persons)}</pre> */}
       {/* {editPerson ? <pre>{JSON.stringify(selectedPerson)}</pre> : <></>} */}
