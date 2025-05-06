@@ -1,0 +1,755 @@
+
+  {
+    "Alturas": {
+      "items": {
+        "Estatura": {
+          "sigla": "",
+          "definition": "Distancia desde el vértex al piso.",
+          "vestuario": "",
+          "posicion": "De pie, en posición de atención antropométrica.",
+          "puntos": "Vértex",
+          "instrumento": "Antropómetro?",
+          "graphic": "Ilustracion_45.png"
+        },
+        "Altura sentado": {
+          "sigla": "APS",
+          "definition": "Es la distancia desde el vértex a la superficie horizontal donde está sentado el sujeto, expresada en centímetros.",
+          "vestuario": "",
+          "posicion": "Posición sedante (Ts), ángulo entre piernas y tronco debe ser de 90º, espalda y cabeza deben de estar verticales, inspiración forzada, cabeza en el plano de Frankfort.",
+          "puntos": "Vértex",
+          "instrumento": "Antropómetro?",
+          "graphic": "Ilustracion_46.png"
+        },
+        "Altura del ojo de pie": {
+          "sigla": "AOP",
+          "definition": "Distancia desde el exocantion (comisura exterior del ojo) al suelo, estando el sujeto de pie con la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "De pie con la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Exocantion (comisura exterior del ojo)",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura del oído de pie": {
+          "sigla": "AOI",
+          "definition": "Distancia comprendida del tragion (punto sobre el borde superior del trago donde se une con el hélix) al suelo, estando el sujeto de pie con la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "De pie con la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Tragion",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura a la vertiente humeral de pie": {
+          "sigla": "AVH",
+          "definition": "Longitud comprendida entre el punto medio de la vertiente humeral y el piso, estando el sujeto de pie.",
+          "vestuario": "",
+          "posicion": "De pie",
+          "puntos": "Punto medio de la vertiente humeral",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura hasta el hombro de pie": {
+          "sigla": "AHH",
+          "definition": "Distancia comprendida entre el punto más alto y externo de la curvatura del hombro (el acromio) y el piso, estando el sujeto de pie.",
+          "vestuario": "",
+          "posicion": "De pie",
+          "puntos": "Acromio",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura hasta el omóplato de pie": {
+          "sigla": "AHO",
+          "definition": "Distancia vertical medida desde el ángulo inferior de la escápula hasta el piso, estando el sujeto de pie.",
+          "vestuario": "",
+          "posicion": "De pie",
+          "puntos": "Ángulo inferior de la escápula",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura del codo parado": {
+          "sigla": "ACP",
+          "definition": "Distancia vertical desde el suelo hasta el punto radial, la depresión que forma la unión del brazo y antebrazo (punto más alto de la cabeza del radio).",
+          "vestuario": "",
+          "posicion": "Parado",
+          "puntos": "Punto radial",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_47.png"
+        },
+        "Altura de la muñeca de pie": {
+          "sigla": "AMU",
+          "definition": "Distancia desde el suelo al punto estilo-radial estando el sujeto de pie.",
+          "vestuario": "",
+          "posicion": "De pie",
+          "puntos": "Punto estilo-radial",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura del nudillo de pie": {
+          "sigla": "ALNU",
+          "definition": "Distancia tomada desde el suelo hasta el nudillo del dedo medio estando el sujeto parado en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "Parado en posición de atención antropométrica.",
+          "puntos": "Nudillo del dedo medio",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura del dedo medio de pie": {
+          "sigla": "",
+          "definition": "Es la distancia desde el dactilio al piso, estando el sujeto de pie con los dedos extendidos en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "De pie con los dedos extendidos en posición de atención antropométrica.",
+          "puntos": "Dactilio",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura ileocrestal de pie": {
+          "sigla": "AI",
+          "definition": "Distancia vertical desde el suelo hasta el punto ileocrestal en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "En posición de atención antropométrica.",
+          "puntos": "Punto ileocrestal",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura de la rodilla parado": {
+          "sigla": "ARP",
+          "definition": "Distancia vertical desde el suelo hasta el vértice de la rótula a la altura del punto tibial.",
+          "vestuario": "",
+          "posicion": "Parado",
+          "puntos": "Vértice de la rótula, punto tibial",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura del tobillo (maleolar o esfirión)": {
+          "sigla": "ADT",
+          "definition": "Es la distancia desde el piso hasta el vértice inferior del maleolar o esfirión externo del pie derecho.",
+          "vestuario": "",
+          "posicion": "De pie",
+          "puntos": "Vértice inferior del maleolar o esfirión externo del pie derecho",
+          "instrumento": "Antropómetro",
+          "graphic": "Ilustracion_48.png"
+        },
+        "Altura de los ojos sentado": {
+          "sigla": "AO",
+          "definition": "Distancia desde el exocantion (comisura exterior del ojo) hasta la superficie horizontal del asiento con el tórax formando un ángulo de 90 grados con el asiento y la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "Sentado con el tórax formando un ángulo de 90 grados con el asiento y la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Exocantion (comisura exterior del ojo)",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura del oído sentado": {
+          "sigla": "AOS",
+          "definition": "Distancia comprendida del tragion (punto sobre el borde superior del trago donde se une con el hélix) a la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Tragion",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura a la vertiente humeral sentado": {
+          "sigla": "AVHS",
+          "definition": "Longitud comprendida entre el punto medio de la vertiente humeral y la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Punto medio de la vertiente humeral",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura del hombro sentado": {
+          "sigla": "AMHS",
+          "definition": "Distancia comprendida entre el punto más alto y externo de la curvatura del hombro (el acromio) y la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
+          "vestuario": "",
+          "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
+          "puntos": "Acromio",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura del omóplato sentado": {
+          "sigla": "AS",
+          "definition": "Distancia vertical medida desde el ángulo inferior de la escápula hasta el plano del asiento cuando el sujeto esta con el tórax erguido y perpendicular al plano del asiento.",
+          "vestuario": "",
+          "posicion": "Sentado con el tórax erguido y perpendicular al plano del asiento.",
+          "puntos": "Ángulo inferior de la escápula",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura del codo sentado": {
+          "sigla": "AC",
+          "definition": "Distancia vertical desde el plano del asiento hasta la depresión que forma la unión del brazo y antebrazo (punto más alto de la cabeza del radio), cuando el sujeto tiene su brazo paralelo a la línea media del tronco y el antebrazo formando constantemente un ángulo aproximado de 90 grados.",
+          "vestuario": "",
+          "posicion": "Sentado con el brazo paralelo a la línea media del tronco y el antebrazo formando un ángulo aproximado de 90 grados.",
+          "puntos": "Punto más alto de la cabeza del radio (punto radial)",
+          "instrumento": "",
+          "graphic": "Ilustracion_49.png"
+        },
+        "Altura ileocrestal sentado": {
+          "sigla": "AI",
+          "definition": "Distancia vertical desde el plano del asiento hasta el punto iliocrestal con el tronco perpendicular al plano del asiento formando un ángulo de 90 grados con los muslos.",
+          "vestuario": "",
+          "posicion": "Sentado con el tronco perpendicular al plano del asiento formando un ángulo de 90 grados con los muslos.",
+          "puntos": "Punto iliocrestal",
+          "instrumento": "",
+          "graphic": "Ilustracion_50.png"
+        },
+        "Altura del muslo sentado": {
+          "sigla": "AM",
+          "definition": "Distancia vertical desde el punto más alto del muslo derecho a nivel inguinal, tomando como referencia el pliegue cutáneo entre el muslo y la cintura pélvica con un ángulo de 90 grados entre el tórax y el muslo.",
+          "vestuario": "",
+          "posicion": "Sentado con un ángulo de 90 grados entre el tórax y el muslo.",
+          "puntos": "Punto más alto del muslo derecho a nivel inguinal, pliegue cutáneo entre el muslo y la cintura pélvica",
+          "instrumento": "",
+          "graphic": "Ilustracion_50.png"
+        },
+        "Altura de la rodilla sentado": {
+          "sigla": "AR",
+          "definition": "Distancia vertical desde el suelo hasta el vértice de la rótula a la altura del punto tibial cuando el sujeto tiene el muslo en posición horizontal formando un ángulo de 90 grados con la pierna.",
+          "vestuario": "",
+          "posicion": "Sentado con el muslo en posición horizontal formando un ángulo de 90 grados con la pierna.",
+          "puntos": "Vértice de la rótula, punto tibial",
+          "instrumento": "",
+          "graphic": "Ilustracion_50.png"
+        },
+        "Altura poplítea sentado": {
+          "sigla": "AP",
+          "definition": "Distancia vertical medida desde el plano del asiento hasta el piso, cuando el sujeto se encuentra con ambos pies apoyados, el borde anterior del asiento no ejerce presiones en la cara posterior del muslo derecho y este forma un ángulo de 90 grados con el tronco y las piernas.",
+          "vestuario": "",
+          "posicion": "Sentado con ambos pies apoyados, el borde anterior del asiento no ejerce presiones en la cara posterior del muslo derecho y este forma un ángulo de 90 grados con el tronco y las piernas.",
+          "puntos": "Depresión poplítea de la pierna derecha",
+          "instrumento": "",
+          "graphic": "Ilustracion_50.png"
+        },
+        "Altura de la cabeza": {
+          "sigla": "ADC",
+          "definition": "Distancia vertical comprendida desde el vértex al tragón.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Vértex, tragón",
+          "instrumento": "",
+          "graphic": "Ilustracion_50.png"
+        }
+      }
+    },
+    "Longitudes": {
+      "items": {
+        "Longitud de la cara": {
+          "sigla": "LCAR",
+          "definition": "Distancia limitada por el entrecejo (glabela) a la parte más inferior y anterior de la mandíbula (gnation).",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Entrecejo (glabela), gnation",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud de la cabeza": {
+          "sigla": "LCA",
+          "definition": "Es la distancia comprendida entre el entrecejo (glabela) y el opistocráneo.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Entrecejo (glabela), opistocráneo",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud del antebrazo": {
+          "sigla": "LAN",
+          "definition": "Distancia desde el punto radial hasta el punto estilio radial en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "En posición de atención antropométrica.",
+          "puntos": "Punto radial, punto estilio radial",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud codo-centro de la mano": {
+          "sigla": "LCCM",
+          "definition": "Distancia horizontal desde el centro de la mano al radial (punto extremo de la cabeza del radio, que forma la unión del brazo y antebrazo) formando estos un ángulo de 90 grados.",
+          "vestuario": "",
+          "posicion": "Formando un ángulo de 90 grados.",
+          "puntos": "Centro de la mano, radial",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud codo-dedos sentado": {
+          "sigla": "LCDS",
+          "definition": "Distancia horizontal desde el dactilión del dedo medio al radial Punto extremo de la cabeza del radio, que forma la unión del brazo y antebrazo formando estos un ángulo de 90 grados.",
+          "vestuario": "",
+          "posicion": "Sentado, formando un ángulo de 90 grados.",
+          "puntos": "Dactilión del dedo medio, radial",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud sacro rótula sentado": {
+          "sigla": "LSR",
+          "definition": "Distancia horizontal medida desde el punto correspondiente al vértice de la rótula derecha hasta el plano vertical situado en la espalda del individuo, cuando este tiene su muslo en posición horizontal y formando un ángulo de 90 grados con las piernas y el tronco.",
+          "vestuario": "",
+          "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
+          "puntos": "Vértice de la rótula derecha, plano vertical situado en la espalda",
+          "instrumento": "",
+          "graphic": "Ilustracion_51.png"
+        },
+        "Longitud sacro poplítea sentado": {
+          "sigla": "LSP",
+          "definition": "Distancia horizontal medida desde el punto correspondiente a la depresión poplítea de la pierna derecha hasta el plano vertical, situado en la espalda del individuo cuando este tiene el muslo en posición horizontal y formando un ángulo de 90 grados con las piernas y el tronco.",
+          "vestuario": "",
+          "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
+          "puntos": "Depresión poplítea de la pierna derecha, plano vertical situado en la espalda",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud del muslo sentado": {
+          "sigla": "",
+          "definition": "Distancia horizontal medida desde el vértice de la rótula derecha hasta el punto más alto del muslo a nivel inguinal, tomando como referencia el pliegue cutáneo que se forma entre el muslo y la cintura pélvica.",
+          "vestuario": "",
+          "posicion": "Sentado",
+          "puntos": "Vértice de la rótula derecha, punto más alto del muslo a nivel inguinal",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud nalga-punta del pie": {
+          "sigla": "",
+          "definition": "Distancia horizontal que se toma desde la superficie más exterior de la nalga hasta la punta del pie.",
+          "vestuario": "",
+          "posicion": "Sentado",
+          "puntos": "Superficie más exterior de la nalga, punta del pie",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud nalga-talón": {
+          "sigla": "",
+          "definition": "Distancia horizontal que se toma desde el talón hasta el plano de una pared donde la persona sentada y erguida apoya la espalda teniendo, además, la pierna perfectamente extendida hacia adelante a lo largo de la superficie del asiento.",
+          "vestuario": "",
+          "posicion": "Sentado y erguido, espalda apoyada en la pared, pierna extendida.",
+          "puntos": "Talón, plano de una pared",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud palma de la mano": {
+          "sigla": "LPM",
+          "definition": "Es la distancia del doblez más cercano a la región del metacarpo de la muñeca, a la base del dedo medio, sobre la articulación metacarpo-falángica.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, base del dedo medio (articulación metacarpo-falángica)",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud de la mano": {
+          "sigla": "LDM",
+          "definition": "Es la distancia limitada por el doblez más cercano a la región del metacarpo de la muñeca, al vértice del dedo medio (dactilion III).",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, dactilion III",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Longitud del pie": {
+          "sigla": "LP",
+          "definition": "Es la distancia desde el punto más anterior del mayor de los dedos del pie, acropodio, a la parte más posterior del talón, ternio (ternio-acropodio).Distancia entre el pternio y el acropodio.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Acropodio, ternio",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        }
+      }
+    },
+    "Profundidades": {
+      "items": {
+        "Profundidad de la mano": {
+          "sigla": "PMA",
+          "definition": "Ancho medido con la mano situada recta y los dedos unidos desde la palma superior de la mano a la inferior incluyendo el metacarpo I.",
+          "vestuario": "",
+          "posicion": "Mano situada recta y dedos unidos.",
+          "puntos": "Palma superior de la mano, palma inferior de la mano incluyendo metacarpo I",
+          "instrumento": "",
+          "graphic": "Ilustracion_54.png"
+        },
+        "Profundidad del nudillo": {
+          "sigla": "PNU",
+          "definition": "Ancho medido con el metacarpal I separado del resto desde la palma superior de la mano a la inferior a la altura de las articulaciones del metacarpal falange sin incluir el metacarpal I.",
+          "vestuario": "",
+          "posicion": "Metacarpal I separado del resto.",
+          "puntos": "Palma superior de la mano, palma inferior de la mano a la altura de las articulaciones del metacarpal falange",
+          "instrumento": "",
+          "graphic": "Ilustracion_54.png"
+        },
+        "Profundidad de la articulación del metacarpal III": {
+          "sigla": "PAM",
+          "definition": "Máxima profundidad del metacarpal III en la articulación de la falange.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Articulación del metacarpal III con la falange",
+          "instrumento": "",
+          "graphic": "Ilustracion_54.png"
+        },
+        "Profundidad de la articulación del pulgar": {
+          "sigla": "",
+          "definition": "Máxima profundidad del metacarpal I",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Metacarpal I",
+          "instrumento": "",
+          "graphic": "Ilustracion_54.png"
+        }
+      }
+    },
+    "Anchuras": {
+      "items": {
+        "Ancho de la cabeza": {
+          "sigla": "ADCA",
+          "definition": "Distancia horizontal comprendida entre el punto eurio izquierdo y el derecho.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Punto eurio izquierdo, punto eurio derecho",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Anchura del cuello": {
+          "sigla": "ACU",
+          "definition": "Es la dimensión mayor en la base del cuello, ubicada donde cambia de dirección su perfil para formar los hombros.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Base del cuello",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Anchura de pecho diámetro del tórax": {
+          "sigla": "",
+          "definition": "Distancia horizontal entre los extremos del pecho. Línea a nivel de los pezones; en las mujeres, a nivel del cuarto espacio intercostal sobre el esternón.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Extremos del pecho (nivel pezones o cuarto espacio intercostal/esternón en mujeres)",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Ancho de cadera parado": {
+          "sigla": "",
+          "definition": "Frecuentemente se utiliza para esta medición el borde superior de la articulación condroesternal, el punto xifoideo o un nivel alto de las axilas o donde se obtenga una lectura máxima.",
+          "vestuario": "",
+          "posicion": "Parado",
+          "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Anchura de la cadera sentado": {
+          "sigla": "ACA",
+          "definition": "Distancia horizontal que existe entre las caderas (trocanteres), encontrándose el sujeto sentado con el tórax erguido y perpendicular al plano de asiento.",
+          "vestuario": "",
+          "posicion": "Sentado con el tórax erguido y perpendicular al plano de asiento.",
+          "puntos": "Caderas (trocanteres)",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Anchura de codo a codo sentado": {
+          "sigla": "ACC",
+          "definition": "Distancia horizontal entre los radiales (puntos extremos de la cabeza del radio, que forma la unión del brazo y antebrazo) formando estos un ángulo aproximado de 90 grados.",
+          "vestuario": "",
+          "posicion": "Sentado, formando un ángulo aproximado de 90 grados.",
+          "puntos": "Radiales",
+          "instrumento": "",
+          "graphic": "Ilustracion_56.png"
+        },
+        "Anchura del codo": {
+          "sigla": "ACOD",
+          "definition": "Es la distancia entre el punto más lateral y medial de los epicóndilos del húmero.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Punto más lateral y medial de los epicóndilos del húmero",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Anchura de la muñeca": {
+          "sigla": "ALMU",
+          "definition": "Es la anchura biestiloidea del cúbito y del radio.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Anchura biestiloidea del cúbito y del radio",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Anchura del tobillo": {
+          "sigla": "ATO",
+          "definition": "Es la distancia medida entre los aspectos más medial y más lateral de los maléolos interno y externo.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Aspectos más medial y más lateral de los maléolos interno y externo",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Anchura de la mano": {
+          "sigla": "ADM",
+          "definition": "Ancho de la mano entre la articulación del metacarpal-falange I y V cuando la manos está extendida con la palma bocarriba sobre la mesa.",
+          "vestuario": "",
+          "posicion": "Mano extendida con la palma bocarriba sobre la mesa.",
+          "puntos": "Articulación del metacarpal-falange I y V",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Anchura del nudillo de la mano": {
+          "sigla": "ANU",
+          "definition": "Ancho de la mano entre la articulación del metacarpal-falange II y V cuando la mano se encuentra extendida sobre una mesa y la palma de la mano bocarriba.",
+          "vestuario": "",
+          "posicion": "Mano extendida sobre una mesa y la palma bocarriba.",
+          "puntos": "Articulación del metacarpal-falange II y V",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Ancho del pie": {
+          "sigla": "AHP",
+          "definition": "Distancia comprendida entre el borde interno y externo del pie a nivel de la cabeza del primer y quinto metatarsiano.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Borde interno y externo del pie a nivel de la cabeza del primer y quinto metatarsiano",
+          "instrumento": "",
+          "graphic": "Ilustracion_57.png"
+        },
+        "Anchura bideltoideo": {
+          "sigla": "",
+          "definition": "Distancia horizontal máxima que separa los músculos deltoides.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Músculos deltoides",
+          "instrumento": "",
+          "graphic": "Ilustracion_58.png"
+        },
+        "Anchura del talón": {
+          "sigla": "AT",
+          "definition": "Es el grosor máximo de la cara interna del talón a la externa.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Cara interna del talón, cara externa del talón",
+          "instrumento": "",
+          "graphic": "Ilustracion_58.png"
+        }
+      }
+    },
+    "Diametros": {
+      "items": {
+        "Diámetro interpupilar": {
+          "sigla": "DI",
+          "definition": "Es la distancia comprendida entre la pupila izquierda y la derecha.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Pupila izquierda, pupila derecha",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetro biacromial": {
+          "sigla": "",
+          "definition": "Distancia entre los puntos acromiales del omóplato, encontrándose el sujeto en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "En posición de atención antropométrica.",
+          "puntos": "Puntos acromiales del omóplato",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetro transversal del tórax": {
+          "sigla": "DTT",
+          "definition": "Es la anchura del tórax medido por la espalda entre los dos pliegues externos y superiores de las axilas con el sujeto de pie, con los brazos sin movimiento y relajados.",
+          "vestuario": "",
+          "posicion": "De pie, con los brazos sin movimiento y relajados.",
+          "puntos": "Dos pliegues externos y superiores de las axilas",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetros transversos y anteroposterior del tórax": {
+          "sigla": "DTAP",
+          "definition": "Frecuentemente se utiliza para esta medición el borde superior de la articulación condroesternal, el punto xifoideo o un nivel alto de las axilas o donde se obtenga una lectura máxima.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetro bicrestal": {
+          "sigla": "DBC",
+          "definition": "Distancia que existe entre las crestas iliacas, encontrándose el sujeto en posición de atención antropométrica.",
+          "vestuario": "",
+          "posicion": "En posición de atención antropométrica.",
+          "puntos": "Crestas iliacas",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetro bitrocantérico": {
+          "sigla": "DBCT",
+          "definition": "Distancia entre las proyecciones más laterales de los grandes trocánteres (trocanterios).",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Proyecciones más laterales de los grandes trocánteres (trocanterios)",
+          "instrumento": "",
+          "graphic": "Ilustracion_59.png"
+        },
+        "Diámetro de empuñadura": {
+          "sigla": "DE",
+          "definition": "Es la distancia máxima comprendida entre dos puntos cerrando un círculo con los dedos índice y pulgar de la mano derecha, se toma con el cono de empuñadura.",
+          "vestuario": "",
+          "posicion": "Cerrando un círculo con los dedos índice y pulgar de la mano derecha.",
+          "puntos": "Dos puntos cerrando un círculo",
+          "instrumento": "Cono de empuñadura",
+          "graphic": "Ilustracion_60.png"
+        }
+      }
+    },
+    "Circunferencias": {
+      "items": {
+        "Circunferencia de la cabeza": {
+          "sigla": "CC",
+          "definition": "Es la circunferencia máxima tomando como referencia las protuberancias frontales y la parte más posterior de la cabeza, occipucio (del frontal al opistocraneo).",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Protuberancias frontales, occipucio",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia del cuello": {
+          "sigla": "CCU",
+          "definition": "Es el perímetro del cuello medido inmediatamente por debajo del cartílago tiroides, justo sobre la prominencia laríngea.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Inmediatamente por debajo del cartílago tiroides, justo sobre la prominencia laríngea",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia del brazo": {
+          "sigla": "",
+          "definition": "Circunferencia obtenida en el brazo en el nivel del punto mesobraquial, con el brazo colgando a lo largo del cuerpo pero ligeramente separado y relajado.",
+          "vestuario": "",
+          "posicion": "Brazo colgando a lo largo del cuerpo, ligeramente separado y relajado.",
+          "puntos": "Nivel del punto mesobraquial",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia máxima del antebrazo": {
+          "sigla": "",
+          "definition": "El máximo perímetro en la parte de más volumen de antebrazo a una distancia no mayor de 6 cm de radial.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Parte de más volumen de antebrazo (a una distancia no mayor de 6 cm de radial)",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia de los hombros": {
+          "sigla": "CH",
+          "definition": "Es el perímetro alcanzado en el tronco tomando como referencia lateral las máximas protuberancias de los músculos deltoides y por delante, la prominencia articular del esternón y la segunda costilla.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Máximas protuberancias de los músculos deltoides, prominencia articular del esternón y la segunda costilla",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia torácica": {
+          "sigla": "CT",
+          "definition": "Es el perímetro del tronco obtenido en el nivel del punto mesoesternal.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Nivel del punto mesoesternal",
+          "instrumento": "",
+          "graphic": "Ilustracion_61.png"
+        },
+        "Circunferencia de la cintura": {
+          "sigla": "CCI",
+          "definition": "Perímetro obtenido en el nivel del onfalio.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Nivel del onfalio",
+          "instrumento": "",
+          "graphic": "Ilustracion_62.png"
+        },
+        "Circunferencia de las caderas": {
+          "sigla": "",
+          "definition": "Máxima circunferencia entre la cintura y los muslos.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Entre la cintura y los muslos",
+          "instrumento": "",
+          "graphic": "Ilustracion_62.png"
+        },
+        "Circunferencia superior del muslo": {
+          "sigla": "",
+          "definition": "Es la circunferencia máxima tomada alrededor del muslo a uno o dos centímetros por debajo de la línea glútea.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Alrededor del muslo a uno o dos centímetros por debajo de la línea glútea",
+          "instrumento": "",
+          "graphic": "Ilustracion_62.png"
+        },
+        "Circunferencia de la pantorrilla": {
+          "sigla": "PPA",
+          "definition": "Es la circunferencia máxima sobre la parte más gruesa de la pierna.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "Parte más gruesa de la pierna",
+          "instrumento": "",
+          "graphic": "Ilustracion_62.png"
+        }
+      }
+    },
+    "Alcances": {
+      "items": {
+        "Alcance máximo de asimiento vertical parado": {
+          "sigla": "AAV",
+          "definition": "Es la distancia máxima medida desde el suelo hasta el nudillo del dedo medio de la mano derecha con el brazo completamente extendido hacia arriba y el cuerpo pegado a la pared sin experimentar molestia o incomodidad.",
+          "vestuario": "",
+          "posicion": "Parado con el brazo completamente extendido hacia arriba y el cuerpo pegado a la pared.",
+          "puntos": "Suelo, nudillo del dedo medio de la mano derecha",
+          "instrumento": "",
+          "graphic": "Ilustracion_63.png"
+        },
+        "Alcance del dedo pulgar": {
+          "sigla": "ADP",
+          "definition": "Distancia que se toma desde la pared contra la que el individuo en observación apoya sus hombros hasta la punta del dedo pulgar, el brazo está completamente estirado y la punta de los dedos medio y pulgar en contacto.",
+          "vestuario": "",
+          "posicion": "Hombros apoyados contra la pared, brazo completamente estirado, puntas de los dedos medio y pulgar en contacto.",
+          "puntos": "Pared, punta del dedo pulgar",
+          "instrumento": "",
+          "graphic": "Ilustracion_63.png"
+        },
+        "Alcance máximo de asimiento lateral": {
+          "sigla": "ALB",
+          "definition": "Distancia que se toma con el brazo lo más estirado horizontalmente posible desde el eje central del cuerpo (que pasa por la glabela, el punto medio y el más bajo del esternón) hasta el metacarpal uno (nudillo) del dedo medio, en posición de atención antropométrica sin que experimente molestia o incomodidad alguna.",
+          "vestuario": "",
+          "posicion": "Brazo lo más estirado horizontalmente posible, en posición de atención antropométrica.",
+          "puntos": "Eje central del cuerpo, metacarpal uno (nudillo) del dedo medio",
+          "instrumento": "",
+          "graphic": "Ilustracion_63.png"
+        },
+        "Alcance asimiento vertical sentado": {
+          "sigla": "AAVS",
+          "definition": "Es la distancia máxima, a partir de la superficie del asiento, a la que llega el metacarpal 1 (nudillo) del dedo medio de la mano derecha con el brazo completamente extendido hacia arriba.",
+          "vestuario": "",
+          "posicion": "Sentado con el brazo completamente extendido hacia arriba.",
+          "puntos": "Superficie del asiento, metacarpal 1 (nudillo) del dedo medio de la mano derecha",
+          "instrumento": "",
+          "graphic": "Ilustracion_63.png"
+        },
+        "Alcance máximo de asimiento horizontal sentado": {
+          "sigla": "AMB",
+          "definition": "Distancia horizontal medida desde el plano vertical que pasa por el occipital, las escápulas, y los glúteos hasta el nudillo del dedo medio cuando el sujeto tiene extendido al máximo el brazo.",
+          "vestuario": "",
+          "posicion": "Sentado con el brazo extendido al máximo.",
+          "puntos": "Plano vertical que pasa por el occipital, las escápulas y los glúteos, nudillo del dedo medio",
+          "instrumento": "",
+          "graphic": "Ilustracion_63.png"
+        },
+        "Alcance mínimo del brazo": {
+          "sigla": "AMIB",
+          "definition": "Distancia horizontal medida desde el plano vertical de la pared hasta el eje vertical que se produce en la mano con el puño cerrado, encontrándose el sujeto en posición sedente.",
+          "vestuario": "",
+          "posicion": "En posición sedente.",
+          "puntos": "Plano vertical de la pared, eje vertical que se produce en la mano con el puño cerrado",
+          "instrumento": "",
+          "graphic": ""
+        }
+      }
+    },
+    "Peso": {
+      "items": {
+        "Peso": {
+          "sigla": "",
+          "definition": "Peso corporal.",
+          "vestuario": "",
+          "posicion": "",
+          "puntos": "",
+          "instrumento": "Balanza",
+          "graphic": "Ilustracion_1.png"
+        }
+      }
+    }
+  }

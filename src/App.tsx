@@ -2,9 +2,10 @@
 import Navbar from "./components/AppBar/AppBar";
 import ManiquiViewer from "./components/ManiquiViewer";
 import ResponsiveAppBar from "./components/ResponsiveAppBar";
-import { AppRouter } from "./routes/AppRouter";
+// import { AppRouter } from "./routes/AppRouter";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useLocation } from "react-router-dom";
+import Layout from "./routes/Layout";
 // import NavBar from './components/NavBar';
 // Define tu tema personalizado
 const theme = createTheme({
@@ -34,17 +35,19 @@ function App() {
     <>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-            <Navbar/>
-        
-          {/* <ResponsiveAppBar></ResponsiveAppBar> */}
-          {/* <ManiquiViewer /> */}
-          <AppRouter />
+            {/* <Navbar/> */}
+           
+          <Layout/>
+       
+          {/* <AppRouter /> */}
           {/* <Footer /> */}
         </ThemeProvider>
       </BrowserRouter>
     </>
   );
 }
+
+
 // const App: React.FC = () => {
 //   return (
 //     <>

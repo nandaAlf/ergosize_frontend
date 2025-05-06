@@ -15,6 +15,7 @@ import LongMenu from "../Menu";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import { deleteData} from "../../service/service";
 interface CardStudyProps {
   study: StudyData;
   selectedCard: number;
@@ -37,7 +38,8 @@ const CardStudy: React.FC<CardStudyProps> = ({
     if (action === "Editar") {
       onEdit(study);
     } else if (action === "Eliminar") {
-      alert("Delete");
+      // alert("Delete");
+      study.id ? deleteData(study.id) : {}
       // Lógica para eliminar
     } else if (action === "Ver mediciones") {
       console.log("Ver dim", study.dimensions);

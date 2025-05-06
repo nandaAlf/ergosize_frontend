@@ -3,12 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import  Home  from "../pages/Home";
 import Studies from "../pages/Studies";;
 import StudyDetail from "../pages/StudyDetail";
-import Help from "../pages/Help";
+import HelpMenu from "../pages/Help";
 import Tables from "../pages/Tables";
 import TableDetail from "../pages/AnthropometricTable";
 
 
-export function AppRouter() {
+export default function AppRouter() {
   return (
     // <Router>
       <Routes>
@@ -17,7 +17,7 @@ export function AppRouter() {
         <Route path="/tables/:id" element={<Tables />} />
         {/* <Route path="/tables/:id" element={<TableDetail />} /> */}
         <Route path="/studies/:id" element={<StudyDetail />} />
-        <Route path="/help/" element={<Help/>} />
+        <Route path="/help/" element={<HelpMenu/>} />
         </Routes>
     // {/* </Router> */}
   );

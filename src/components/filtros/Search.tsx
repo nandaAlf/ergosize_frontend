@@ -20,15 +20,15 @@ const Search: React.FC<SearchProps> = ({ text, onChange, value }) => {
     <Box >
       <TextField
         sx={{
-          borderRadius: "999px", // súper redondeado
+          // borderRadius: "999px", // súper redondeado
           '& .MuiOutlinedInput-root': {
-            borderRadius: "999px", // borde del input
+            // borderRadius: "999px", // borde del input
             paddingRight: 0,
           },
           '& .MuiOutlinedInput-input': {
             padding: '8px 14px', // ajusta esto según te guste
           },
-          backgroundColor: "#fff",
+          // backgroundColor: "#fff",
         }}
         id="search-input"
         // label={text}

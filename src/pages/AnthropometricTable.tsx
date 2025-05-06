@@ -1,339 +1,54 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import {
-  alpha,
   Box,
-  CircularProgress,
-  Checkbox,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
+  TablePagination,
   TableSortLabel,
   Toolbar,
   Typography,
-  IconButton,
-  Tooltip,
   Switch,
   FormControlLabel,
-  Stack,
+  CircularProgress,
   Button,
+  Paper,
+  Avatar,
+  Stack,
+  Chip,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import LongMenu from "../components/Menu";
 import Search from "../components/filtros/Search";
+import { color } from "three/tsl";
+import BarChartIcon from "@mui/icons-material/BarChart";
 interface PercentileMap {
   [key: string]: number;
 }
-
 interface ResultRow {
   dimension: string;
-  dimension_id: number;
-  mean: number;
-  sd: number;
-  percentiles: PercentileMap;
+  stats?: { mean: number; sd: number; percentiles: PercentileMap };
+  by_gender?: {
+    M?: { mean: number; sd: number; percentiles: PercentileMap };
+    F?: { mean: number; sd: number; percentiles: PercentileMap };
+  };
 }
-
 interface AnthropometricTableProps {
   studyId: number;
-  gender?: string;
+  gender?: "M" | "F" | "mixto";
   ageMin?: string;
   ageMax?: string;
   dimensions: number[];
   percentilesList: number[];
 }
-
 type Order = "asc" | "desc";
-const params = new URLSearchParams();
-interface HeadCell {
+interface ColumnDef {
   id: string;
   label: string;
-  numeric: boolean;
-  disablePadding?: boolean;
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
-}
-
-function getComparator(
-  order: Order,
-  orderBy: string,
-  percentilesList: number[]
-): (a: ResultRow, b: ResultRow) => number {
-  return (a, b) => {
-    let valueA: any;
-    let valueB: any;
-
-    if (orderBy.startsWith("percentile_")) {
-      const percentile = orderBy.replace("percentile_", "");
-      valueA = a.percentiles[percentile] || 0;
-      valueB = b.percentiles[percentile] || 0;
-    } else {
-      // Validamos que orderBy sea una clave de ResultRow
-      const validKeys: (keyof ResultRow)[] = ["dimension", "mean", "sd"];
-      const safeOrderBy = validKeys.includes(orderBy as keyof ResultRow)
-        ? (orderBy as keyof ResultRow)
-        : "dimension";
-
-      valueA = a[safeOrderBy];
-      valueB = b[safeOrderBy];
-    }
-
-    const compareResult = valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
-    return order === "desc" ? compareResult : -compareResult;
-  };
-}
-interface EnhancedTableHeadProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  headCells: HeadCell[];
-}
-
-function EnhancedTableHead(props: EnhancedTableHeadProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-    headCells,
-  } = props;
-
-  const createSortHandler =
-    (property: string) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  studyId: number;
-}
-interface FilterTableToolbarProps {
-  searchTerm: string;
-  onSearchTermChange: (value:string) => void;
-  studyId:number
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, studyId } = props;
-  const handleMenuAction = async (action: string) => {
-    const baseUrl = `http://127.0.0.1:8000/api/export`;
-    const url = `${baseUrl}/${
-      action.includes("Excel") ? "excel" : "pdf"
-    }/${studyId}/?${params.toString()}`;
-
-    try {
-      const response = await axios.get(url, {
-        responseType: "blob", // 👈 necesario para archivos
-      });
-
-      // Crear un blob y un enlace para forzar la descarga
-      const fileType = action.includes("Excel")
-        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        : "application/pdf";
-
-      const extension = action.includes("Excel") ? "xlsx" : "pdf";
-
-      const blob = new Blob([response.data], { type: fileType });
-      const downloadUrl = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = `percentiles_study_${studyId}.${extension}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      window.URL.revokeObjectURL(downloadUrl); // Limpieza
-    } catch (err) {
-      console.error(`Error al descargar archivo ${action}:`, err);
-    }
-  };
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} seleccionados
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Resultados del Estudio
-        </Typography>
-      )}
-
-      {/* <Tooltip title="Eliminar"> */}
-        {/* <LongMenu
-          onAction={handleMenuAction}
-          options={["Exportar a Excel", "Exportar a PDF"]}
-        /> */}
-      {/* </Tooltip> */}
-    </Toolbar>
-  );
-}
-
-function FilterTableToolbar(props: FilterTableToolbarProps) {
-  const { searchTerm, onSearchTermChange,studyId} = props;
-  const handleMenuAction = async (action: string) => {
-    const baseUrl = `http://127.0.0.1:8000/api/export`;
-    const url = `${baseUrl}/${
-      action.includes("Excel") ? "excel" : "pdf"
-    }/${studyId}/?${params.toString()}`;
-
-    try {
-      const response = await axios.get(url, {
-        responseType: "blob", // 👈 necesario para archivos
-      });
-
-      // Crear un blob y un enlace para forzar la descarga
-      const fileType = action.includes("Excel")
-        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        : "application/pdf";
-
-      const extension = action.includes("Excel") ? "xlsx" : "pdf";
-
-      const blob = new Blob([response.data], { type: fileType });
-      const downloadUrl = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = `percentiles_study_${studyId}.${extension}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      window.URL.revokeObjectURL(downloadUrl); // Limpieza
-    } catch (err) {
-      console.error(`Error al descargar archivo ${action}:`, err);
-    }
-  };
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        // ...(numSelected > 0 && {
-        //   bgcolor: (theme) =>
-        //     alpha(
-        //       theme.palette.primary.main,
-        //       theme.palette.action.activatedOpacity
-        //     ),
-        // }),
-      }}
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        flexWrap="wrap"
-        gap={2}
-        sx={{ width: "100%" }}
-      >
-        {/* Search con límite de ancho */}
-        <Box sx={{ flexGrow: 1, minWidth: 300, maxWidth: 400 }}>
-          <Search
-            text="Buscar dimension "
-            onChange={(e) => onSearchTermChange(e.target.value)}
-            value={searchTerm} // onChange={(e) => onSearchChange(e.target.value)}
-            // value={searchTerm}
-            // value={search}
-          />
-        </Box>
-
-        {/* Botones con espacio entre ellos */}
-        {/* <Stack direction="row" spacing={1} flexWrap="wrap"> */}
-        <Button
-          variant="outlined"
-          color="primary"
-          // size="small"
-          sx={{ minWidth: "150px", maxWidth: "200px" }}
-          // onClick={toggleDrawer}
-        >
-          <FilterListIcon />
-          <LongMenu
-          onAction={handleMenuAction}
-          options={["Exportar a Excel", "Exportar a PDF"]}
-        />
-          Exportar
-        </Button>
-
-        {/* </Stack> */}
-      </Box>
-    </Toolbar>
-  );
+  getValue: (row: ResultRow) => number | string;
 }
 
 const AnthropometricTable: React.FC<AnthropometricTableProps> = ({
@@ -344,267 +59,348 @@ const AnthropometricTable: React.FC<AnthropometricTableProps> = ({
   dimensions,
   percentilesList,
 }) => {
+  const [data, setData] = useState<ResultRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState<ResultRow[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<string>("dimension");
-  const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [dense, setDense] = useState(false);
-  // const params = new URLSearchParams();
-  //  ← Nuevo estado para búsqueda
+  const [orderBy, setOrderBy] = useState<string>("dimension");
+  const [order, setOrder] = useState<Order>("asc");
   const [searchTerm, setSearchTerm] = useState("");
-  const headCells: HeadCell[] = useMemo(
-    () => [
-      {
-        id: "dimension",
-        numeric: false,
-        disablePadding: true,
-        label: "Dimensión",
-      },
-      {
-        id: "mean",
-        numeric: true,
-        label: "Media",
-      },
-      {
-        id: "sd",
-        numeric: true,
-        label: "SD",
-      },
-      ...percentilesList.map((p) => ({
-        id: `percentile_${p.toFixed(1)}`,
-        numeric: true,
-        label: `${p}%`,
-      })),
-    ],
-    [percentilesList]
-  );
+  const isMixed = gender === "mixto";
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-      setResults([]);
-
-      // const params = new URLSearchParams();
-      if (gender) params.append("gender", gender);
-      if (ageMin) params.append("age_min", ageMin);
-      if (ageMax) params.append("age_max", ageMax);
-      if (dimensions.length > 0)
-        params.append("dimensions", dimensions.join(","));
-      if (percentilesList.length > 0)
-        params.append("percentiles", percentilesList.join(","));
-
+      const params = new URLSearchParams();
+      if (gender) params.set("gender", gender);
+      if (ageMin) params.set("age_min", ageMin);
+      if (ageMax) params.set("age_max", ageMax);
+      if (dimensions.length) params.set("dimensions", dimensions.join(","));
+      if (percentilesList.length)
+        params.set("percentiles", percentilesList.join(","));
       try {
-        const response = await axios.get(
+        const res = await axios.get(
           `http://127.0.0.1:8000/api/test-percentiles/${studyId}/?${params.toString()}`
         );
-        setResults(response.data?.results || []);
-        console.log("Revisar", response.data);
-      } catch (err) {
-        console.error("Error al obtener datos de percentiles:", err);
-        setError("No se pudieron obtener los datos.");
+        setData(res.data.results || []);
+      } catch {
+        setError("Error al cargar datos");
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [studyId, gender, ageMin, ageMax, dimensions, percentilesList]);
+  }, [
+    studyId,
+    gender,
+    ageMin,
+    ageMax,
+    dimensions.join(),
+    percentilesList.join(),
+  ]);
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: string
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = results.map((n) => n.dimension);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, dimension: string) => {
-    const selectedIndex = selected.indexOf(dimension);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, dimension);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+  const columns: ColumnDef[] = useMemo(() => {
+    const cols: ColumnDef[] = [
+      { id: "dimension", label: "Dimensión", getValue: (r) => r.dimension },
+    ];
+    if (isMixed) {
+      ["M", "F"].forEach((g) => {
+        cols.push({
+          id: `mean_${g}`,
+          label: `Media ${g}`,
+          getValue: (r) => r.by_gender?.[g]?.mean ?? NaN,
+        });
+        cols.push({
+          id: `sd_${g}`,
+          label: `SD ${g}`,
+          getValue: (r) => r.by_gender?.[g]?.sd ?? NaN,
+        });
+        percentilesList.forEach((p) =>
+          cols.push({
+            id: `p${p}_${g}`,
+            label: `${p}% ${g}`,
+            getValue: (r) => r.by_gender?.[g]?.percentiles[p.toString()] ?? NaN,
+          })
+        );
+      });
+    } else {
+      cols.push({
+        id: "mean",
+        label: "Media",
+        getValue: (r) => r.stats?.mean ?? NaN,
+      });
+      cols.push({ id: "sd", label: "SD", getValue: (r) => r.stats?.sd ?? NaN });
+      percentilesList.forEach((p) =>
+        cols.push({
+          id: `p${p}`,
+          label: `${p}%`,
+          getValue: (r) => r.stats?.percentiles[p.toString()] ?? NaN,
+        })
       );
     }
-    setSelected(newSelected);
-  };
+    return cols;
+  }, [isMixed, percentilesList]);
 
-  
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
-  const sortedResults = useMemo(
-    () => [...results].sort(getComparator(order, orderBy, percentilesList)),
-    [results, order, orderBy, percentilesList]
-  );
-
-  const visibleRows = useMemo(
+  const sorted = useMemo(
     () =>
-      sortedResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [sortedResults, page, rowsPerPage]
+      [...data].sort((a, b) => {
+        const col = columns.find((c) => c.id === orderBy)!;
+        const aV = col.getValue(a),
+          bV = col.getValue(b);
+        if (aV < bV) return order === "asc" ? -1 : 1;
+        if (aV > bV) return order === "asc" ? 1 : -1;
+        return 0;
+      }),
+    [data, orderBy, order, columns]
   );
-  //  ← Filtra las personas aquí
-  const filteredDimension = React.useMemo(
+  const filtered = useMemo(
     () =>
-      visibleRows.filter((p) =>
-        p.dimension.toLowerCase().includes(searchTerm.trim().toLowerCase())
+      sorted.filter((r) =>
+        r.dimension.toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [visibleRows, searchTerm]
+    [sorted, searchTerm]
   );
-  if (loading) {
+  const paged = useMemo(
+    () => filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [filtered, page, rowsPerPage]
+  );
+
+  if (loading)
     return (
       <Box display="flex" justifyContent="center" mt={4}>
         <CircularProgress />
       </Box>
     );
-  }
-
-  if (error) {
-    return (
-      <Box mt={4}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
-  if (results.length === 0) {
-    return (
-      <Box mt={4}>
-        <Typography>
-          No hay resultados disponibles para los filtros seleccionados.
-        </Typography>
-      </Box>
-    );
-  }
+  if (error) return <Typography color="error">{error}</Typography>;
+  if (!data.length) return <Typography>No hay datos</Typography>;
 
   return (
-    <>
-    <h2>NOMBRE</h2>
-    {/* Titulo */}
-    <Box
-      sx={{
-        width: "100%",
-        marginTop: "20px",
-        boxSizing: "border-box",
-        padding: "25px",
-        borderRadius: "30px",
-        border: "1px solid rgba(37, 100, 235, 0.2)",
-      }}
-    >
-     
-      {/* <Paper sx={{ width: "100%", mb: 2 }}> */}
-      <EnhancedTableToolbar numSelected={selected.length} studyId={studyId} />
-      <FilterTableToolbar  searchTerm={searchTerm} onSearchTermChange={setSearchTerm} studyId={studyId}/>
-      <TableContainer>
-        <Table size={dense ? "small" : "medium"} aria-labelledby="tableTitle">
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={results.length}
-            headCells={headCells}
-          />
-          <TableBody>
-            {filteredDimension.map((row, index) => {
-              const isItemSelected = selected.includes(row.dimension);
-              const labelId = `enhanced-table-checkbox-${index}`;
+    <Box>
+      <Paper
+        elevation={0}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          p: 2,
+          mb: 3,
+          borderRadius: 2,
+          // backgroundColor: '#F9FAFB',
+          border: "1px solid #E5E7EB",
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: "primary.main",
+            width: 48,
+            height: 48,
+            mr: 2,
+          }}
+        >
+          <BarChartIcon fontSize="large" />
+        </Avatar>
 
-              return (
-                <TableRow
-                  hover
-                  onClick={(event) => handleClick(event, row.dimension)}
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.dimension}
-                  selected={isItemSelected}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    component="th"
-                    id={labelId}
-                    scope="row"
-                    padding="none"
-                  >
-                    {row.dimension}
-                  </TableCell>
-                  <TableCell align="right">{row.mean.toFixed(2)}</TableCell>
-                  <TableCell align="right">{row.sd.toFixed(2)}</TableCell>
-                  {percentilesList.map((p) => (
-                    <TableCell key={p} align="right">
-                      {row.percentiles?.[p.toFixed(1)] !== undefined
-                        ? row.percentiles[p.toFixed(1)].toFixed(2)
-                        : "-"}
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="h5" component="div" gutterBottom>
+            Peso, estatura y complexión
+          </Typography>
+
+          <Stack direction="row" spacing={3} alignItems="center">
+            <Typography variant="body2">
+              <Box
+                component="span"
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 500 /* opcional para negrita */,
+                }}
+              >
+                Ubicación:
+              </Box>{" "}
+              <Box component="span" sx={{ color: "text.secondary", ml: 0.5 }}>
+                Cuba / Cienfuegos / UCLV
+              </Box>
+            </Typography>
+            <Typography variant="body2">
+              <Box
+                component="span"
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 500 /* opcional para negrita */,
+                }}
+              >
+                Participantes:
+              </Box>{" "}
+              <Box component="span" sx={{ color: "text.secondary", ml: 0.5 }}>
+                300
+              </Box>
+            </Typography>
+            <Typography variant="body2">
+            <Box
+              component="span"
+              sx={{
+                color: "text.primary",
+                fontWeight: 500 /* opcional para negrita */,
+              }}
+            >
+              Genero:
+            </Box>{" "}
+            <Box component="span" sx={{ color: "text.secondary", ml: 0.5 }}>
+              Mixto
+            </Box>
+          </Typography>
+            {/* <Chip label={`Ubicación: Cuba /Cienfuegos / UCLV`} size="small" />
+            <Chip label={`Género: Femenino`} size="small" />
+            <Chip label={`300 participantes`} size="small" /> */}
+          </Stack>
+        </Box>
+      </Paper>
+
+      <Box
+        sx={{
+          boxSizing: "border-box",
+          p: 2, // 24px
+          m: "40px 0",
+          borderRadius: "8px",
+          backgroundColor: "#fff", // fondo claro
+          border: "1px solid #E5E7EB", // borde gris claro
+          boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        }}
+      >
+        <Toolbar
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            boxSizing: "border-box",
+          }}
+        >
+          <Box sx={{ width: "500px" }}>
+            <Search
+              text="Buscar dimensión"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Box>
+
+          <Button sx={{ width: "150px" }} variant="contained">
+            Exportar
+          </Button>
+          {/* <FormControlLabel
+            control={
+              <Switch
+                checked={false}
+                onChange={() => setOrderBy("dimension")}
+              />
+            }
+            label="Vista compacta"
+          /> */}
+        </Toolbar>
+
+        <TableContainer
+          sx={{
+            borderRadius: "8px",
+            overflow: "hidden", // para que el borde redondeado funcione
+            // border: "1px solid #E5E7EB", // mismo borde en la tabla
+            backgroundColor: "white",
+          }}
+        >
+          <Table
+            size={false ? "small" : "medium"}
+            sx={{
+              borderCollapse: "collapse",
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                {columns.map((col) => {
+                  const isFirstF = col.id.startsWith("mean_F");
+                  return (
+                    <TableCell
+                      key={col.id}
+                      align={col.id === "dimension" ? "left" : "right"}
+                      sortDirection={orderBy === col.id ? order : false}
+                      sx={
+                        {
+                          // border: "1px solid #E5E7EB",
+                          // ...(isFirstF && {
+                          //   borderLeft: "2px solid #E5E7EB",
+                          //   pl: 1,
+                          // }),
+                        }
+                      }
+                    >
+                      <TableSortLabel
+                        active={orderBy === col.id}
+                        direction={order}
+                        onClick={() => {
+                          const asc = orderBy === col.id && order === "asc";
+                          setOrder(asc ? "desc" : "asc");
+                          setOrderBy(col.id);
+                        }}
+                      >
+                        {col.label}
+                        {orderBy === col.id && (
+                          <Box component="span" sx={visuallyHidden}>
+                            {order === "desc"
+                              ? "sorted descending"
+                              : "sorted ascending"}
+                          </Box>
+                        )}
+                      </TableSortLabel>
                     </TableCell>
-                  ))}
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paged.map((row, i) => (
+                <TableRow key={i} hover>
+                  {columns.map((col) => {
+                    const isFirstF = col.id.startsWith("mean_F");
+                    return (
+                      <TableCell
+                        key={col.id}
+                        align={col.id === "dimension" ? "left" : "right"}
+                        sx={
+                          {
+                            // border: "1px solid #E5E7EB",
+                            // ...(isFirstF && {
+                            //   borderLeft: "2px solid #E5E7EB",
+                            //   pl: 1,
+                            // }),
+                          }
+                        }
+                      >
+                        {typeof col.getValue(row) === "number"
+                          ? (col.getValue(row) as number).toFixed(2)
+                          : col.getValue(row)}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={results.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      {/* </Paper> */}
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Vista compacta"
-      />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <TablePagination
+            component="div"
+            count={filtered.length}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={(_, p) => setPage(p)}
+            onRowsPerPageChange={(e) => {
+              setRowsPerPage(+e.target.value);
+              setPage(0);
+            }}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Box>
+      </Box>
     </Box>
-    </>
   );
 };
-
 export default AnthropometricTable;
-

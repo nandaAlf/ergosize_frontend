@@ -109,7 +109,13 @@ export const TableComponent: React.FC<TableProps> = ({
     setOpenPersonForm(false);
     setEditPerson(false);
   };
+  
 
+  const params = new URLSearchParams({
+    study_id: study_id.toString(),
+    person_id: selected.length > 0 ? selected[0].toString() : ''
+});
+    
   return (
     <Box
       sx={{
@@ -134,8 +140,7 @@ export const TableComponent: React.FC<TableProps> = ({
       <FilterPanelToobar
         onOpenPersonForm={setOpenPersonForm}
         searchTerm={searchTerm}
-        onSearchChange={onSearchTermChange}
-      />
+        onSearchChange={onSearchTermChange} params={params}      />
       <TableContainer>
         <Table
           sx={{ minWidth: 750 }}

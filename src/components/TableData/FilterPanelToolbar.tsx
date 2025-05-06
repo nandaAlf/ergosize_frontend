@@ -14,17 +14,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add"; // Importar el ícono de añadir
 import Search from "../filtros/Search";
+import { getFilePerson } from "../../service/service";
 
 interface FilterPanelProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onOpenPersonForm: (open: boolean) => void;
+  params:URLSearchParams;
 }
 
 export const FilterPanelToobar: React.FC<FilterPanelProps> = ({
   searchTerm,
   onSearchChange,
   onOpenPersonForm,
+  params,
 }) => {
   return (
     <Toolbar
@@ -60,7 +63,7 @@ export const FilterPanelToobar: React.FC<FilterPanelProps> = ({
             color="primary"
             // size="small"
             sx={{ minWidth: "150px", maxWidth: "200px" }}
-            // onClick={toggleDrawer}
+            onClick={()=>getFilePerson(params)}
           >
             <FilterListIcon />
             Exportar

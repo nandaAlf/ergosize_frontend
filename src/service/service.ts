@@ -21,3 +21,74 @@ export const getPersonStudyData = async (id: string): Promise<PersonMeasurement>
     throw error;
   }
 };
+export const deleteData = async (id: number) => {
+  try {
+    const response = await ApiService.delete(`/studies/${id}/`);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
+  }
+};
+
+export const getFile = async (action: string , id:number , params:string) => {
+  const endpoint = `/export/${action.includes("Excel") ? "excel" : "pdf"}/${id}/`;
+  
+  try {
+    const response = await ApiService.get(endpoint, params, {
+      responseType: "blob" // 👈 Añade responseType como opción adicional
+    });
+
+    // Crear un blob y un enlace para forzar la descarga
+    const fileType = action.includes("Excel")
+      ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      : "application/pdf";
+
+    const extension = action.includes("Excel") ? "xlsx" : "pdf";
+
+    const blob = new Blob([response.data], { type: fileType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = `percentiles_study_${id}.${extension}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(downloadUrl); // Limpieza
+  } catch (err) {
+    console.error(`Error al descargar archivo ${action}:`, err);
+  }
+};
+
+export const getFilePerson = async (  params:URLSearchParams) => {
+  const endpoint = `/report/`;
+  alert(params)
+  try {
+    const response = await ApiService.get(endpoint, params, {
+      responseType: "blob" // 👈 Añade responseType como opción adicional
+    });
+
+    // Crear un blob y un enlace para forzar la descarga
+    const fileType = "application/pdf"
+ 
+
+    const extension = "pdf";
+
+    const blob = new Blob([response.data], { type: fileType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = `person.${extension}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(downloadUrl); // Limpieza
+  } catch (err) {
+    console.error(`Error al descargar archivo :`, err);
+  }
+};

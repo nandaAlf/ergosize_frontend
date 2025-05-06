@@ -20,7 +20,8 @@ const api = axios.create({
 // });
 
 const ApiService = {
-  get: (url: string, params = {}) => api.get(url, { params }),
+  // get: (url: string, params = {}) => api.get(url, { params }),
+  get: (url: string, params = {}, config = {}) => api.get(url, { params, ...config }),
   post: (url: string, data: any) => api.post(url, data),
   put: (url: string, data: any) => api.put(url, data),
   delete: (url: string) => api.delete(url),
