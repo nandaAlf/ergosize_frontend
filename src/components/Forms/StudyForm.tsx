@@ -20,7 +20,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { Dimension, StudyData } from "../../types";
-import { createStudy, getDimension, updateStudy } from "../../api/api";
+// import { createStudy, getDimension, updateStudy } from "../../api/api";
+import {
+  getAllDimensions,
+  createStudy,
+  updateStudy,
+} from "../../service/service";
 
 interface StudyFormProps {
   open: boolean;
@@ -121,15 +126,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   useEffect(() => {
     const loadDimensions = async () => {
       try {
-        const dimensionsFromApi = await getDimension();
-      
-        // Mapear de {id, name, initial} a {id_dimension, name, initial}
-        // const mappedDimensions = dimensionsFromApi?.map(dim => ({
-        //   id_dimension: dim.id,
-        //   name: dim.name,
-        //   initial: dim.initial
-        // }));
-        
+        const dimensionsFromApi = await getAllDimensions();
         setAvailableDimensions(dimensionsFromApi);
       } catch (error) {
         console.error("Error loading dimensions:", error);
@@ -257,21 +254,24 @@ const StudyForm: React.FC<StudyFormProps> = ({
     e.preventDefault();
     const dataToSubmit = {
       ...formData,
-      start_date: formData.start_date 
-        ? dayjs(formData.start_date).format('YYYY-MM-DD') 
+      start_date: formData.start_date
+        ? dayjs(formData.start_date).format("YYYY-MM-DD")
         : null,
-      end_date: formData.end_date 
-        ? dayjs(formData.end_date).format('YYYY-MM-DD') 
+      end_date: formData.end_date
+        ? dayjs(formData.end_date).format("YYYY-MM-DD")
         : null,
-      dimensions: selectedDimensionIds.map(id => ({ id_dimension: id })),
+      dimensions: selectedDimensionIds.map((id) => ({ id_dimension: id })),
     };
     if (validateForm()) {
       console.log("enviando", dataToSubmit);
-      if(mode=='add'){
-           await createStudy(dataToSubmit);
-      }
-      else{
-        await updateStudy(dataToSubmit)
+      if (mode == "add") {
+        await createStudy(dataToSubmit);
+      } else {
+        if (dataToSubmit.id !== undefined) {
+          await updateStudy(dataToSubmit, dataToSubmit.id);
+        } else {
+          console.error("Error: Study ID is undefined.");
+        }
       }
       // onSubmit(formData);
       onClose();
@@ -433,7 +433,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
                     // typeof value[0] === "string"
                     //   ? (value as string[]).map(Number)
                     //   :
-                       (value as number[]);
+                    value as number[];
                   setSelectedDimensionIds(selectedIds);
                 }}
                 renderValue={(selected) => (

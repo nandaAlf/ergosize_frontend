@@ -35,10 +35,8 @@ function App() {
     <>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-            {/* <Navbar/> */}
-           
           <Layout/>
-       
+
           {/* <AppRouter /> */}
           {/* <Footer /> */}
         </ThemeProvider>

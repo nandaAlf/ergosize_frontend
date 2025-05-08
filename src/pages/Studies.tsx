@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createStudy, getData } from "../api/api";
+
 import { StudyData } from "../types";
 import CardStudy from "../components/card/CardStudy";
 import Grid from "@mui/material/Grid2";
@@ -21,6 +21,7 @@ import FilterPanelLayout from "../components/FilterPanelStudies";
 import dayjs, { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { useLocation } from "react-router-dom";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -47,10 +48,15 @@ const Studies: React.FC = () => {
   const [selectedStudyForTable, setSelectedStudyForTable] =
     useState<StudyData | null>(null);
 
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const mine = params.get("mine") === "true";
+
+ 
   useEffect(() => {
     const fetchStudies = async () => {
       try {
-        const data = await getAllStudies();
+        const data = await getAllStudies(mine);
         setStudiesData(data);
       } catch (err: any) {
         setError("No se pudieron obtener los estudios");
@@ -59,28 +65,8 @@ const Studies: React.FC = () => {
       }
     };
     fetchStudies();
-  }, []);
+  }, [mine]);
 
-  // Función para manejar cambios en el campo de búsqueda
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-  // Función para manejar cambios en el tipo de búsqueda
-  const handleSearchTypeChange = (value: string) => {
-    setSearchType(value as "name" | "location");
-    setSearchTerm(""); // Limpiar el término de búsqueda al cambiar el tipo
-  };
-  // const filteredStudies = studiesData?.filter((study) => {
-  //   if (searchType === "name") {
-  //     return study.name.toLowerCase().includes(searchTerm.toLowerCase());
-  //   } else if (searchType === "location") {
-  //     return (
-  //       study.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       study.country.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //   }
-  //   return true;
-  // });
   const filteredStudies = studiesData
     ?.filter((study) => {
       // 1) Búsqueda por nombre o ubicación
@@ -119,15 +105,6 @@ const Studies: React.FC = () => {
       }
       return 0; // sin orden
     });
-  const searchTypeItems = [
-    { value: "name", label: "Nombre" },
-    { value: "location", label: "Ubicación" },
-  ];
-  const orderItemsBy = [
-    { value: "date", label: "Más recientes" },
-    { value: "estatus", label: "Finalizados" },
-    // { value: "estatus", label: "Finalizados" },
-  ];
 
   const handleCloseStudyForm = () => {
     setOpenStudyForm(false);
@@ -163,23 +140,24 @@ const Studies: React.FC = () => {
   }
   if (error) return <p>{error}</p>;
   return (
-    <Box  sx={{ width: "100%" }} >
-        <FilterPanelLayout
-          search={searchTerm}
-          onSearchChange={setSearchTerm}
-          sexo={sexoFilter}
-          onSexoChange={setSexoFilter}
-          orden={ordenFilter}
-          onOrdenChange={setOrdenFilter}
-          fechaDesde={fechaDesde}
-          onFechaDesdeChange={setFechaDesde}
-          fechaHasta={fechaHasta}
-          onFechaHastaChange={setFechaHasta} 
-          openStudyForm={openStudyForm} 
-          onOpenStudyForm={setOpenStudyForm}        />
-      
+    <Box sx={{ width: "100%" }}>
+      <FilterPanelLayout
+        search={searchTerm}
+        onSearchChange={setSearchTerm}
+        sexo={sexoFilter}
+        onSexoChange={setSexoFilter}
+        orden={ordenFilter}
+        onOrdenChange={setOrdenFilter}
+        fechaDesde={fechaDesde}
+        onFechaDesdeChange={setFechaDesde}
+        fechaHasta={fechaHasta}
+        onFechaHastaChange={setFechaHasta}
+        openStudyForm={openStudyForm}
+        onOpenStudyForm={setOpenStudyForm}
+      />
+
       {/* </Box> */}
-      <Grid container spacing={3} sx={{ padding: "25px"}}>
+      <Grid container spacing={3} sx={{ padding: "25px" }}>
         {filteredStudies?.map((study, index) => (
           <Grid
             size={{ xs: 12, sm: 4 }}
@@ -188,11 +166,16 @@ const Studies: React.FC = () => {
           >
             <CardStudy
               study={study}
-              selectedCard={selectedCard}
-              setSelectedCard={setSelectedCard}
-              index={index}
+              selected={false}
+              // setSelectedCard={setSelectedCard}
+              // index={index}
+              // mine={mine}
               onEdit={() => handleEditStudy(study)}
-              handleOpenTableDialog={handleOpenTableDialog} // Pasar la función al componente
+              onOpenTable={handleOpenTableDialog} // Pasar la función al componente
+              onSelect={() => {}}
+              onViewMeasurements={function (study: StudyData): void {
+                throw new Error("Function not implemented.");
+              }}
             />
           </Grid>
         ))}

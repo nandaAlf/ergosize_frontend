@@ -1,11 +1,20 @@
 // src/services/StudyService.ts
 
 import ApiService from '../api/ApiService';
-import { PersonMeasurement, StudyData } from '../types';
+import { Dimension, PersonMeasurement, StudyData } from '../types';
 
-export const getAllStudies = async (): Promise<StudyData[]> => {
+export const getAllStudies = async (mine = false): Promise<StudyData[]> => {
   try {
-    const response = await ApiService.get('studies/');
+    const response=await ApiService.get('/studies/', mine ? { mine: 'true' } : {});
+    return response.data;
+  } catch (error) {
+    console.error('Error en getAllStudies:', error);
+    throw error;
+  }
+};
+export const getAllDimensions = async (): Promise<Dimension[]> => {
+  try {
+    const response = await ApiService.get('dimension/');
     return response.data;
   } catch (error) {
     console.error('Error en getAllStudies:', error);
@@ -14,7 +23,7 @@ export const getAllStudies = async (): Promise<StudyData[]> => {
 };
 export const getPersonStudyData = async (id: string): Promise<PersonMeasurement> => {
   try {
-    const response = await ApiService.get(`/study-data/${id}`);
+    const response = await ApiService.get(`/studies/${id}/members`);
     return response.data;
   } catch (error) {
     console.error('Error en fetchStudyData:', error);
@@ -90,5 +99,24 @@ export const getFilePerson = async (  params:URLSearchParams) => {
     window.URL.revokeObjectURL(downloadUrl); // Limpieza
   } catch (err) {
     console.error(`Error al descargar archivo :`, err);
+  }
+};
+
+export const createStudy = async (data:StudyData): Promise<PersonMeasurement> => {
+  try {
+    const response = await ApiService.post('studies/',data);
+    return response.data;
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
+  }
+};
+export const updateStudy = async (data:StudyData,id:number): Promise<PersonMeasurement> => {
+  try {
+    const response = await ApiService.patch(`studies/${id}/`,data);
+    return response.data;
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
   }
 };

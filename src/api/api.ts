@@ -112,38 +112,38 @@ export const deleteMeasurements = async (studyId: number, personId: number) => {
 //   dimensions: { id_dimension: number }[];
 // }
 
-export const createStudy = async (studyData: StudyData) => {
-  try {
-    // const payload = {
-    //   ...studyData,
-    //   start_date: studyData.start_date?.format("YYYY-MM-DD") || null,
-    //   end_date: studyData.end_date?.format("YYYY-MM-DD") || null,
-    //   // dimensions: formData.dimensions.map((id) => ({ id_dimension: id })),
-    //   dimensions:  studyData.dimensions.map(d => ({ id_dimension: d.id_dimension })),
-    // };
-    const response = await api.post('studies/', studyData);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating study:', error);
-    throw error;
-  }
-};
-export const updateStudy = async (studyData: StudyData) => {
-  try {
-    // const payload = {
-    //   ...studyData,
-    //   start_date: studyData.start_date?.format("YYYY-MM-DD") || null,
-    //   end_date: studyData.end_date?.format("YYYY-MM-DD") || null,
-    //   // dimensions: formData.dimensions.map((id) => ({ id_dimension: id })),
-    //   dimensions:  studyData.dimensions.map(d => ({ id_dimension: d.id_dimension })),
-    // };
-    const response = await api.put(`studies/${studyData.id}/`, studyData);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating study:', error);
-    throw error;
-  }
-};
+// export const createStudy = async (studyData: StudyData) => {
+//   try {
+//     // const payload = {
+//     //   ...studyData,
+//     //   start_date: studyData.start_date?.format("YYYY-MM-DD") || null,
+//     //   end_date: studyData.end_date?.format("YYYY-MM-DD") || null,
+//     //   // dimensions: formData.dimensions.map((id) => ({ id_dimension: id })),
+//     //   dimensions:  studyData.dimensions.map(d => ({ id_dimension: d.id_dimension })),
+//     // };
+//     const response = await api.post('studies/', studyData);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error creating study:', error);
+//     throw error;
+//   }
+// };
+// export const updateStudy = async (studyData: StudyData) => {
+//   try {
+//     // const payload = {
+//     //   ...studyData,
+//     //   start_date: studyData.start_date?.format("YYYY-MM-DD") || null,
+//     //   end_date: studyData.end_date?.format("YYYY-MM-DD") || null,
+//     //   // dimensions: formData.dimensions.map((id) => ({ id_dimension: id })),
+//     //   dimensions:  studyData.dimensions.map(d => ({ id_dimension: d.id_dimension })),
+//     // };
+//     const response = await api.put(`studies/${studyData.id}/`, studyData);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error creating study:', error);
+//     throw error;
+//   }
+// };
 export const getDimension = async () => {
   try {
     

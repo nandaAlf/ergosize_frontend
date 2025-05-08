@@ -23,6 +23,7 @@ import Search from "./filtros/Search";
 import SelectFilter from "./filtros/Selct";
 import DateSelect from "./filtros/date";
 import AddIcon from "@mui/icons-material/Add";
+import { parseJwt } from "../hooks/parseJwt";
 export interface FilterPanelProps {
   search: string;
   onSearchChange: (value: string) => void;
@@ -70,6 +71,14 @@ export default function FilterPanelLayout({
     { value: "reciente", label: "Mas Recientes" },
     { value: "antiguos", label: "Mas Antiguos" },
   ];
+  // 1. Leer el rol del token
+  const token = localStorage.getItem("access_token");
+  const payload: any = token ? parseJwt(token) : null;
+  const role: string = payload?.role;
+
+  // 2. Determinar si debe verse el botón
+  const canCreate = role === "admin" || role === "investigador";
+
   return (
     <Box
       display="flex"
@@ -102,20 +111,16 @@ export default function FilterPanelLayout({
             <FilterListIcon />
             Filtrar
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            sx={{
-              // border: "1px solid rgba(7, 7, 7, 0.97)",
-              // backgroundColor: "primary",
-              // color: "#fff",
-            }}
-            onClick={() => onOpenStudyForm(true)}
-          >
-            <AddIcon />
-            Crear
-          </Button>
+          {/* Solo admins e investigadores ven “Crear” */}
+          {canCreate && (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => onOpenStudyForm(true)}
+            >
+              <AddIcon /> Crear
+            </Button>
+          )}
         </Stack>
       </Box>
       {/* Active Filters */}
@@ -171,12 +176,18 @@ export default function FilterPanelLayout({
           </FormControl>
 
           <FormControl fullWidth margin="normal">
-
-          <Box mt={2} display="flex" flexDirection="column" gap={2}>
-            <DateSelect value={fechaDesde} onDateChange={onFechaDesdeChange} label="Desde" />
-            <DateSelect value={fechaHasta} onDateChange={onFechaHastaChange} label="Hasta" />
-          </Box>
-
+            <Box mt={2} display="flex" flexDirection="column" gap={2}>
+              <DateSelect
+                value={fechaDesde}
+                onDateChange={onFechaDesdeChange}
+                label="Desde"
+              />
+              <DateSelect
+                value={fechaHasta}
+                onDateChange={onFechaHastaChange}
+                label="Hasta"
+              />
+            </Box>
           </FormControl>
           <Button
             fullWidth

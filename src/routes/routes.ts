@@ -2,7 +2,8 @@ const pagesRoutes: { [key: string]: string } = {
   home: '/',
   Tablas: '/tables',
   Estudios: '/studies',
-  Help:'/help'
+  Help:'/help',
+  'Mis Estudios': '/studies/?mine=true',
 };
 
 
