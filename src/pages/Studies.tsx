@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { StudyData } from "../types";
 import CardStudy from "../components/card/CardStudy";
-import Grid from "@mui/material/Grid2";
+// import Grid from "@mui/material/Grid2";
 import Search from "../components/filtros/Search";
 import SelectFilter from "../components/filtros/Selct";
 import React from "react";
@@ -15,7 +15,7 @@ import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import { getAllStudies } from "../service/service";
-import { Container, IconButton, Typography } from "@mui/material";
+import { Container, Grid, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FilterPanelLayout from "../components/FilterPanelStudies";
 import dayjs, { Dayjs } from "dayjs";
@@ -160,7 +160,7 @@ const Studies: React.FC = () => {
       <Grid container spacing={3} sx={{ padding: "25px" }}>
         {filteredStudies?.map((study, index) => (
           <Grid
-            size={{ xs: 12, sm: 4 }}
+            size={{ xs: 12, sm: 6 }}
             key={study.id}
             sx={{ minHeight: "65%" }}
           >

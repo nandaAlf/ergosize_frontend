@@ -18,8 +18,8 @@ const StudyDetail: React.FC = () => {
   const [dimensions, setDimensions] = useState<Dimension[]>([]);
   //  ← Nuevo estado para búsqueda
   const [searchTerm, setSearchTerm] = useState("");
-   //  ← Filtra las personas aquí
-   const filteredPersons = React.useMemo(
+  //  ← Filtra las personas aquí
+  const filteredPersons = React.useMemo(
     () =>
       persons.filter((p) =>
         p.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
@@ -54,6 +54,7 @@ const StudyDetail: React.FC = () => {
         searchTerm={searchTerm} // Pasa el término de búsqueda al componente
         study_id={study.id || 0}
         onSearchTermChange={setSearchTerm} // Pasa la función de cambio de búsqueda
+        study_name={study.name}
       ></TableComponent>
     </>
   );

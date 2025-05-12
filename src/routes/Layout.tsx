@@ -1,7 +1,7 @@
 // Layout.tsx
 import { useLocation } from "react-router-dom";
-import Navbar from "../components/AppBar/AppBar"
 import AppRouter from "./AppRouter";
+import DashboardLayoutBasic from "../components/D";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -9,7 +9,7 @@ export default function Layout() {
 
   return (
     <>
-      { !hideNavbar && <Navbar /> }
+      { !hideNavbar &&  <DashboardLayoutBasic/> }
       <AppRouter />
     </>
   );

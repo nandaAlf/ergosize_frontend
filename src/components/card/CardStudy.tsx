@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import React from "react";
 // import { StudyData } from "../../types";
 // import {
@@ -547,9 +548,9 @@ const CardStudy: React.FC<Props> = memo(
         sx={{
           width: "100%",
           height: "100%",
-          border: selected ? "2px solid" : "1px solid rgba(37,100,235,0.2)",
-          borderColor: selected ? "primary.main" : undefined,
-          borderRadius: 2,
+          border: selected ? "20px solid" : "1px solid #E5E7EB",
+          // borderColor: selected ? "primary.main" : undefined,
+          // borderRadius: 2,
           display: "flex",
           flexDirection: "column",
           transition: "background-color 0.2s",
@@ -586,7 +587,7 @@ const CardStudy: React.FC<Props> = memo(
               sx={{ display: "flex", alignItems: "center" }}
             >
               <CalendarIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {study.start_date} / {study.end_date}
+              {study.start_date ? study.start_date.toString() : ""} / {study.end_date ? study.end_date.toString() : ""}
             </Typography>
             <Typography
               variant="body2"
@@ -633,11 +634,12 @@ const CardStudy: React.FC<Props> = memo(
                 sx={{
                   px: 1.5,
                   py: 0.5,
-                  bgcolor: "primary.light",
+
+                  border: "0.5px solid",
                   borderRadius: 1,
                   display: "flex",
                   alignItems: "center",
-                  minWidth: "30px",
+                  minWidth: "60px",
                 }}
               >
                 <Tooltip title={dim.name}>
@@ -647,15 +649,15 @@ const CardStudy: React.FC<Props> = memo(
             ))}
           </Box>
           {/* <Tooltip title="Tablas"> */}
-          <Button
+          {/* <Button
             onClick={() => onOpenTable(study)}
             variant="outlined"
             // sx={{ cursor: "pointer", ml: 1 }}
           >
             {/* <Typography variant="body2" color="primary"> */}
-            Tablas
+            {/* Tablas */}
             {/* </Typography> */}
-          </Button>
+          {/* </Button> */} 
           {/* </Tooltip> */}
         </CardContent>
       </Card>

@@ -26,6 +26,7 @@ interface TableProps {
   dimensions: Dimension[];
   persons: Person[];
   study_id: number;
+  study_name: string;
   searchTerm: string; // Término de búsqueda
   onSearchTermChange: (value: string) => void;
 }
@@ -34,8 +35,9 @@ export const TableComponent: React.FC<TableProps> = ({
   dimensions,
   persons,
   study_id,
+  study_name,
   searchTerm,
-  onSearchTermChange
+  onSearchTermChange,
 }) => {
   const {
     order,
@@ -109,24 +111,23 @@ export const TableComponent: React.FC<TableProps> = ({
     setOpenPersonForm(false);
     setEditPerson(false);
   };
-  
 
   const params = new URLSearchParams({
     study_id: study_id.toString(),
-    person_id: selected.length > 0 ? selected[0].toString() : ''
-});
-    
+    person_id: selected.length > 0 ? selected[0].toString() : "",
+  });
+
   return (
     <Box
       sx={{
         // width: "100%",
-        width: "calc(100% - 40px)", // evitar overflow horizontal
-        boxSizing: "border-box",
-        padding: "25px",
-        borderRadius: "30px",
-        margin: "40px 20px",
-        border: "1px solid rgba(37, 100, 235, 0.2)",
-        backgroundColor: "white", // opcional para mejor contraste
+        // width: "calc(100% - 40px)", // evitar overflow horizontal
+        // boxSizing: "border-box",
+        // padding: "25px",
+        // borderRadius: "5px", 
+        // margin: "40px 20px",
+        // border: "1px solid rgba(37, 100, 235, 0.2)",
+        // backgroundColor: "white", // opcional para mejor contraste
       }}
     >
       {/* <Paper sx={{ mb: 2 }}> */}
@@ -135,84 +136,105 @@ export const TableComponent: React.FC<TableProps> = ({
         onAddPerson={handleAddPerson}
         onEditPerson={handleEditPerson}
         onDeletePerson={handleDeletePerson}
-        title={"TITULO DE LA TABLA"}
+        title={study_name || "TITULO"}
       />
-      <FilterPanelToobar
-        onOpenPersonForm={setOpenPersonForm}
-        searchTerm={searchTerm}
-        onSearchChange={onSearchTermChange} params={params}      />
-      <TableContainer>
-        <Table
-          sx={{ minWidth: 750 }}
-          aria-labelledby="tableTitle"
-          size={dense ? "small" : "medium"}
-        >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={persons.length}
-            headCells={headCells}
-          />
-          <TableBody>
-            {visibleRows.map((person, index) => {
-              const isItemSelected = selected.includes(person.id);
-              const labelId = `enhanced-table-checkbox-${index}`;
+      <Box sx={{
+          // padding: "25px",
+          borderRadius: "5px",
+          margin: "10px 15px",
+          // border: "1px solid rgba(2, 2, 2, 0.2)",
+        }}>
+        <FilterPanelToobar
+          onOpenPersonForm={setOpenPersonForm}
+          searchTerm={searchTerm}
+          onSearchChange={onSearchTermChange}
+          params={params}
+        />
+      </Box>
+      <Paper
+        sx={{
+          padding: "25px",
+          borderRadius: "5px",
+          margin: "10px 40px",
+          border: "1px solid #E5E7EB",
+        }}
+        elevation={1}
+      >
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={dense ? "small" : "medium"}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={persons.length}
+              headCells={headCells}
+            />
+            <TableBody>
+              {visibleRows.map((person, index) => {
+                const isItemSelected = selected.includes(person.id);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  onClick={(event) => handleClick(event, person.id)}
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={person.id}
-                  selected={isItemSelected}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox color="primary" checked={isItemSelected} />
-                  </TableCell>
-                  <TableCell
-                    component="th"
-                    id={labelId}
-                    scope="row"
-                    padding="none"
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, person.id)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={person.id}
+                    selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
                   >
-                    {person.name}
-                  </TableCell>
-                  {dimensions.map((dimension) => (
-                    <TableCell key={dimension.id_dimension} align="right">
-                      {dimension.name ? person.dimensions[dimension.name] : ""}
+                    <TableCell padding="checkbox">
+                      <Checkbox color="primary" checked={isItemSelected} />
                     </TableCell>
-                  ))}
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
+                    >
+                      {person.name}
+                    </TableCell>
+                    {dimensions.map((dimension) => (
+                      <TableCell key={dimension.id_dimension} align="right">
+                        {dimension.name
+                          ? person.dimensions[dimension.name]
+                          : ""}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                  <TableCell colSpan={dimensions.length + 2} />
                 </TableRow>
-              );
-            })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                <TableCell colSpan={dimensions.length + 2} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={persons.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      {/* </Paper> */}
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={persons.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        {/* </Paper> */}
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
+        />
+      </Paper>
       <PersonForm
         open={openPersonForm}
         onClose={handleClosePersonForm}

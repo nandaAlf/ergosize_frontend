@@ -32,10 +32,10 @@ export const FilterPanelToobar: React.FC<FilterPanelProps> = ({
   return (
     <Toolbar
       sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        mb: 2,
-        width: "100%",
+        // pl: { sm: 2 },
+        // pr: { xs: 1, sm: 1 },
+        // mb: 0,
+        // width: "100%",
       }}
     >
       <Box
