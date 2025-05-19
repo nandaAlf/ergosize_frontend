@@ -12,6 +12,8 @@ const Tables = () => {
   const gender = searchParams.get("gender") || "";
   const ageMin = searchParams.get("age_min") || "";
   const ageMax = searchParams.get("age_max") || "";
+  const age_ranges=searchParams.get("age_ranges"||"")
+  console.log("AAAA",age_ranges);
   const dimensions = (searchParams.get("dimensions") || "")
     .split(",")
     .map(Number)
@@ -34,6 +36,7 @@ const Tables = () => {
         ageMax={ageMax}
         dimensions={dimensions}
         percentilesList={percentiles}
+        age_ranges={age_ranges}
       />
     </div>
   );

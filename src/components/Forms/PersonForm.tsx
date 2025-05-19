@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import {
   Dialog,
   DialogTitle,
@@ -17,16 +19,19 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  Autocomplete,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Dimension, Person } from "../../types";
 import axios from "axios";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import DateSelect from "../filtros/date";
 import dayjs, { Dayjs } from "dayjs";
 import { AnnotatedImage } from "../AnnotatedImage";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { createPerson, getPerson, updatePerson } from "../../service/service";
+import { countries } from "../../utils/countries";
 interface PersonFormProps {
   open: boolean;
   onClose: () => void;
@@ -69,7 +74,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   personId,
 }) => {
   const [name, setName] = useState("");
-  const [gender, setGender] = useState<string | null>(null);
+  const [gender, setGender] = useState<string>("");
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
@@ -137,7 +142,23 @@ const PersonForm: React.FC<PersonFormProps> = ({
     // };
 
     // 3) Construir el payload de forma condicional
-    const payload: any = {
+    // interface Payload {
+    //   name: string;
+    //   gender: string;
+    //   date_of_birth: string;
+    //   country: string;
+    //   state: string;
+    //   province: string;
+    //   measurements?: {
+    //     dimension_id: number;
+    //     value: number;
+    //     position: "P" | "S";
+    //     study_id: number;
+    //     date: string;
+    //   }[];
+    // }
+
+    const payload: Person = {
       name,
       gender,
       date_of_birth: dateOfBirth ? dateOfBirth.format("YYYY-MM-DD") : "",
@@ -152,13 +173,15 @@ const PersonForm: React.FC<PersonFormProps> = ({
       setIsLoading(true);
 
       if (mode === "add") {
-        await axios.post("http://127.0.0.1:8000/api/persons/", payload);
+        createPerson(payload)
+        // await axios.post("http://127.0.0.1:8000/api/persons/", payload);
       } else if (mode === "edit" && personId) {
         // PATCH en lugar de PUT para no borrar las mediciones faltantes
-        await axios.put(
-          `http://127.0.0.1:8000/api/persons/${personId}/`,
-          payload
-        );
+        updatePerson(payload, personId);
+        // await axios.put(
+        //   `http://127.0.0.1:8000/api/persons/${personId}/`,
+        //   payload
+        // );
         console.log("edit", payload);
       }
 
@@ -195,35 +218,60 @@ const PersonForm: React.FC<PersonFormProps> = ({
 
   useEffect(() => {
     if (mode === "edit" && personId) {
+      const fetchPerson = async () => {
+        const fullPersonData = await getPerson(personId);
+        setName(fullPersonData.name);
+        setGender(fullPersonData.gender);
+        setDateOfBirth(dayjs(fullPersonData.date_of_birth));
+        setCountry(fullPersonData.country);
+        setState(fullPersonData.state);
+        setProvince(fullPersonData.province);
+        setDateOfMeasurement(
+          dayjs(fullPersonData.measurements?.[0]?.date ?? "")
+        );
+        // console.log(response.data);
+        const initialMeasurements: Measurement[] = (
+          fullPersonData.measurements ?? []
+        ).map((m: Measurement) => ({
+          dimension_id: m.dimension_id,
+          value: m.value,
+          position: m.position, // "P" o "S"
+          date: m.date.split("T")[0], // "YYYY-MM-DD"
+        }));
+        setMeasurements(initialMeasurements);
+      };
+
+      fetchPerson();
+
       setIsLoading(true);
       // Obtener los datos adicionales de la persona desde la API
-      axios
-        .get(`http://127.0.0.1:8000/api/persons/${personId}/`)
-        .then((response) => {
-          const fullPersonData = response.data;
-          setName(fullPersonData.name);
-          setGender(fullPersonData.gender);
-          setDateOfBirth(dayjs(fullPersonData.date_of_birth));
-          setCountry(fullPersonData.country);
-          setState(fullPersonData.state);
-          setProvince(fullPersonData.province);
-          setDateOfMeasurement(dayjs(fullPersonData.measurements[0]?.date));
-          console.log(response.data);
-          const initialMeasurements: Measurement[] =
-            fullPersonData.measurements.map((m: any) => ({
-              dimension_id: m.dimension_id,
-              value: m.value,
-              position: m.position, // "P" o "S"
-              date: m.date.split("T")[0], // "YYYY-MM-DD"
-            }));
-          setMeasurements(initialMeasurements);
-        })
-        .catch((error) => {
-          console.error("Error al obtener los datos de la persona:", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      // axios
+      //   .getPerson(personId)
+      //   .then((response) => {
+      //     const fullPersonData = response.data;
+      //     setName(fullPersonData.name);
+      //     setGender(fullPersonData.gender);
+      //     setDateOfBirth(dayjs(fullPersonData.date_of_birth));
+      //     setCountry(fullPersonData.country);
+      //     setState(fullPersonData.state);
+      //     setProvince(fullPersonData.province);
+      //     setDateOfMeasurement(dayjs(fullPersonData.measurements[0]?.date));
+      //     console.log(response.data);
+      //     const initialMeasurements: Measurement[] =
+      //       fullPersonData.measurements.map((m: any) => ({
+      //         dimension_id: m.dimension_id,
+      //         value: m.value,
+      //         position: m.position, // "P" o "S"
+      //         date: m.date.split("T")[0], // "YYYY-MM-DD"
+      //       }));
+      //     setMeasurements(initialMeasurements);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error al obtener los datos de la persona:", error);
+      //   })
+      //   .finally(() => {
+      //     setIsLoading(false);
+      //   });
     }
     // if (personData) {
     //   console.log("personData", personData);
@@ -280,7 +328,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   };
   return (
     <>
-      <Dialog open={open} onClose={onClose} maxWidth="sm">
+      <Dialog open={open} onClose={onClose} maxWidth="md">
         <DialogTitle>
           {mode === "add" ? "Añadir nueva persona" : "Editar persona"}
         </DialogTitle>
@@ -291,218 +339,299 @@ const PersonForm: React.FC<PersonFormProps> = ({
         <DialogContent sx={{ py: 0, px: 4 }}>
           {/* Formulario para la persona */}
           <TabPanel value={tabIndex} index={0}>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Nombre"
-              fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              size="small"
-              required
-              error={!!errors.name}
-              helperText={errors.name}
-            />
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Sexo</InputLabel>
-              <Select
-                value={gender || ""}
-                onChange={(e) => setGender(e.target.value as string)}
-                label="Sexo"
+            <Box maxWidth={500}>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Nombre"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 size="small"
-                error={!!errors.gender}
-              >
-                <MenuItem value="M">Masculino</MenuItem>
-                <MenuItem value="F">Femenino</MenuItem>
-              </Select>
-              {errors.gender && (
-                <p
-                  style={{
-                    color: "red",
-                    fontSize: "13px",
-                    marginLeft: "12px",
-                    marginTop: "4px",
-                  }}
+                required
+                error={!!errors.name}
+                helperText={errors.name}
+              />
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Sexo</InputLabel>
+                <Select
+                  value={gender || ""}
+                  onChange={(e) => setGender(e.target.value as string)}
+                  label="Sexo"
+                  size="small"
+                  error={!!errors.gender}
                 >
-                  {errors.gender}
+                  <MenuItem value="M">Masculino</MenuItem>
+                  <MenuItem value="F">Femenino</MenuItem>
+                </Select>
+                {errors.gender && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "13px",
+                      marginLeft: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.gender}
+                  </p>
+                )}
+              </FormControl>
+
+              <DateSelect
+                value={dateOfBirth}
+                onDateChange={setDateOfBirth}
+                label="Fecha de nacimiento"
+              />
+              {errors.dateOfBirth && (
+                <p
+                  style={{ color: "red", fontSize: "13px", marginLeft: "12px" }}
+                >
+                  {errors.dateOfBirth}
                 </p>
               )}
-            </FormControl>
 
-            <DateSelect
-              value={dateOfBirth}
-              onDateChange={setDateOfBirth}
-              label="Fecha de nacimiento"
-            />
-            {errors.dateOfBirth && (
-              <p style={{ color: "red", fontSize: "13px", marginLeft: "12px" }}>
-                {errors.dateOfBirth}
-              </p>
-            )}
-
-            {/* <TextField
-            margin="dense"
-            label="Fecha de nacimiento"
-            type="date"
-            fullWidth
-            value={dateOfBirth || ""}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-            size="small"
-            required
-            error={!!errors.dateOfBirth}
-            helperText={errors.dateOfBirth}
-            InputLabelProps={{ shrink: true }}
-          /> */}
-            <TextField
-              margin="dense"
-              label="País"
-              fullWidth
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              size="small"
-              error={!!errors.country}
-              helperText={errors.country}
-            />
-            <TextField
-              margin="dense"
-              label="Estado"
-              fullWidth
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              size="small"
-              error={!!errors.state}
-              helperText={errors.state}
-            />
-          </TabPanel>
-          <TabPanel value={tabIndex} index={1}>
-  <Box display="flex" sx={{ mt: 0, minWidth: 500 }}>
-    {/* Left Column */}
-    <Box
-      sx={{
-        flex: 1,
-        // pr: 2,
-        // p: 2,
-        // bgcolor: 'background.paper',
-        // borderRadius: 1,
-        // boxShadow: 1,
-      }}
-    >
-      {/* Toolbar */}
-      <Box
-        display="flex"
-        alignItems="center"
-        gap={1}
-        sx={{
-          // bgcolor: 'grey.100',
-          p: 1,
-          // borderRadius: 1,
-          mb: 2,
-        }}
-      >
-      
-        
-        <DateSelect
-          label="Fecha de medición"
-          value={dateOfMeasurement}
-          onDateChange={setDateOfMeasurement}
-          // size="small"
-        />
-        <Button
-          variant="outlined"
-          // size="small"
-          onClick={() => setShowImage((v) => !v)}
-        >
-          Ver
-        </Button>
-        <Button variant="outlined" >
-          Ayuda
-        </Button>
-      </Box>
-
-      {/* Inputs */}
-      {dimensions.map((dimension) => {
-        const m =
-          measurements.find((x) => x.dimension_id === dimension.id_dimension) || {
-            value: '',
-            position: 'P',
-          };
-        return (
-          <Box
-            key={dimension.id_dimension}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              mb: 1,
-              p: 1,
-              borderRadius: 1,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
-            <Box flex={8} pr={1}>
-              <TextField
+              {/* <TextField
+                margin="dense"
+                label="País"
                 fullWidth
-                label={dimension.name}
-                type="number"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                 size="small"
-                value={m.value}
-                onFocus={() => setSelectedDimension(dimension.id_dimension)}
-                onChange={(e) => {
-                  handleMeasurementChange(dimension.id_dimension, e.target.value);
-                  setSelectedDimension(dimension.id_dimension);
+                error={!!errors.country}
+                helperText={errors.country}
+              /> */}
+              {/* <Autocomplete
+                id="country-select-demo"
+                sx={{ width: 300 }}
+                options={countries}
+                autoHighlight
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option) => {
+                  const { key, ...optionProps } = props;
+                  return (
+                    <Box
+                      key={key}
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...optionProps}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                        alt=""
+                      />
+                      {option.label} ({option.code}) +{option.phone}
+                    </Box>
+                  );
                 }}
-              />
-            </Box>
-            <Box flex={4}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={m.position === 'P'}
-                    onChange={() => {
-                      handlePositionToggle(dimension.id_dimension);
-                      setSelectedDimension(dimension.id_dimension);
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose a country"
+                    slotProps={{
+                      htmlInput: {
+                        ...params.inputProps,
+                        autoComplete: "new-password", // disable autocomplete and autofill
+                      },
                     }}
                   />
-                }
-                label={m.position === 'P' ? 'Parado' : 'Sentado'}
+                )}
+              /> */}
+              <Autocomplete
+                freeSolo
+                autoHighlight
+                options={countries.map((c) => c.label)} // lista de etiquetas
+                value={country}
+                onInputChange={(_, value) => {
+                  setCountry(value);
+                  if (!value) setErrors({ country: "El país es obligatorio" });
+                  else setErrors({});
+                }}
+                renderOption={(props, option) => {
+                  const c = countries.find((c) => c.label === option)!;
+                  return (
+                    <Box
+                      component="li"
+                      {...props}
+                      sx={{ "& > img": { mr: 1, flexShrink: 0 } }}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={`https://flagcdn.com/w20/${c.code.toLowerCase()}.png`}
+                        srcSet={`https://flagcdn.com/w40/${c.code.toLowerCase()}.png 2x`}
+                        alt=""
+                      />
+                      {c.label}
+                    </Box>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="País"
+                    size="small"
+                    margin="dense"
+                    fullWidth
+                    error={!!errors.country}
+                    helperText={errors.country}
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // Deshabilita autofill
+                    }}
+                  />
+                )}
+                sx={{ width: "100%" }}
+              />
+              <TextField
+                margin="dense"
+                label="Estado"
+                fullWidth
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                size="small"
+                error={!!errors.state}
+                helperText={errors.state}
               />
             </Box>
-          </Box>
-        );
-      })}
-    </Box>
+          </TabPanel>
+          <TabPanel value={tabIndex} index={1}>
+            <Box display="flex" sx={{ mt: 0 }}>
+              {/* Left Column */}
+              <Box
+                sx={{
+                  flex: 1,
+                  // pr: 2,
+                  // p: 2,
+                  // bgcolor: 'background.paper',
+                  // borderRadius: 1,
+                  // boxShadow: 1,
+                }}
+              >
+                {/* Toolbar */}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap={1}
+                  sx={{
+                    // bgcolor: 'grey.100',
+                    p: 1,
+                    // borderRadius: 1,
+                    mb: 2,
+                  }}
+                >
+                  <DateSelect
+                    label="Fecha de medición"
+                    value={dateOfMeasurement}
+                    onDateChange={setDateOfMeasurement}
+                    // size="small"
+                  />
+                  <Button
+                    variant="outlined"
+                    // size="small"
+                    onClick={() => setShowImage((v) => !v)}
+                  >
+                    Ver
+                  </Button>
+                  <Button variant="outlined">Ayuda</Button>
+                </Box>
 
-    {/* Right Column: image */}
-    {showImage && selectedDimension && (
-      <Box
-        sx={{
-          ml: 2,
-          flex: '0 0 auto',
-          p: 2,
-          bgcolor: 'background.paper',
-          borderRadius: 1,
-          boxShadow: 1,
-        }}
-      >
-        <AnnotatedImage
-          src={`../${
-            dimensions.find((d) => d.id_dimension === selectedDimension)?.name
-          }.jpg`}
-          width={250}
-          measurements={[
-            {
-              xPct: 50,
-              yPct: 50,
-              label: `${
-                measurements.find((m) => m.dimension_id === selectedDimension)
-                  ?.value ?? ''
-              } cm`,
-            },
-          ]}
-        />
-      </Box>
-    )}
-  </Box>
-</TabPanel>
+                {/* Inputs */}
+                {dimensions.map((dimension) => {
+                  const m = measurements.find(
+                    (x) => x.dimension_id === dimension.id_dimension
+                  ) || {
+                    value: "",
+                    position: "P",
+                  };
+                  return (
+                    <Box
+                      key={dimension.id_dimension}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mb: 1,
+                        p: 1,
+                        borderRadius: 1,
+                        "&:hover": { bgcolor: "grey.50" },
+                      }}
+                    >
+                      <Box flex={8} pr={1}>
+                        <TextField
+                          fullWidth
+                          label={dimension.name}
+                          type="number"
+                          size="small"
+                          value={m.value}
+                          onFocus={() =>
+                            setSelectedDimension(dimension.id_dimension)
+                          }
+                          onChange={(e) => {
+                            handleMeasurementChange(
+                              dimension.id_dimension,
+                              e.target.value
+                            );
+                            setSelectedDimension(dimension.id_dimension);
+                          }}
+                        />
+                      </Box>
+                      <Box flex={4}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={m.position === "P"}
+                              onChange={() => {
+                                handlePositionToggle(dimension.id_dimension);
+                                setSelectedDimension(dimension.id_dimension);
+                              }}
+                            />
+                          }
+                          label={m.position === "P" ? "Parado" : "Sentado"}
+                        />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+
+              {/* Right Column: image */}
+              {showImage && selectedDimension && (
+                <Box
+                  sx={{
+                    ml: 2,
+                    flex: "0 0 auto",
+                    p: 2,
+                    bgcolor: "background.paper",
+                    borderRadius: 1,
+                    boxShadow: 1,
+                  }}
+                >
+                  <AnnotatedImage
+                    src={`../${
+                      dimensions.find(
+                        (d) => d.id_dimension === selectedDimension
+                      )?.name
+                    }.jpg`}
+                    width={250}
+                    measurements={[
+                      {
+                        xPct: 50,
+                        yPct: 50,
+                        label: `${
+                          measurements.find(
+                            (m) => m.dimension_id === selectedDimension
+                          )?.value ?? ""
+                        } cm`,
+                      },
+                    ]}
+                  />
+                </Box>
+              )}
+            </Box>
+          </TabPanel>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancelar</Button>

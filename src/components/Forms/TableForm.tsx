@@ -20,6 +20,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  Stack,
 } from "@mui/material";
 import SelectFilter from "../filtros/Selct";
 import { StudyData } from "../../types";
@@ -43,14 +44,48 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   const genderOptions =
     study.gender === "MF"
       ? [
-          { value: "MF", label: "Mixto" },
-          { value: "F", label: "Femenino" },
-          { value: "M", label: "Masculino" },
+        { value: "MF", label: "Todos" },
+        { value: "mixto", label: "Mixto" },
+        { value: "F", label: "Femenino" },
+        { value: "M", label: "Masculino" },
         ]
       : study.gender === "F"
       ? [{ value: "F", label: "Femenino" }]
       : [{ value: "M", label: "Masculino" }];
 
+    // rangos de edad
+  const [ageRangeInput, setAgeRangeInput] = useState<string>("");           // "20-25"
+  const [ageRangesList, setAgeRangesList] = useState<string[]>([]);         // ["20-25","25-30",...]
+
+  // Añadir un rango
+  const handleAddRange = () => {
+    // Validar formato: debe ser "min-max"
+    const parts = ageRangeInput.split("-").map((p) => p.trim());
+    if (parts.length !== 2) return;
+    const [min, max] = parts.map(Number);
+    if (
+      isNaN(min) ||
+      isNaN(max) ||
+      min < study.age_min ||
+      max > study.age_max ||
+      min >= max
+    ) {
+      // aquí podrías mostrar un error si quieres
+      return;
+    }
+    const newRange = `${min}-${max}`;
+    if (!ageRangesList.includes(newRange)) {
+      setAgeRangesList((prev) => [...prev, newRange]);
+    }
+    setAgeRangeInput("");
+  };
+
+  // Quitar rango
+  const handleDeleteRange = (range: string) => {
+    setAgeRangesList((prev) => prev.filter((r) => r !== range));
+  };
+
+  
   // Para dimensiones
   const [selectedDimensions, setSelectedDimensions] = useState<number[]>([]);
   useEffect(() => {
@@ -98,7 +133,8 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
       params.append("dimensions", selectedDimensions.join(","));
     if (selectedPercentiles.length)
       params.append("percentiles", selectedPercentiles.join(","));
-
+    if(ageRangesList.length !== 0) params.append("age_ranges",ageRangesList.toString());
+    else params.append("age_ranges",`${ageMin}-${ageMax}`)
     window.open(`/tables/${study.id}/?${params.toString()}`, "_blank");
     onClose();
   };
@@ -146,6 +182,34 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
             />
           </Box>
 
+          
+          {/* --- RANGOS DE EDAD --- */}
+          <Box>
+            <Typography variant="subtitle2">Rangos de edad</Typography>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+              <TextField
+                label={`Ej: ${study.age_min}-${study.age_max}`}
+                placeholder="20-25"
+                value={ageRangeInput}
+                onChange={(e) => setAgeRangeInput(e.target.value)}
+                size="small"
+              />
+              <Button variant="outlined" size="small" onClick={handleAddRange}>
+                Añadir
+              </Button>
+            </Stack>
+            <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {ageRangesList.map((range) => (
+                <Chip
+                  key={range}
+                  label={range}
+                  onDelete={() => handleDeleteRange(range)}
+                />
+              ))}
+            </Box>
+          </Box>
+
+
           {/* Select all dimensions */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Button
@@ -164,6 +228,9 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               <DeleteIcon /> Limpiar
             </Button> */}
           </Box>
+
+          
+
 
           {/* Selección de dimensiones */}
           <FormControl fullWidth>

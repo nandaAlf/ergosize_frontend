@@ -1,7 +1,7 @@
 // src/services/StudyService.ts
 
 import ApiService from '../api/ApiService';
-import { Dimension, PersonMeasurement, StudyData } from '../types';
+import { Dimension, Person, PersonMeasurement, StudyData } from '../types';
 
 export const getAllStudies = async (mine = false): Promise<StudyData[]> => {
   try {
@@ -118,5 +118,46 @@ export const updateStudy = async (data:StudyData,id:number): Promise<PersonMeasu
   } catch (error) {
     console.error('Error en fetchStudyData:', error);
     throw error;
+  }
+};
+
+export const updatePerson = async (data:Person,id:number): Promise<Person> => {
+  try {
+    const response = await ApiService.patch(`persons/${id}/`,data);
+    return response.data;
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
+  }
+};
+export const createPerson = async (data:Person): Promise<Person> => {
+  try {
+    const response = await ApiService.post(`persons/`,data);
+    return response.data;
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
+  }
+};
+export const getPerson = async (id:number): Promise<Person> => {
+  try {
+    const response = await ApiService.get(`persons/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error en fetchStudyData:', error);
+    throw error;
+  }
+};
+export const deleteMeasurements = async (studyId: number, personId: number) => {
+  try {
+    const response = await ApiService.delete(`/measurements/${studyId}/`, {
+        params: { person_id: personId }
+      }
+    );
+
+    return response.data; // Retornar la respuesta del servidor
+  } catch (error) {
+    console.error("Error al eliminar las mediciones:", error);
+    throw error; // Relanzar el error para manejarlo en el componente que llama a esta función
   }
 };

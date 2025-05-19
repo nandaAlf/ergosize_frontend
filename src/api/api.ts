@@ -78,25 +78,25 @@ export const insertMeasurements = async (
   }
 };
 
-export const deleteMeasurements = async (studyId: number, personId: number) => {
-  try {
-    const response = await api.delete(`/measurements/${studyId}/`, {
-      data: {
-        // Usar 'data' en lugar de 'body' para enviar el cuerpo en solicitudes DELETE
-        person_id: personId,
-      },
-      // headers: {
-      //   Authorization: `Bearer ${localStorage.getItem("token")}`, // Si usas autenticación JWT
-      //   "Content-Type": "application/json",
-      // },
-    });
+// export const deleteMeasurements = async (studyId: number, personId: number) => {
+//   try {
+//     const response = await api.delete(`/measurements/${studyId}/`, {
+//       data: {
+//         // Usar 'data' en lugar de 'body' para enviar el cuerpo en solicitudes DELETE
+//         person_id: personId,
+//       },
+//       // headers: {
+//       //   Authorization: `Bearer ${localStorage.getItem("token")}`, // Si usas autenticación JWT
+//       //   "Content-Type": "application/json",
+//       // },
+//     });
 
-    return response.data; // Retornar la respuesta del servidor
-  } catch (error) {
-    console.error("Error al eliminar las mediciones:", error);
-    throw error; // Relanzar el error para manejarlo en el componente que llama a esta función
-  }
-};
+//     return response.data; // Retornar la respuesta del servidor
+//   } catch (error) {
+//     console.error("Error al eliminar las mediciones:", error);
+//     throw error; // Relanzar el error para manejarlo en el componente que llama a esta función
+//   }
+// };
 // export interface CreateStudyPayload {
 //   name: string;
 //   classification: string;

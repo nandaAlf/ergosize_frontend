@@ -19,8 +19,9 @@ import { useTable } from "../../hooks/useTable";
 import { Dimension, Person } from "../../types";
 import { useState } from "react";
 import PersonForm from "../Forms/PersonForm";
-import { deleteMeasurements } from "../../api/api";
+
 import { FilterPanelToobar } from "./FilterPanelToolbar";
+import { deleteMeasurements } from "../../service/service";
 
 interface TableProps {
   dimensions: Dimension[];
@@ -82,7 +83,6 @@ export const TableComponent: React.FC<TableProps> = ({
       alert("Editando persona");
       // Solo permitir editar si hay una fila seleccionada
       const personToEdit = persons.find((p) => p.id === selected[0]);
-      console.log("personToEdit", personToEdit);
       if (personToEdit) {
         setSelectedPerson(personToEdit); // Guardar la persona seleccionada
         setEditPerson(true); // Abrir el diálogo en modo edición
@@ -99,9 +99,10 @@ export const TableComponent: React.FC<TableProps> = ({
     try {
       console.log("VER");
       console.log(selected);
-      const studyId = 1; // ID del estudio
+      // const studyId = 1; // ID del estudio
       // const personId = 2; // ID de la persona
-      const result = await deleteMeasurements(studyId, selected[0]);
+      // alert("oo")
+      const result = await deleteMeasurements(study_id, selected[0]);
       console.log("Mediciones eliminadas:", result);
     } catch (error) {
       console.error("Error al eliminar las mediciones:", error);
