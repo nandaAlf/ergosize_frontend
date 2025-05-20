@@ -25,6 +25,7 @@ export interface StudyData {
   start_date: string | Dayjs | null;
   end_date: string | Dayjs | null;
   dimensions: Dimension[];
+  supervisor: number;
 }
 // export interface Person {
 //   id: number;

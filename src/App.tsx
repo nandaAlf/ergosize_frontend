@@ -1,4 +1,3 @@
-
 import Navbar from "./components/AppBar/AppBar";
 import ManiquiViewer from "./components/ManiquiViewer";
 import ResponsiveAppBar from "./components/ResponsiveAppBar";
@@ -7,10 +6,11 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter, useLocation } from "react-router-dom";
 import Layout from "./routes/Layout";
 import DashboardLayoutBasic from "./components/D";
+import { NotificationsProvider } from '@toolpad/core/useNotifications';
 // import NavBar from './components/NavBar';
 // Define tu tema personalizado
 // const theme = createTheme({
-  
+
 //   palette: {
 //     primary: {
 //       main: "#2563eb", //grey
@@ -30,7 +30,7 @@ import DashboardLayoutBasic from "./components/D";
 // });
 const theme = createTheme({
   cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
+    colorSchemeSelector: "data-toolpad-color-scheme",
   },
   colorSchemes: { light: true, dark: true },
   breakpoints: {
@@ -49,19 +49,19 @@ function App() {
 
   return (
     <>
-    
       <BrowserRouter>
         {/* <ThemeProvider theme={theme}> */}
-          {/* <Layout/> */}
-         <DashboardLayoutBasic/>
-          {/* <AppRouter /> */}
-          {/* <Footer /> */}
+        {/* <Layout/> */}
+        <NotificationsProvider>
+          <DashboardLayoutBasic />
+        </NotificationsProvider>
+        {/* <AppRouter /> */}
+        {/* <Footer /> */}
         {/* </ThemeProvider> */}
       </BrowserRouter>
     </>
   );
 }
-
 
 // const App: React.FC = () => {
 //   return (

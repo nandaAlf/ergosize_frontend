@@ -32,6 +32,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createPerson, getPerson, updatePerson } from "../../service/service";
 import { countries } from "../../utils/countries";
+import CountrySelect from "../CountrySelect";
 interface PersonFormProps {
   open: boolean;
   onClose: () => void;
@@ -173,7 +174,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       setIsLoading(true);
 
       if (mode === "add") {
-        createPerson(payload)
+        createPerson(payload);
         // await axios.post("http://127.0.0.1:8000/api/persons/", payload);
       } else if (mode === "edit" && personId) {
         // PATCH en lugar de PUT para no borrar las mediciones faltantes
@@ -440,7 +441,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                   />
                 )}
               /> */}
-              <Autocomplete
+              {/* <Autocomplete
                 freeSolo
                 autoHighlight
                 options={countries.map((c) => c.label)} // lista de etiquetas
@@ -485,6 +486,17 @@ const PersonForm: React.FC<PersonFormProps> = ({
                   />
                 )}
                 sx={{ width: "100%" }}
+              /> */}
+              <CountrySelect
+                value={country}
+                onChange={(value) => {
+                  setCountry(value);
+                  // if (!value) setErrors({ country: "El país es obligatorio" });
+                  // else setErrors({});
+                }}
+                // onChange={(e) => setCountry(e.target.value)}
+                error={!!errors.country}
+                helperText={errors.country}
               />
               <TextField
                 margin="dense"

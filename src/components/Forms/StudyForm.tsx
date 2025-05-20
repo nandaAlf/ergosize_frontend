@@ -26,6 +26,8 @@ import {
   createStudy,
   updateStudy,
 } from "../../service/service";
+import { useNotify } from "../../hooks/useNotifications";
+import CountrySelect from "../CountrySelect";
 
 interface StudyFormProps {
   open: boolean;
@@ -33,6 +35,7 @@ interface StudyFormProps {
   onSubmit: (data: StudyData) => void;
   mode?: "add" | "edit";
   initialData?: StudyData;
+  onSuccess?: () => void; // Nueva prop
 }
 interface FormErrors {
   name?: string;
@@ -81,6 +84,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   onClose,
   open,
   onSubmit,
+  onSuccess,
   initialData,
 }) => {
   const defaultValues: StudyData = {
@@ -106,6 +110,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   const [selectedDimensionIds, setSelectedDimensionIds] = useState<number[]>(
     []
   );
+  const notify = useNotify();
 
   useEffect(() => {
     if (initialData && mode === "edit") {
@@ -134,10 +139,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
     };
     loadDimensions();
   }, []);
-  // useEffect(() => {
-  //   console.log(allDimensions);
-  // }, [allDimensions]);
-  // Cargar dimensiones seleccionadas cuando hay initialData
+  
   useEffect(() => {
     if (initialData && mode === "edit") {
       setSelectedDimensionIds(
@@ -252,7 +254,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dataToSubmit = {
+    const payload = {
       ...formData,
       start_date: formData.start_date
         ? dayjs(formData.start_date).format("YYYY-MM-DD")
@@ -262,20 +264,29 @@ const StudyForm: React.FC<StudyFormProps> = ({
         : null,
       dimensions: selectedDimensionIds.map((id) => ({ id_dimension: id })),
     };
-    if (validateForm()) {
-      console.log("enviando", dataToSubmit);
-      if (mode == "add") {
-        await createStudy(dataToSubmit);
+    if (!validateForm) return;
+
+    try {
+      if (mode === "add") {
+        await createStudy(payload);
+        notify.success("Estudio creado correctamente");
       } else {
-        if (dataToSubmit.id !== undefined) {
-          await updateStudy(dataToSubmit, dataToSubmit.id);
-        } else {
-          console.error("Error: Study ID is undefined.");
-        }
+        if (!payload.id) throw new Error("ID de estudio no definido");
+        await updateStudy(payload, payload.id);
+        notify.success("Estudio actualizado correctamente");
       }
-      // onSubmit(formData);
       onClose();
+      if (onSuccess) onSuccess(); // Actualiza la lista padre
+    } catch (error) {
+      console.error(error);
+      notify.error(
+        mode === "add"
+          ? "Error al crear el estudio"
+          : "Error al actualizar el estudio"
+      );
     }
+    // onSubmit(formData);
+    onClose();
   };
 
   return (
@@ -373,14 +384,22 @@ const StudyForm: React.FC<StudyFormProps> = ({
             </Box>
 
             <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
+              <CountrySelect
+                value={formData.country}
+                onChange={(value: string) =>
+                  setFormData((prev) => ({ ...prev, country: value }))
+                }
+                error={!!errors.country}
+                helperText={errors.country}
+              />
+              {/* <TextField 
                 label="País"
                 value={formData.country}
                 onChange={handleChange("country")}
                 size="small"
                 fullWidth
                 required
-              />
+              /> */}
               <TextField
                 label="Locación"
                 value={formData.location}

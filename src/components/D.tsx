@@ -16,7 +16,7 @@ import LayersIcon from "@mui/icons-material/Layers";
 import type { Navigation } from "@toolpad/core/AppProvider";
 import AppRouter from "../routes/AppRouter";
 import HelpMenu from "../pages/Help";
-
+import { DialogsProvider } from "@toolpad/core/useDialogs";
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Main items" },
   {
@@ -76,7 +76,7 @@ function useReactRouterAdapter() {
     () => ({
       // current full path
       pathname: location.pathname + location.search,
-   
+
       // search parameters as URLSearchParams
       searchParams: new URLSearchParams(location.search),
       // navigate function
@@ -120,9 +120,10 @@ export default function DashboardLayoutBasic() {
           title: "ERGOsizes",
           homeUrl: "/",
         }}
-        
       >
-        <LayoutSwitcher />
+        {/* <DialogsProvider> */}
+          <LayoutSwitcher />
+        {/* </DialogsProvider> */}
       </AppProvider>
     </>
   );

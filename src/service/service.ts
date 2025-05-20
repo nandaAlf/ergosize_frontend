@@ -106,6 +106,7 @@ export const createStudy = async (data:StudyData): Promise<PersonMeasurement> =>
   try {
     const response = await ApiService.post('studies/',data);
     return response.data;
+ 
   } catch (error) {
     console.error('Error en fetchStudyData:', error);
     throw error;

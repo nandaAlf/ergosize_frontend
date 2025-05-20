@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 
 import { StudyData } from "../types";
@@ -7,7 +8,7 @@ import Search from "../components/filtros/Search";
 import SelectFilter from "../components/filtros/Selct";
 import React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button/Button";
+import Button from "@mui/material/Button";
 import StudyForm from "../components/Forms/StudyForm";
 import TableForm from "../components/Forms/TableForm";
 import ApiService from "../api/ApiService";
@@ -15,13 +16,15 @@ import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import { getAllStudies } from "../service/service";
-import { Container, Grid, IconButton, Typography } from "@mui/material";
+import { Container, Grid, IconButton, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FilterPanelLayout from "../components/FilterPanelStudies";
 import dayjs, { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useLocation } from "react-router-dom";
+import { useNotify } from "../hooks/useNotifications";
+import { useDialogs } from "@toolpad/core/useDialogs";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -51,12 +54,14 @@ const Studies: React.FC = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const mine = params.get("mine") === "true";
-
- 
+  const notify = useNotify();
+  const dialogs = useDialogs();
+  const [refreshCounter, setRefreshCounter] = useState(0);
   useEffect(() => {
     const fetchStudies = async () => {
       try {
         const data = await getAllStudies(mine);
+        // const result = await dialogs.open(MyCustomDialog);
         setStudiesData(data);
       } catch (err: any) {
         setError("No se pudieron obtener los estudios");
@@ -65,7 +70,7 @@ const Studies: React.FC = () => {
       }
     };
     fetchStudies();
-  }, [mine]);
+  }, [mine,refreshCounter]);
 
   const filteredStudies = studiesData
     ?.filter((study) => {
@@ -105,7 +110,10 @@ const Studies: React.FC = () => {
       }
       return 0; // sin orden
     });
-
+  // Función para actualizar la lista
+  const handleStudyUpdate = () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
   const handleCloseStudyForm = () => {
     setOpenStudyForm(false);
     setEditingStudy(null);
@@ -167,15 +175,13 @@ const Studies: React.FC = () => {
             <CardStudy
               study={study}
               selected={false}
-              // setSelectedCard={setSelectedCard}
-              // index={index}
-              // mine={mine}
               onEdit={() => handleEditStudy(study)}
               onOpenTable={handleOpenTableDialog} // Pasar la función al componente
               onSelect={() => {}}
               onViewMeasurements={function (study: StudyData): void {
                 throw new Error("Function not implemented.");
               }}
+              onSuccess ={handleStudyUpdate}
             />
           </Grid>
         ))}
@@ -189,6 +195,7 @@ const Studies: React.FC = () => {
         }}
         initialData={editingStudy ? editingStudy : undefined}
         mode={editingStudy ? "edit" : "add"}
+        onSuccess={handleStudyUpdate} // Agrega esta prop
       ></StudyForm>
 
       {/* Integración del TableForm a nivel global en la página Studies */}
