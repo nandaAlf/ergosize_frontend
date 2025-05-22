@@ -4,6 +4,7 @@ import { Toolbar, Typography, IconButton, Tooltip, alpha } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add"; // Importar el ícono de añadir
+import EditIcon from '@mui/icons-material/Edit';
 interface EnhancedTableToolbarProps {
   numSelected: number;
   onAddPerson: () => void;
@@ -45,10 +46,12 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: "1 1 100%" }}
+          sx={{ flex: "1 1 100%", ml:3,  }}
           variant="h6"
           id="tableTitle"
           component="div"
+          // fontFamily={"helvetica"}
+        
         >
           {title}
         </Typography>
@@ -57,7 +60,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         <>
         <Tooltip title="Editar">
           <IconButton onClick={onEditPerson}>
-            <FilterListIcon />
+            <EditIcon />
           </IconButton>
         </Tooltip>
          {/* <Tooltip title="Ficha">
@@ -70,7 +73,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         <></>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="Eliminar">
           <IconButton onClick={onDeletePerson}>
             <DeleteIcon />
           </IconButton>

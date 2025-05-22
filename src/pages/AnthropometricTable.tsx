@@ -431,8 +431,9 @@
 // };
 // export default AnthropometricTable;
 
-import React, { useEffect, useState, useMemo } from "react"; 
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import PlaceIcon from "@mui/icons-material/Place";
 import {
   Box,
   Table,
@@ -446,8 +447,11 @@ import {
   Paper,
   CircularProgress,
   Typography,
+  Button,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
+import Search from "../components/filtros/Search";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 interface Stats {
   mean: number;
@@ -467,10 +471,13 @@ type Order = "asc" | "desc";
 
 interface Props {
   studyId: number;
-  gender?: "M" | "F" | "mixto";
+  gender?: "M" | "F" | "mixto" |"";
   dimensions: number[];
   percentilesList: number[];
   age_ranges: string;
+  tableTitle: string;
+  location: string;
+  size: number;
 }
 
 const AnthropometricTable: React.FC<Props> = ({
@@ -479,6 +486,9 @@ const AnthropometricTable: React.FC<Props> = ({
   dimensions,
   percentilesList,
   age_ranges,
+  tableTitle,
+  location,
+  size,
 }) => {
   const [data, setData] = useState<ApiEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -486,6 +496,7 @@ const AnthropometricTable: React.FC<Props> = ({
   const [orderBy, setOrderBy] = useState<string>("dimension");
   const [order, setOrder] = useState<Order>("asc");
   const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
@@ -505,7 +516,10 @@ const AnthropometricTable: React.FC<Props> = ({
   }, [studyId, gender, dimensions, percentilesList, age_ranges]);
 
   // Géneros y rangos detectados
-  const genders = useMemo(() => (data[0] ? Object.keys(data[0].by_gender) : []), [data]);
+  const genders = useMemo(
+    () => (data[0] ? Object.keys(data[0].by_gender) : []),
+    [data]
+  );
   const ageRanges = useMemo(
     () =>
       data[0] && genders.length
@@ -548,9 +562,21 @@ const AnthropometricTable: React.FC<Props> = ({
     });
   }, [data, order, orderBy]);
 
+  const filtered = useMemo(
+    () =>
+      sorted.filter((r) =>
+        r.dimension.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [sorted, searchTerm]
+  );
+
+  // const paged = useMemo(
+  //   () => sorted.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+  //   [sorted, page, rowsPerPage]
+  // );
   const paged = useMemo(
-    () => sorted.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [sorted, page, rowsPerPage]
+    () => filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [filtered, page, rowsPerPage]
   );
 
   const handleSort = (field: string) => {
@@ -572,140 +598,259 @@ const AnthropometricTable: React.FC<Props> = ({
   if (!data.length) return <Typography>No hay datos</Typography>;
 
   return (
-    <Paper>
-      <TableContainer sx={{ maxHeight: 500 }}>
-        <Table stickyHeader size="small" sx={{ borderCollapse: "collapse" }}>
-          <TableHead>
-            {/* Nivel 1: Género */}
-            <TableRow>
-              <TableCell
-                rowSpan={3}
-                align="left"
-                sx={{ border: "1px solid #E5E7EB", }}
-              >
-                <TableSortLabel
-                  active={orderBy === "dimension"}
-                  direction={order}
-                  onClick={() => handleSort("dimension")}
-                >
-                  Dimensión
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc" ? "sorted descending" : "sorted ascending"}
-                  </Box>
-                </TableSortLabel>
-              </TableCell>
+    <>
+      {/* <Paper> */}
+      {/* <Typography
+        sx={{ flex: "1 1 100%",
+          //  ml: 3 
+          }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        {tableTitle}
+      </Typography>
+      <Typography
+        sx={{ flex: "1 1 100%",
+          //  ml: 3 
+          }}
+        // variant=""
+        // id="tableTitle"
+        component="div"
+      >
+        Lugar: {location} Muestra :{size}
+      </Typography> */}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 3 }}>
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{
+            fontWeight: 600,
+            color: "text.primary",
+            lineHeight: 1.2,
+          }}
+        >
+          {tableTitle}
+        </Typography>
 
-              {genders.map((g) => (
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="body1"
+            component="div"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              color: "text.secondary",
+            }}
+          >
+            <PlaceIcon fontSize="small" />
+            <Box component="span" sx={{ fontWeight: 500 }}>
+              Lugar:
+            </Box>
+            {location}
+          </Typography>
+
+          <Typography
+            variant="body1"
+            component="div"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              color: "text.secondary",
+            }}
+          >
+            <GroupsIcon fontSize="small" />
+            <Box component="span" sx={{ fontWeight: 500 }}>
+              Muestra:
+            </Box>
+            {size}
+          </Typography>
+        </Box>
+      </Box>
+      {/* </Paper> */}
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        justifyContent="space-between"
+        mt={4}
+        mb={4}
+        //           sx={{
+        //             p: 2,
+        //             display: "flex",
+        //             justifyContent: "space-between",
+        //             flexWrap: "wrap",
+        //             boxSizing: "border-box",
+        //           }}
+      >
+        <Box sx={{ width: "500px" }}>
+          <Search
+            text="Buscar dimensión"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Box>
+
+        <Button sx={{ width: "150px" }} variant="contained">
+          Exportar
+        </Button>
+
+        {/* <FormControlLabel
+//             control={
+  //               <Switch
+//                 checked={false}
+//                 onChange={() => setOrderBy("dimension")}
+//               />
+//             }
+//             label="Vista compacta"
+//           /> */}
+      </Box>
+      <Paper>
+        <TableContainer sx={{ maxHeight: 500 }}>
+          <Table stickyHeader size="small" sx={{ borderCollapse: "collapse" }}>
+            <TableHead>
+              {/* Nivel 1: Género */}
+              <TableRow>
                 <TableCell
-                  key={g}
-                  align="center"
-                  colSpan={ageRanges.length * statsCols.length}
-                  sx={{ border: "1px solid #E5E7EB"}}
+                  rowSpan={3}
+                  align="left"
+                  sx={{ border: "1px solid #E5E7EB" }}
                 >
-                  {g === "M" ? "Hombres" : g === "F" ? "Mujeres" : "Mixto"}
-                </TableCell>
-              ))}
-            </TableRow>
-
-            {/* Nivel 2: Rango de edad */}
-            <TableRow>
-              <TableCell sx={{ display: "none" }} /> {/* placeholder */}
-              {genders.map((g) =>
-                ageRanges.map((r) => (
-                  <TableCell
-                    key={`${g}-${r}`}
-                    align="center"
-                    colSpan={statsCols.length}
-                    sx={{ border: "1px solid #E5E7EB", }}
+                  <TableSortLabel
+                    active={orderBy === "dimension"}
+                    direction={order}
+                    onClick={() => handleSort("dimension")}
                   >
-                    {r} 
-                  </TableCell>
-                ))
-              )}
-            </TableRow>
+                    Dimensión
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  </TableSortLabel>
+                </TableCell>
 
-            {/* Nivel 3: Estadísticas */}
-            <TableRow>
-              <TableCell sx={{ display: "none" }} /> {/* placeholder */}
-              {genders.map((g) =>
-                ageRanges.map((r) =>
-                  statsCols.map((stat) => (
+                {genders.map((g) => (
+                  <TableCell
+                    key={g}
+                    align="center"
+                    colSpan={ageRanges.length * statsCols.length}
+                    sx={{ border: "1px solid #E5E7EB" }}
+                  >
+                    {g === "M" ? "Hombres" : g === "F" ? "Mujeres" : "Mixto"}
+                  </TableCell>
+                ))}
+              </TableRow>
+
+              {/* Nivel 2: Rango de edad */}
+              <TableRow>
+                <TableCell sx={{ display: "none" }} /> {/* placeholder */}
+                {genders.map((g) =>
+                  ageRanges.map((r) => (
                     <TableCell
-                      key={`${g}-${r}-${stat}`}
-                      align="right"
-                      sx={{ border: "1px solid #E5E7EB", py: 1 }}
+                      key={`${g}-${r}`}
+                      align="center"
+                      colSpan={statsCols.length}
+                      sx={{ border: "1px solid #E5E7EB" }}
                     >
-                      <TableSortLabel
-                        active={orderBy === stat}
-                        direction={order}
-                        onClick={() => handleSort(stat)}
-                        hideSortIcon={false}
-                      >
-                        {stat === "mean"
-                          ? "Media"
-                          : stat === "sd"
-                          ? "SD"
-                          : stat.replace("p", "") + "%"}
-                      </TableSortLabel>
+                      {r}
                     </TableCell>
                   ))
-                )
-              )}
-            </TableRow>
-          </TableHead>
+                )}
+              </TableRow>
 
-          <TableBody>
-            {paged.map((row) => (
-              <TableRow 
-              key={row.dimension} hover>
-                {/* Dimensión a la izquierda */}
-                <TableCell sx={{ border: "1px solid #E5E7EB", py: 1 }} align="left">
-                  {row.dimension} 
-                </TableCell>
-
+              {/* Nivel 3: Estadísticas */}
+              <TableRow>
+                <TableCell sx={{ display: "none" }} /> {/* placeholder */}
                 {genders.map((g) =>
                   ageRanges.map((r) =>
-                    statsCols.map((stat) => {
-                      const statsBlock = row.by_gender[g]?.[r];
-                      const value =
-                        stat === "mean"
-                          ? statsBlock?.mean
-                          : stat === "sd"
-                          ? statsBlock?.sd
-                          : statsBlock?.percentiles[stat.replace("p", "")];
-                      return (
-                        <TableCell
-                          key={`${row.dimension}-${g}-${r}-${stat}`}
-                          align="right"
-                          sx={{ border: "1px solid #E5E7EB", py: 1 }}
+                    statsCols.map((stat) => (
+                      <TableCell
+                        key={`${g}-${r}-${stat}`}
+                        align="right"
+                        sx={{ border: "1px solid #E5E7EB", py: 1 }}
+                      >
+                        <TableSortLabel
+                          active={orderBy === stat}
+                          direction={order}
+                          onClick={() => handleSort(stat)}
+                          hideSortIcon={false}
                         >
-                          {value != null ? value.toFixed(2) : "-"}
-                        </TableCell>
-                      );
-                    })
+                          {stat === "mean"
+                            ? "Media"
+                            : stat === "sd"
+                              ? "SD"
+                              : stat.replace("p", "") + "%"}
+                        </TableSortLabel>
+                      </TableCell>
+                    ))
                   )
                 )}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
 
-      <Box display="flex" justifyContent="flex-end" mt={1}>
-        <TablePagination
-          component="div"
-          count={data.length}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          onPageChange={(_, p) => setPage(p)}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(+e.target.value);
-            setPage(0);
-          }}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </Box>
-    </Paper>
+            <TableBody>
+              {paged.map((row) => (
+                <TableRow key={row.dimension} hover>
+                  {/* Dimensión a la izquierda */}
+                  <TableCell
+                    sx={{ border: "1px solid #E5E7EB", py: 1 }}
+                    align="left"
+                  >
+                    {row.dimension}
+                  </TableCell>
+
+                  {genders.map((g) =>
+                    ageRanges.map((r) =>
+                      statsCols.map((stat) => {
+                        const statsBlock = row.by_gender[g]?.[r];
+                        const value =
+                          stat === "mean"
+                            ? statsBlock?.mean
+                            : stat === "sd"
+                              ? statsBlock?.sd
+                              : statsBlock?.percentiles[stat.replace("p", "")];
+                        return (
+                          <TableCell
+                            key={`${row.dimension}-${g}-${r}-${stat}`}
+                            align="right"
+                            sx={{ border: "1px solid #E5E7EB", py: 1 }}
+                          >
+                            {value != null ? value.toFixed(2) : "-"}
+                          </TableCell>
+                        );
+                      })
+                    )
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box display="flex" justifyContent="flex-end" mt={1}>
+          <TablePagination
+            component="div"
+            count={data.length}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={(_, p) => setPage(p)}
+            onRowsPerPageChange={(e) => {
+              setRowsPerPage(+e.target.value);
+              setPage(0);
+            }}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Box>
+      </Paper>
+    </>
   );
 };
 

@@ -22,14 +22,19 @@ import PersonForm from "../Forms/PersonForm";
 
 import { FilterPanelToobar } from "./FilterPanelToolbar";
 import { deleteMeasurements } from "../../service/service";
+import { useNotify } from "../../hooks/useNotifications";
+import { useConfirmDialog } from "../../hooks/useConfirmation";
 
 interface TableProps {
   dimensions: Dimension[];
   persons: Person[];
   study_id: number;
   study_name: string;
+  size: number;
+  current_size:number;
   searchTerm: string; // Término de búsqueda
   onSearchTermChange: (value: string) => void;
+  onRefresh: () => void;
 }
 
 export const TableComponent: React.FC<TableProps> = ({
@@ -39,6 +44,9 @@ export const TableComponent: React.FC<TableProps> = ({
   study_name,
   searchTerm,
   onSearchTermChange,
+  size,
+  current_size,
+  onRefresh,
 }) => {
   const {
     order,
@@ -55,6 +63,7 @@ export const TableComponent: React.FC<TableProps> = ({
     handleChangeDense,
     emptyRows,
     visibleRows,
+    clearSelected,
   } = useTable(persons);
 
   const headCells = [
@@ -74,40 +83,57 @@ export const TableComponent: React.FC<TableProps> = ({
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [openPersonForm, setOpenPersonForm] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
+  const notify = useNotify();
+  const { confirm, dialog } = useConfirmDialog();
   const handleAddPerson = () => {
-    setOpenPersonForm(true); // Abrir el diálogo
+    if (current_size < size)
+      setOpenPersonForm(true); // Abrir el diálogo
+    else {
+      notify.warning("Este estudio ya está completo");
+    }
   };
   const handleEditPerson = () => {
     // setEditPerson(true); // Abrir el diálogo
     if (selected.length === 1) {
-      alert("Editando persona");
       // Solo permitir editar si hay una fila seleccionada
       const personToEdit = persons.find((p) => p.id === selected[0]);
       if (personToEdit) {
         setSelectedPerson(personToEdit); // Guardar la persona seleccionada
         setEditPerson(true); // Abrir el diálogo en modo edición
         setOpenPersonForm(true);
-        console.log("edit");
-        console.log(personToEdit);
       }
     } else {
       alert("Selecciona una sola fila para editar.");
     }
   };
   const handleDeletePerson = async () => {
-    console.log(persons);
-    try {
-      console.log("VER");
-      console.log(selected);
-      // const studyId = 1; // ID del estudio
-      // const personId = 2; // ID de la persona
-      // alert("oo")
-      const result = await deleteMeasurements(study_id, selected[0]);
-      console.log("Mediciones eliminadas:", result);
-    } catch (error) {
-      console.error("Error al eliminar las mediciones:", error);
+    for (const select of selected) {
+      try {
+        // Buscar la persona por ID
+        const personToDelete = persons.find((person) => person.id === select);
+
+        const isConfirmed = await confirm({
+          title: "Eliminar Persona",
+          description: `¿Estás seguro de querer eliminar a ${personToDelete?.name || "Nombre no encontrado"} del estudio?`,
+          acceptLabel: "Eliminar",
+          cancelLabel: "Cancelar",
+        });
+
+        if (isConfirmed) {
+          await deleteMeasurements(study_id, select);
+          onRefresh();
+          notify.success(
+            `Persona ${personToDelete?.name || ""} eliminada correctamente`
+          );
+          clearSelected(); // <-- Aquí la novedad
+        }
+      } catch (error) {
+        console.error("Error al eliminar persona:", error);
+        notify.error("Error al eliminar la persona");
+      }
     }
   };
+
   const handleClosePersonForm = () => {
     setOpenPersonForm(false);
     setEditPerson(false);
@@ -120,16 +146,18 @@ export const TableComponent: React.FC<TableProps> = ({
 
   return (
     <Box
-      sx={{
-        // width: "100%",
-        // width: "calc(100% - 40px)", // evitar overflow horizontal
-        // boxSizing: "border-box",
-        // padding: "25px",
-        // borderRadius: "5px", 
-        // margin: "40px 20px",
-        // border: "1px solid rgba(37, 100, 235, 0.2)",
-        // backgroundColor: "white", // opcional para mejor contraste
-      }}
+      sx={
+        {
+          // width: "100%",
+          // width: "calc(100% - 40px)", // evitar overflow horizontal
+          // boxSizing: "border-box",
+          // padding: "25px",
+          // borderRadius: "5px",
+          // margin: "40px 20px",
+          // border: "1px solid rgba(37, 100, 235, 0.2)",
+          // backgroundColor: "white", // opcional para mejor contraste
+        }
+      }
     >
       {/* <Paper sx={{ mb: 2 }}> */}
       <EnhancedTableToolbar
@@ -139,14 +167,16 @@ export const TableComponent: React.FC<TableProps> = ({
         onDeletePerson={handleDeletePerson}
         title={study_name || "TITULO"}
       />
-      <Box sx={{
+      <Box
+        sx={{
           // padding: "25px",
           borderRadius: "5px",
           margin: "10px 15px",
           // border: "1px solid rgba(2, 2, 2, 0.2)",
-        }}>
+        }}
+      >
         <FilterPanelToobar
-          onOpenPersonForm={setOpenPersonForm}
+          onOpenPersonForm={handleAddPerson}
           searchTerm={searchTerm}
           onSearchChange={onSearchTermChange}
           params={params}
@@ -161,11 +191,12 @@ export const TableComponent: React.FC<TableProps> = ({
         }}
         elevation={1}
       >
-        <TableContainer>
+        <TableContainer sx={{ maxHeight: 400 }}>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
+            stickyHeader
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -178,13 +209,17 @@ export const TableComponent: React.FC<TableProps> = ({
             />
             <TableBody>
               {visibleRows.map((person, index) => {
-                const isItemSelected = selected.includes(person.id);
+                const isItemSelected = person.id !== undefined && selected.includes(person.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, person.id)}
+                    onClick={(event) => {
+                      if (person.id !== undefined) {
+                        handleClick(event, person.id);
+                      }
+                    }}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -243,7 +278,9 @@ export const TableComponent: React.FC<TableProps> = ({
         dimensions={dimensions}
         studyId={study_id}
         personId={editPerson && selectedPerson ? selectedPerson.id : undefined}
+        onRefresh={onRefresh}
       ></PersonForm>
+      {dialog} {/* Renderiza el modal de confirmación */}
       {/* {/* <pre>{JSON.stringify(persons)}</pre> */}
       {/* {editPerson ? <pre>{JSON.stringify(selectedPerson)}</pre> : <></>} */}
     </Box>

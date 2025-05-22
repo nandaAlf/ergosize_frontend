@@ -63,14 +63,14 @@ const Studies: React.FC = () => {
         const data = await getAllStudies(mine);
         // const result = await dialogs.open(MyCustomDialog);
         setStudiesData(data);
-      } catch (err: any) {
-        setError("No se pudieron obtener los estudios");
+      } catch (err) {
+        setError(`No se pudieron obtener los estudios`);
       } finally {
         setLoading(false);
       }
     };
     fetchStudies();
-  }, [mine,refreshCounter]);
+  }, [mine, refreshCounter]);
 
   const filteredStudies = studiesData
     ?.filter((study) => {
@@ -181,7 +181,7 @@ const Studies: React.FC = () => {
               onViewMeasurements={function (study: StudyData): void {
                 throw new Error("Function not implemented.");
               }}
-              onSuccess ={handleStudyUpdate}
+              onSuccess={handleStudyUpdate}
             />
           </Grid>
         ))}

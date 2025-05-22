@@ -20,6 +20,7 @@ import {
   IconButton,
   Tooltip,
   Autocomplete,
+  InputAdornment,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Dimension, Person } from "../../types";
@@ -33,6 +34,9 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createPerson, getPerson, updatePerson } from "../../service/service";
 import { countries } from "../../utils/countries";
 import CountrySelect from "../CountrySelect";
+import { useNotify } from "../../hooks/useNotifications";
+import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
+import useNavigation from "../../hooks/useNavigation";
 interface PersonFormProps {
   open: boolean;
   onClose: () => void;
@@ -40,6 +44,7 @@ interface PersonFormProps {
   dimensions: Dimension[]; // Lista de dimensiones del grupo
   studyId: number;
   personId?: number; // ID de la persona (si se está editando)
+  onRefresh: () => void;
 }
 interface Measurement {
   dimension_id: number;
@@ -73,6 +78,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   dimensions,
   studyId,
   personId,
+  onRefresh,
 }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState<string>("");
@@ -92,7 +98,8 @@ const PersonForm: React.FC<PersonFormProps> = ({
   const [tabIndex, setTabIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+  const notify = useNotify();
+  const { goToPage } = useNavigation();
   const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
     setTabIndex(newIndex);
   };
@@ -126,39 +133,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
         date: dateOfMeasurement ? dateOfMeasurement.format("YYYY-MM-DD") : "",
       }));
 
-    // const personDataToSave = {
-    //   name,
-    //   gender,
-    //   date_of_birth: dateOfBirth?.format("YYYY-MM-DD") || "",
-    //   country,
-    //   state,
-    //   province,
-    //   measurements: measurements.map((m) => ({
-    //     dimension_id: m.dimension_id,
-    //     value: m.value,
-    //     position: m.position, // Puedes agregar un campo para seleccionar la posición si es necesario
-    //     study_id: studyId,
-    //     date: dateOfMeasurement?.format("YYYY-MM-DD") || "", // Fecha de medición
-    //   })),
-    // };
-
-    // 3) Construir el payload de forma condicional
-    // interface Payload {
-    //   name: string;
-    //   gender: string;
-    //   date_of_birth: string;
-    //   country: string;
-    //   state: string;
-    //   province: string;
-    //   measurements?: {
-    //     dimension_id: number;
-    //     value: number;
-    //     position: "P" | "S";
-    //     study_id: number;
-    //     date: string;
-    //   }[];
-    // }
-
     const payload: Person = {
       name,
       gender,
@@ -175,16 +149,13 @@ const PersonForm: React.FC<PersonFormProps> = ({
 
       if (mode === "add") {
         createPerson(payload);
-        // await axios.post("http://127.0.0.1:8000/api/persons/", payload);
+        notify.success("Persona añadida con éxito");
       } else if (mode === "edit" && personId) {
         // PATCH en lugar de PUT para no borrar las mediciones faltantes
         updatePerson(payload, personId);
-        // await axios.put(
-        //   `http://127.0.0.1:8000/api/persons/${personId}/`,
-        //   payload
-        // );
-        console.log("edit", payload);
+        notify.success("Cambios realizados con éxito");
       }
+      onRefresh();
 
       onClose();
     } catch (error) {
@@ -192,29 +163,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
     } finally {
       setIsLoading(false);
     }
-    // try {
-    //   setIsLoading(true);
-    //   console.log("Save");
-    //   console.log(personDataToSave);
-    //   if (mode === "add") {
-    //     alert("agregando")
-    //     await axios.post(
-    //       "http://127.0.0.1:8000/api/persons/",
-    //       personDataToSave
-    //     );
-    //   } else if (mode === "edit" && personData?.id) {
-    //     alert("editando")
-    //     await axios.put(
-    //       `http://127.0.0.1:8000/api/persons/${personData.id}/`,
-    //       personDataToSave
-    //     );
-    //   }
-    //   onClose(); // Cerrar el formulario después de guardar
-    // } catch (error) {
-    //   console.error("Error al guardar la persona:", error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   useEffect(() => {
@@ -245,54 +193,8 @@ const PersonForm: React.FC<PersonFormProps> = ({
       fetchPerson();
 
       setIsLoading(true);
-      // Obtener los datos adicionales de la persona desde la API
-      // axios
-      //   .getPerson(personId)
-      //   .then((response) => {
-      //     const fullPersonData = response.data;
-      //     setName(fullPersonData.name);
-      //     setGender(fullPersonData.gender);
-      //     setDateOfBirth(dayjs(fullPersonData.date_of_birth));
-      //     setCountry(fullPersonData.country);
-      //     setState(fullPersonData.state);
-      //     setProvince(fullPersonData.province);
-      //     setDateOfMeasurement(dayjs(fullPersonData.measurements[0]?.date));
-      //     console.log(response.data);
-      //     const initialMeasurements: Measurement[] =
-      //       fullPersonData.measurements.map((m: any) => ({
-      //         dimension_id: m.dimension_id,
-      //         value: m.value,
-      //         position: m.position, // "P" o "S"
-      //         date: m.date.split("T")[0], // "YYYY-MM-DD"
-      //       }));
-      //     setMeasurements(initialMeasurements);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error al obtener los datos de la persona:", error);
-      //   })
-      //   .finally(() => {
-      //     setIsLoading(false);
-      //   });
     }
-    // if (personData) {
-    //   console.log("personData", personData);
-    //   // setName(personData.name);
-    //   // Mapear las medidas de personData al estado measurements
-    //   const initialMeasurements = Object.entries(personData.dimensions)
-    //     .map(([dimensionName, value]) => {
-    //       const dimension = dimensions.find((d) => d.name === dimensionName);
-    //       return {
-    //         dimension_id: dimension ? dimension.id_dimension : -1, // Obtener el ID de la dimensión
-    //         value: value,
-    //         position: "P" as "P" | "S",
-    //         date: dayjs("2020-02-02").format("YYYY-MM-DD"), // Cambia esto según sea necesario
-    //       };
-    //     })
-    //     .filter((m) => m.dimension_id !== -1); // Filtrar dimensiones no encontradas
-
-    //   setMeasurements(initialMeasurements);
-    // }
-  }, [personId, dimensions]);
+  }, [personId, dimensions, mode]);
 
   const handleMeasurementChange = (dimensionId: number, value: string) => {
     const numericValue = value === "" ? null : parseFloat(value);
@@ -360,6 +262,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                   onChange={(e) => setGender(e.target.value as string)}
                   label="Sexo"
                   size="small"
+                  margin="dense"
                   error={!!errors.gender}
                 >
                   <MenuItem value="M">Masculino</MenuItem>
@@ -392,101 +295,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
                 </p>
               )}
 
-              {/* <TextField
-                margin="dense"
-                label="País"
-                fullWidth
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                size="small"
-                error={!!errors.country}
-                helperText={errors.country}
-              /> */}
-              {/* <Autocomplete
-                id="country-select-demo"
-                sx={{ width: 300 }}
-                options={countries}
-                autoHighlight
-                getOptionLabel={(option) => option.label}
-                renderOption={(props, option) => {
-                  const { key, ...optionProps } = props;
-                  return (
-                    <Box
-                      key={key}
-                      component="li"
-                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                      {...optionProps}
-                    >
-                      <img
-                        loading="lazy"
-                        width="20"
-                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                        alt=""
-                      />
-                      {option.label} ({option.code}) +{option.phone}
-                    </Box>
-                  );
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Choose a country"
-                    slotProps={{
-                      htmlInput: {
-                        ...params.inputProps,
-                        autoComplete: "new-password", // disable autocomplete and autofill
-                      },
-                    }}
-                  />
-                )}
-              /> */}
-              {/* <Autocomplete
-                freeSolo
-                autoHighlight
-                options={countries.map((c) => c.label)} // lista de etiquetas
-                value={country}
-                onInputChange={(_, value) => {
-                  setCountry(value);
-                  if (!value) setErrors({ country: "El país es obligatorio" });
-                  else setErrors({});
-                }}
-                renderOption={(props, option) => {
-                  const c = countries.find((c) => c.label === option)!;
-                  return (
-                    <Box
-                      component="li"
-                      {...props}
-                      sx={{ "& > img": { mr: 1, flexShrink: 0 } }}
-                    >
-                      <img
-                        loading="lazy"
-                        width="20"
-                        src={`https://flagcdn.com/w20/${c.code.toLowerCase()}.png`}
-                        srcSet={`https://flagcdn.com/w40/${c.code.toLowerCase()}.png 2x`}
-                        alt=""
-                      />
-                      {c.label}
-                    </Box>
-                  );
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="País"
-                    size="small"
-                    margin="dense"
-                    fullWidth
-                    error={!!errors.country}
-                    helperText={errors.country}
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password", // Deshabilita autofill
-                    }}
-                  />
-                )}
-                sx={{ width: "100%" }}
-              /> */}
               <CountrySelect
                 value={country}
                 onChange={(value) => {
@@ -511,16 +319,11 @@ const PersonForm: React.FC<PersonFormProps> = ({
             </Box>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            <Box display="flex" sx={{ mt: 0 }}>
+            <Box display="flex"  sx={{ mt: 0, minWidth:500 }}>
               {/* Left Column */}
               <Box
                 sx={{
                   flex: 1,
-                  // pr: 2,
-                  // p: 2,
-                  // bgcolor: 'background.paper',
-                  // borderRadius: 1,
-                  // boxShadow: 1,
                 }}
               >
                 {/* Toolbar */}
@@ -541,14 +344,27 @@ const PersonForm: React.FC<PersonFormProps> = ({
                     onDateChange={setDateOfMeasurement}
                     // size="small"
                   />
+                  {errors.dateOfMeasurement && (
+                    <p
+                      style={{
+                        color: "red",
+                        fontSize: "13px",
+                        marginLeft: "12px",
+                      }}
+                    >
+                      {errors.dateOfMeasurement}
+                    </p>
+                  )}
                   <Button
                     variant="outlined"
                     // size="small"
+                    // margin="dense"
+                    sx={{ p:"6px", mt:"4px" }}
                     onClick={() => setShowImage((v) => !v)}
                   >
                     Ver
                   </Button>
-                  <Button variant="outlined">Ayuda</Button>
+                  {/* <Button variant="outlined">Ayuda</Button> */}
                 </Box>
 
                 {/* Inputs */}
@@ -578,6 +394,15 @@ const PersonForm: React.FC<PersonFormProps> = ({
                           type="number"
                           size="small"
                           value={m.value}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment position="start">
+                                  {dimension.name != "Peso" ? "mm" : "kg"}
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
                           onFocus={() =>
                             setSelectedDimension(dimension.id_dimension)
                           }
@@ -619,8 +444,39 @@ const PersonForm: React.FC<PersonFormProps> = ({
                     bgcolor: "background.paper",
                     borderRadius: 1,
                     boxShadow: 1,
+                    position: "relative", // Añadido para posicionamiento relativo
                   }}
                 >
+                  {/* <Box>Helpp</?Box> */}
+                  {/* <IconButton sx={{zIndex:2}}>f</IconButton> */}
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      left: 8,
+                      zIndex: 2,
+                      backgroundColor: "rgba(255,255,255,0.8)",
+                      "&:hover": {
+                        backgroundColor: "rgba(255,255,255,0.9)",
+                      },
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Lógica para mostrar ayuda
+                      e.stopPropagation();
+                      const dimension = dimensions.find(
+                        (d) => d.id_dimension === selectedDimension
+                      );
+                      if (dimension) {
+                        goToPage(
+                          `/help?item=${encodeURIComponent(dimension.name)}`
+                        );
+                      }
+                    }}
+                  >
+                    {/* HelpOutlinedIcon */}
+                    <HelpOutlinedIcon fontSize="small" />
+                  </IconButton>
                   <AnnotatedImage
                     src={`../${
                       dimensions.find(

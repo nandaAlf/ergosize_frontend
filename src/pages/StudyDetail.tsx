@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useLocation, useParams } from "react-router-dom";
 import { Dimension, Person, StudyData } from "../types";
 import { getData } from "../api/api";
@@ -16,7 +17,12 @@ const StudyDetail: React.FC = () => {
   const study = location.state?.study as StudyData | undefined; // Obtener los datos del estudio
   const [persons, setPersons] = useState<Person[]>([]);
   const [dimensions, setDimensions] = useState<Dimension[]>([]);
+  const [refreshCounter, setRefreshCounter] = useState(0);
   //  ← Nuevo estado para búsqueda
+
+  const handleRefresh = () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
   const [searchTerm, setSearchTerm] = useState("");
   //  ← Filtra las personas aquí
   const filteredPersons = React.useMemo(
@@ -40,7 +46,7 @@ const StudyDetail: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [refreshCounter]);
 
   if (!study) {
     return <div>Estudio no encontrado</div>;
@@ -55,6 +61,9 @@ const StudyDetail: React.FC = () => {
         study_id={study.id || 0}
         onSearchTermChange={setSearchTerm} // Pasa la función de cambio de búsqueda
         study_name={study.name}
+        size={study.size ?? 0}
+        current_size={study.current_size ?? 0}
+        onRefresh={handleRefresh}
       ></TableComponent>
     </>
   );

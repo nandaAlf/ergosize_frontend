@@ -19,7 +19,7 @@ import { getFilePerson } from "../../service/service";
 interface FilterPanelProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onOpenPersonForm: (open: boolean) => void;
+  onOpenPersonForm: () => void;
   params:URLSearchParams;
 }
 
@@ -79,7 +79,7 @@ export const FilterPanelToobar: React.FC<FilterPanelProps> = ({
               // backgroundColor: "primary",
               // color: "#fff",
             }}
-            onClick={() => onOpenPersonForm(true)}
+            onClick={onOpenPersonForm}
           >
             <AddIcon />
             Crear

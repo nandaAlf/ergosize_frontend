@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -36,6 +37,7 @@ interface StudyFormProps {
   mode?: "add" | "edit";
   initialData?: StudyData;
   onSuccess?: () => void; // Nueva prop
+  study_size?: number;
 }
 interface FormErrors {
   name?: string;

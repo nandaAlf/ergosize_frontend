@@ -31,6 +31,7 @@ return (
         autoHighlight
         options={countries.map((c) => c.label)}
         value={value}
+        // margin="dense"
         onInputChange={(_, newValue) => onChange(newValue)}
         renderOption={(props, option) => {
             const country = countries.find((c) => c.label === option);
@@ -58,7 +59,7 @@ return (
                 {...params}
                 label={label}
                 size="small"
-                // margin="dense"
+                margin="dense"
                 fullWidth
                 error={error}
                 helperText={helperText}

@@ -1,6 +1,6 @@
 // useTable.ts
 import * as React from 'react';
-import { Dimension, Person } from '../types';
+import { Person } from '../types';
 
 export const useTable = (persons: Person[]) => {
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
@@ -18,10 +18,13 @@ export const useTable = (persons: Person[]) => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = persons.map((person) => person.id);
+      const newSelected = persons.map((person) => person.id).filter((id): id is number => id !== undefined);
       setSelected(newSelected);
       return;
     }
+    setSelected([]);
+  };
+   const clearSelected = () => {
     setSelected([]);
   };
 
@@ -63,8 +66,8 @@ export const useTable = (persons: Person[]) => {
           if (orderBy === 'name') {
             return order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
           }
-          const aValue = a.dimensions[orderBy] || 0;
-          const bValue = b.dimensions[orderBy] || 0;
+          const aValue = a.dimensions?.[orderBy] || 0;
+          const bValue = b.dimensions?.[orderBy] || 0;
           return order === 'asc' ? (aValue > bValue ? 1 : -1) : bValue > aValue ? 1 : -1;
         })
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
@@ -75,6 +78,7 @@ export const useTable = (persons: Person[]) => {
     order,
     orderBy,
     selected,
+    clearSelected,
     page,
     dense,
     rowsPerPage,

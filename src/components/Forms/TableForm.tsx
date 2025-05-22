@@ -26,7 +26,7 @@ import SelectFilter from "../filtros/Selct";
 import { StudyData } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 const availablePercentiles = [5, 10, 25, 50, 75, 90, 95];
-
+import useNavigation from "../../hooks/useNavigation";
 interface TableFormProps {
   open: boolean;
   onClose: () => void;
@@ -35,27 +35,38 @@ interface TableFormProps {
 
 const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   // Inicializar filtro de género según el estudio
-  const defaultGender = study.gender === "MF" ? "" : study.gender;
-  const [genderFilter, setGenderFilter] = useState<string>(defaultGender);
-  const [ageMin, setAgeMin] = useState<string>(study.age_min.toString());
-  const [ageMax, setAgeMax] = useState<string>(study.age_max.toString());
+  // const defaultGender = study.gender === "MF" ? "" : study.gender;
+  const [genderFilter, setGenderFilter] = useState<string>("");
+  const [ageMin, setAgeMin] = useState<string>("");
+  const [ageMax, setAgeMax] = useState<string>("");
+  const {goToPage}=useNavigation()
+  useEffect(() => {
+    if (study) {
+      setGenderFilter(study.gender === "MF" ? "" : study.gender);
+      setAgeMin(study.age_min.toString());
+      setAgeMax(study.age_max.toString());
+      setAgeRangesList([]);
+      setSelectedDimensions([]);
+      setSelectedPercentiles([]);
+    }
+  }, [study]); // <-- Añadir study como dependencia
 
   // Opciones de género dinámicas
   const genderOptions =
     study.gender === "MF"
       ? [
-        { value: "MF", label: "Todos" },
-        { value: "mixto", label: "Mixto" },
-        { value: "F", label: "Femenino" },
-        { value: "M", label: "Masculino" },
+          { value: "MF", label: "Todos" },
+          { value: "mixto", label: "Mixto" },
+          { value: "F", label: "Femenino" },
+          { value: "M", label: "Masculino" },
         ]
       : study.gender === "F"
-      ? [{ value: "F", label: "Femenino" }]
-      : [{ value: "M", label: "Masculino" }];
+        ? [{ value: "F", label: "Femenino" }]
+        : [{ value: "M", label: "Masculino" }];
 
-    // rangos de edad
-  const [ageRangeInput, setAgeRangeInput] = useState<string>("");           // "20-25"
-  const [ageRangesList, setAgeRangesList] = useState<string[]>([]);         // ["20-25","25-30",...]
+  // rangos de edad
+  const [ageRangeInput, setAgeRangeInput] = useState<string>(""); // "20-25"
+  const [ageRangesList, setAgeRangesList] = useState<string[]>([]); // ["20-25","25-30",...]
 
   // Añadir un rango
   const handleAddRange = () => {
@@ -85,7 +96,6 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
     setAgeRangesList((prev) => prev.filter((r) => r !== range));
   };
 
-  
   // Para dimensiones
   const [selectedDimensions, setSelectedDimensions] = useState<number[]>([]);
   useEffect(() => {
@@ -93,12 +103,13 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
     setSelectedDimensions([]);
   }, [study.dimensions]);
 
-  const handleDimensionsChange = (event: any) => {
+  const handleDimensionsChange = (
+    event: React.ChangeEvent<HTMLInputElement> | (Event & { target: { value: number[] | string; name?: string } })  ) => {
     const {
       target: { value },
     } = event;
     setSelectedDimensions(
-      typeof value === "string" ? value.split(",").map(Number) : value
+      typeof value === "string" ? value.split(",").map(Number) : (value as number[])
     );
   };
 
@@ -133,9 +144,14 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
       params.append("dimensions", selectedDimensions.join(","));
     if (selectedPercentiles.length)
       params.append("percentiles", selectedPercentiles.join(","));
-    if(ageRangesList.length !== 0) params.append("age_ranges",ageRangesList.toString());
-    else params.append("age_ranges",`${ageMin}-${ageMax}`)
-    window.open(`/tables/${study.id}/?${params.toString()}`, "_blank");
+    if (ageRangesList.length !== 0)
+      params.append("age_ranges", ageRangesList.toString());
+    else params.append("age_ranges", `${ageMin}-${ageMax}`);
+    params.append("size",study.size?.toString() )
+    params.append("name",study.name||"")
+    params.append("location",`${study.country}  - ${study.location}`)
+    goToPage(`/tables/${study.id}/?${params.toString()}`,)
+    // window.open(`/tables/${study.id}/?${params.toString()}`, "_blank");
     onClose();
   };
 
@@ -154,10 +170,11 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               value={genderFilter}
               items={genderOptions}
               onChange={(value: string) => setGenderFilter(value)}
+              // size="small"
             />
           </FormControl>
           {/* Filtro de edad */}
-          <Box sx={{ display: "flex", gap: 2 }}>
+          {/* <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
               label="Edad mínima"
               type="number"
@@ -166,7 +183,8 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               size="small"
               slotProps={{
                 htmlInput: { min: study.age_min, max: study.age_max },
-              }}
+              }}  
+              disabled
               fullWidth
             />
             <TextField
@@ -174,22 +192,29 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               type="number"
               value={ageMax}
               size="small"
+               disabled
               onChange={(e) => setAgeMax(e.target.value)}
               slotProps={{
                 htmlInput: { min: study.age_min, max: study.age_max },
               }}
               fullWidth
             />
-          </Box>
+          </Box> */}
 
-          
           {/* --- RANGOS DE EDAD --- */}
           <Box>
-            <Typography variant="subtitle2">Rangos de edad</Typography>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+            <Typography variant="subtitle2">
+              Rangos de edad entre {study.age_min} y {study.age_max} años
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{ mt: 1 }}
+            >
               <TextField
                 label={`Ej: ${study.age_min}-${study.age_max}`}
-                placeholder="20-25"
+                // placeholder={`${ageMin}-${ageMax}`}
                 value={ageRangeInput}
                 onChange={(e) => setAgeRangeInput(e.target.value)}
                 size="small"
@@ -209,7 +234,6 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
             </Box>
           </Box>
 
-
           {/* Select all dimensions */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Button
@@ -228,9 +252,6 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               <DeleteIcon /> Limpiar
             </Button> */}
           </Box>
-
-          
-
 
           {/* Selección de dimensiones */}
           <FormControl fullWidth>

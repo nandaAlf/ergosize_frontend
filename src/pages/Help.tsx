@@ -15,7 +15,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useSearchParams } from "react-router-dom";
 // Asegúrate de que la ruta sea correcta
 import helpDataDimension from "../utils/helpDataDimension.json";
-import { AnnotatedImage } from "../components/AnnotatedImage";
 
 // Define la estructura esperada para los detalles de una dimensión individual
 interface DimensionDetail {
@@ -43,7 +42,7 @@ export default function HelpMenu() {
       // Buscamos el ítem en todo el helpDataDimension para seleccionarlo
       for (const catKey in helpDataDimension) {
         if (
-          helpDataDimension.hasOwnProperty(catKey) &&
+          Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
           helpDataDimension[catKey as keyof typeof helpDataDimension].items
         ) {
           const items = helpDataDimension[
@@ -77,7 +76,7 @@ export default function HelpMenu() {
 
     for (const catKey in helpDataDimension) {
       if (
-        helpDataDimension.hasOwnProperty(catKey) &&
+        Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
         helpDataDimension[catKey as keyof typeof helpDataDimension].items
       ) {
         const items = helpDataDimension[
@@ -92,12 +91,12 @@ export default function HelpMenu() {
   }, [selectedItem]); // Recalcula solo cuando selectedItem cambia
 
   // La lista de ítems para la navegación sigue dependiendo de la categoría abierta
-  const itemsListForNavigation = selectedCategory
-    ? Object.keys(
-        (helpDataDimension[selectedCategory as keyof typeof helpDataDimension]
-          ?.items as Record<string, DimensionDetail>) || {}
-      )
-    : [];
+  // const itemsListForNavigation = selectedCategory
+  //   ? Object.keys(
+  //       (helpDataDimension[selectedCategory as keyof typeof helpDataDimension]
+  //         ?.items as Record<string, DimensionDetail>) || {}
+  //     )
+  //   : [];
 
   return (
     <Box
@@ -161,24 +160,6 @@ export default function HelpMenu() {
         {!detail && (
           <Typography variant="h6" color="textSecondary">
             Selecciona una dimensión para ver la ayuda
-            {/* <AnnotatedImage
-              src="5-Altura del hombro.jpeg"
-              width={500}
-              measurements={[
-                { xPct: 20, yPct: 30, label: "185 cm" }, // estatura
-                // { xPct: 30, yPct: 40, label: "90 cm" }, // altura del codo
-                // { xPct: 60, yPct: 35, label: "165 cm" }, // altura del ojo
-              ]}
-            />
-             <AnnotatedImage
-              src="5-Altura del hombro.jpeg"
-              width={500}
-              measurements={[
-                { xPct: 20, yPct: 30, label: "185 cm" }, // estatura
-                { xPct: 30, yPct: 40, label: "90 cm" }, // altura del codo
-                // { xPct: 60, yPct: 35, label: "165 cm" }, // altura del ojo
-              ]}
-            /> */}
           </Typography>
         )}
         {detail && (

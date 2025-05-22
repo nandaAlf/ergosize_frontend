@@ -20,12 +20,13 @@ export interface StudyData {
   location: string;
   description: string;
   size: number | null;
+  current_size?: number | null;
   age_min: number;
   age_max: number;
   start_date: string | Dayjs | null;
   end_date: string | Dayjs | null;
   dimensions: Dimension[];
-  supervisor: number;
+  supervisor?: number;
 }
 // export interface Person {
 //   id: number;
@@ -50,13 +51,14 @@ export interface Measurement {
 }
 
 export interface Person {
+  id?: number;
   name: string;
   gender: string;
   date_of_birth: string;
   country: string;
   state: string;
   province: string;
-  measurements?: Measurement[]; // Updated to match the structure used in PersonForm
+  dimensions : Measurement[]; // Updated to match the structure used in PersonForm
 }
 
 export interface CountryType {

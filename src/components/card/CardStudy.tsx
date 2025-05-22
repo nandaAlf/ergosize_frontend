@@ -12,6 +12,7 @@ import {
   Button,
   Grid,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import useNavigation from "../../hooks/useNavigation";
 import LongMenu from "../Menu";
@@ -62,6 +63,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
     const currentUserId = payload?.user_id;
     const currentUserRole = payload?.role;
     const notify = useNotify();
+    const theme = useTheme();
     // Determine if current user is supervisor or admin
     const isOwner = currentUserId === study.supervisor;
     const isAdmin = currentUserRole === "admin";
@@ -157,10 +159,45 @@ const CardStudy: React.FC<CardStudyProps> = memo(
               >
                 {study.name}
               </Typography>
+              <Box sx={{ position: "relative", display: "inline-flex" }}>
+                <CircularProgress
+                  variant="determinate"
+                  value={(study.current_size / study.size) * 100}
+                  size={32}
+                  thickness={4}
+                  sx={{
+                    color: (theme) =>
+                      study.current_size >= study.size
+                        ? theme.palette.success.main
+                        : theme.palette.primary.main,
+                  }}
+                />
+                <Box
+                  sx={{
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    position: "absolute",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    component="div"
+                    color="text.secondary"
+                    fontSize={10}
+                  >
+                    {Math.round((study.current_size / study.size) * 100)}%
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
 
             <Divider />
-            <Grid container spacing={2}  mt={2} alignItems="center">
+            <Grid container spacing={2} mt={2} alignItems="center">
               {/* Columna izquierda - Datos del estudio */}
               <Grid size={{ xs: 8, sm: 9 }}>
                 <Stack spacing={1}>
@@ -205,7 +242,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
               </Grid>
 
               {/* Columna derecha - Progreso circular */}
-              <Grid size={{ xs: 4, sm: 3 }}>
+              {/* <Grid size={{ xs: 4, sm: 3 }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -250,7 +287,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
                     </Box>
                   </Box>
                 </Box>
-              </Grid>
+              </Grid> */}
             </Grid>
             {/* <Stack spacing={1} mt={1}>
               <Typography
@@ -298,26 +335,88 @@ const CardStudy: React.FC<CardStudyProps> = memo(
               {study.description}
             </Typography>
 
-            <Divider textAlign="left">Dimensiones</Divider>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 1 }}>
+            {/* <Divider textAlign="left">Dimensiones</Divider> */}
+            <Divider textAlign="left"></Divider>
+            {/* <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 1 }}>
               {study.dimensions?.map((dim) => (
                 <Box
                   key={dim.id_dimension}
                   sx={{
                     px: 1.5,
-                    py: 0.5,
+                    // py: 0.5,
 
                     border: "0.5px solid",
                     borderRadius: 1,
-                    display: "flex",
+                    // display: "flex",
                     alignItems: "center",
-                    minWidth: "60px",
+                    minWidth: "30%",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 1,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
                   }}
                 >
-                  <Tooltip title={dim.name}>
-                    <Typography variant="caption">{dim.initial}</Typography>
-                  </Tooltip>
+                  <Grid size={{ xs: 4, sm: 3 }}>
+                    <Tooltip
+                      title={dim.name}
+                      sx={
+                        {
+                          // display: "-webkit-box",
+                          // WebkitLineClamp: 1,
+                          // WebkitBoxOrient: "vertical",
+                          // overflow: "hidden",
+                        }
+                      }
+                    >
+                      <Typography variant="caption">{dim.name}</Typography>
+                    </Tooltip>{" "}
+                  </Grid>
                 </Box>
+              ))}
+            </Box> */}
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)", // 3 bloques por fila
+                gap: 2,
+                mt: 1.5,
+              }}
+            >
+              {study.dimensions?.map((dim) => (
+                <Tooltip key={dim.id_dimension} title={dim.name} arrow>
+                  <Box
+                    sx={{
+                      // px: 1.5,
+                      py: 0.5,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderRadius: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // minHeight: 40,
+                      backgroundColor: theme.palette.background.paper,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      "&:hover": {
+                        // borderColor: theme.palette.primary.main,
+                        boxShadow: theme.shadows[1],
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "0.8rem",
+                        fontWeight: 500,
+                        color: theme.palette.text.secondary,
+                        textAlign: "center",
+                      }}
+                    >
+                      {dim.name.length > 25 ? dim.initial : dim.name}
+                    </Typography>
+                  </Box>
+                </Tooltip>
               ))}
             </Box>
             {/* <Tooltip title="Tablas"> */}
