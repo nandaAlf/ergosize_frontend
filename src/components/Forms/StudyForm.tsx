@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
   ListItemText,
+  ListSubheader,
   MenuItem,
   Select,
   TextField,
@@ -20,7 +21,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { Dimension, StudyData } from "../../types";
+import {
+  Dimension,
+  GroupedDimensions,
+  StudyData,
+  StudyPayload,
+} from "../../types";
 // import { createStudy, getDimension, updateStudy } from "../../api/api";
 import {
   getAllDimensions,
@@ -89,14 +95,14 @@ const StudyForm: React.FC<StudyFormProps> = ({
   onSuccess,
   initialData,
 }) => {
-  const defaultValues: StudyData = {
+  const defaultValues: StudyPayload = {
     name: "",
     classification: "",
     gender: "",
     country: "",
     location: "",
     description: "",
-    size: null,
+    size: 0,
     age_min: 0,
     age_max: 120,
     start_date: null,
@@ -104,11 +110,11 @@ const StudyForm: React.FC<StudyFormProps> = ({
     dimensions: [],
   };
 
-  const [formData, setFormData] = useState<StudyData>(defaultValues);
+  const [formData, setFormData] = useState<StudyPayload>(defaultValues);
   const [errors, setErrors] = useState<Partial<FormErrors>>({});
-  const [availableDimensions, setAvailableDimensions] = useState<Dimension[]>(
-    []
-  );
+  const [availableDimensions, setAvailableDimensions] = useState<
+    GroupedDimensions[]
+  >([]);
   const [selectedDimensionIds, setSelectedDimensionIds] = useState<number[]>(
     []
   );
@@ -130,23 +136,26 @@ const StudyForm: React.FC<StudyFormProps> = ({
     }
   }, [initialData, open, mode]);
   // Cargar dimensiones disponibles
+  // Antes — cuidado: sin array de deps o con deps cambiantes → loop
   useEffect(() => {
     const loadDimensions = async () => {
-      try {
-        const dimensionsFromApi = await getAllDimensions();
-        setAvailableDimensions(dimensionsFromApi);
-      } catch (error) {
-        console.error("Error loading dimensions:", error);
-      }
+      const raw = await getAllDimensions();
+      // raw es un objeto, cambia siempre la referencia → dispara setState en cada render
+      const grouped = Object.entries(raw).map(([category, dims]) => ({
+        category,
+        dimensions: Array.isArray(dims) ? dims : [dims],
+      }));
+      setAvailableDimensions(grouped);
     };
     loadDimensions();
-  }, []);
-  
+  }, []); // Asegúrate de tener aquí el array vacío
   useEffect(() => {
     if (initialData && mode === "edit") {
-      setSelectedDimensionIds(
-        initialData.dimensions.map((d) => d.id_dimension)
-      );
+      const allDimensionIds = Object.values(initialData.dimensions)
+        .flat() // une todos los arrays de dimensiones por categoría
+        .map((d) => d.id_dimension);
+
+      setSelectedDimensionIds(allDimensionIds);
     } else {
       setSelectedDimensionIds([]);
     }
@@ -264,11 +273,12 @@ const StudyForm: React.FC<StudyFormProps> = ({
       end_date: formData.end_date
         ? dayjs(formData.end_date).format("YYYY-MM-DD")
         : null,
-      dimensions: selectedDimensionIds.map((id) => ({ id_dimension: id })),
+      study_dimension: selectedDimensionIds.map((id) => ({ id_dimension: id })),
     };
     if (!validateForm) return;
 
     try {
+      console.log("paylodad", payload);
       if (mode === "add") {
         await createStudy(payload);
         notify.success("Estudio creado correctamente");
@@ -449,28 +459,19 @@ const StudyForm: React.FC<StudyFormProps> = ({
                 multiple
                 value={selectedDimensionIds}
                 onChange={(e) => {
-                  const value = e.target.value;
-                  const selectedIds =
-                    // typeof value[0] === "string"
-                    //   ? (value as string[]).map(Number)
-                    //   :
-                    value as number[];
-                  setSelectedDimensionIds(selectedIds);
+                  const value = e.target.value as number[];
+                  setSelectedDimensionIds(value);
                 }}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((id) => {
-                      const dimension = availableDimensions.find(
-                        (d) => d.id_dimension === id
-                      );
+                      const d = availableDimensions
+                        .flatMap((g) => g.dimensions)
+                        .find((x) => x.id_dimension === id);
                       return (
                         <Chip
-                          key={`selected-dim-${id}`} // Key única añadida aquí
-                          label={
-                            dimension
-                              ? `${dimension.name} (${dimension.initial})`
-                              : id
-                          }
+                          key={id}
+                          label={d ? `${d.name} (${d.initial})` : id}
                           size="small"
                         />
                       );
@@ -478,21 +479,21 @@ const StudyForm: React.FC<StudyFormProps> = ({
                   </Box>
                 )}
               >
-                {availableDimensions?.map((dimension) => (
-                  <MenuItem
-                    key={`dim-${dimension.id_dimension}`} // Key única añadida aquí
-                    value={dimension.id_dimension}
-                  >
-                    <Checkbox
-                      checked={selectedDimensionIds.includes(
-                        dimension.id_dimension
-                      )}
-                    />
-                    <ListItemText
-                      primary={`${dimension.name} (${dimension.initial})`}
-                    />
-                  </MenuItem>
-                ))}
+                {availableDimensions.map((group) => [
+                  <ListSubheader key={group.category}>
+                    {group.category}
+                  </ListSubheader>,
+                  group.dimensions.map((dim) => (
+                    <MenuItem key={dim.id_dimension} value={dim.id_dimension}>
+                      <Checkbox
+                        checked={selectedDimensionIds.includes(
+                          dim.id_dimension
+                        )}
+                      />
+                      <ListItemText primary={`${dim.name} (${dim.initial})`} />
+                    </MenuItem>
+                  )),
+                ])}
               </Select>
             </FormControl>
             <TextField

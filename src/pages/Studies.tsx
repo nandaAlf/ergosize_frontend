@@ -61,6 +61,7 @@ const Studies: React.FC = () => {
     const fetchStudies = async () => {
       try {
         const data = await getAllStudies(mine);
+        console.log(data);
         // const result = await dialogs.open(MyCustomDialog);
         setStudiesData(data);
       } catch (err) {

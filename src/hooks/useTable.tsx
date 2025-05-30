@@ -75,7 +75,7 @@ export const useTable = (persons: Person[]) => {
   );
 
   return {
-    order,
+  order,
     orderBy,
     selected,
     clearSelected,

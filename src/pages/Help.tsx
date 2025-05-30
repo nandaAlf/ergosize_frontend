@@ -30,34 +30,37 @@ interface DimensionDetail {
 export default function HelpMenu() {
   const [searchParams] = useSearchParams();
   const itemParam = searchParams.get("item");
-
+  const categoryParam = searchParams.get("category");
   // Mantenemos selectedCategory para el acordeón, pero no lo usaremos para mostrar el detalle
   const [selectedCategory, setCategory] = useState<string | null>(null);
   // selectedItem ahora es clave para mostrar el detalle
   const [selectedItem, setItem] = useState<string | null>(null);
 
   // Efecto para manejar el parámetro 'item' en la URL
+  // useEffect(() => {
+  //   if (itemParam) {
+  //     // Buscamos el ítem en todo el helpDataDimension para seleccionarlo
+  //     for (const catKey in helpDataDimension) {
+  //       if (
+  //         Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
+  //         helpDataDimension[catKey as keyof typeof helpDataDimension].items
+  //       ) {
+  //         const items = helpDataDimension[
+  //           catKey as keyof typeof helpDataDimension
+  //         ].items as Record<string, DimensionDetail>;
+  //         if (itemParam in items) {
+  //           setCategory(catKey); // Abrimos la categoría correspondiente al cargar desde URL
+  //           setItem(itemParam);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [itemParam]);
   useEffect(() => {
-    if (itemParam) {
-      // Buscamos el ítem en todo el helpDataDimension para seleccionarlo
-      for (const catKey in helpDataDimension) {
-        if (
-          Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
-          helpDataDimension[catKey as keyof typeof helpDataDimension].items
-        ) {
-          const items = helpDataDimension[
-            catKey as keyof typeof helpDataDimension
-          ].items as Record<string, DimensionDetail>;
-          if (itemParam in items) {
-            setCategory(catKey); // Abrimos la categoría correspondiente al cargar desde URL
-            setItem(itemParam);
-            break;
-          }
-        }
-      }
-    }
-  }, [itemParam]);
-
+    if (categoryParam) setCategory(categoryParam);
+    if (itemParam) setItem(itemParam);
+  }, [categoryParam, itemParam]);
   // Modificamos handleCategory para que NO anule selectedItem al cerrar un acordeón
   const handleCategory = (cat: string | null) => {
     setCategory((prev) => (prev === cat ? null : cat));
@@ -71,24 +74,33 @@ export default function HelpMenu() {
 
   // Calculamos detail buscando selectedItem en TODO helpDataDimension
   // Esto permite que el detalle se muestre independientemente de si la categoría está abierta
-  const detail: DimensionDetail | null = useMemo(() => {
-    if (!selectedItem) return null;
+  // const detail: DimensionDetail | null = useMemo(() => {
+  //   if (!selectedItem) return null;
 
-    for (const catKey in helpDataDimension) {
-      if (
-        Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
-        helpDataDimension[catKey as keyof typeof helpDataDimension].items
-      ) {
-        const items = helpDataDimension[
-          catKey as keyof typeof helpDataDimension
-        ].items as Record<string, DimensionDetail>;
-        if (selectedItem in items) {
-          return items[selectedItem];
-        }
-      }
-    }
-    return null; // Si no se encuentra el ítem
-  }, [selectedItem]); // Recalcula solo cuando selectedItem cambia
+  //   for (const catKey in helpDataDimension) {
+  //     if (
+  //       Object.prototype.hasOwnProperty.call(helpDataDimension, catKey) &&
+  //       helpDataDimension[catKey as keyof typeof helpDataDimension].items
+  //     ) {
+  //       const items = helpDataDimension[
+  //         catKey as keyof typeof helpDataDimension
+  //       ].items as Record<string, DimensionDetail>;
+  //       if (selectedItem in items) {
+  //         return items[selectedItem];
+  //       }
+  //     }
+  //   }
+  //   return null; // Si no se encuentra el ítem
+  // }, [selectedItem]); // Recalcula solo cuando selectedItem cambia
+  const detail = useMemo<DimensionDetail | null>(() => {
+    if (!selectedCategory || !selectedItem) return null;
+    const catData =
+      helpDataDimension[selectedCategory as keyof typeof helpDataDimension];
+    if (!catData) return null;
+    return (
+      (catData.items as Record<string, DimensionDetail>)[selectedItem] || null
+    );
+  }, [selectedCategory, selectedItem]);
 
   // La lista de ítems para la navegación sigue dependiendo de la categoría abierta
   // const itemsListForNavigation = selectedCategory
@@ -193,15 +205,24 @@ export default function HelpMenu() {
                 <strong>Instrumento:</strong> {detail.instrumento}
               </Typography>
             )}
-
-            {detail.graphic && (
+            {Array.isArray(detail.graphic) &&
+              detail.graphic.map((img, index) => (
+                <Box
+                  key={index}
+                  component="img"
+                  src={`public/imagenes_dimensiones/${img}`}
+                  alt={`${selectedItem} - imagen ${index + 1}`}
+                  sx={{ mt: 2, maxWidth: "100%" }}
+                />
+              ))}
+            {/* {detail.graphic && (
               <Box
                 component="img"
-                src={detail.graphic}
+                src={`public/imagenes_dimensiones/${detail.graphic[0]}`}
                 alt={selectedItem!}
                 sx={{ mt: 2, maxWidth: "100%" }}
               />
-            )}
+            )} */}
           </Paper>
         )}
       </Box>

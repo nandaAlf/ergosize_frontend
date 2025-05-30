@@ -448,10 +448,13 @@ import {
   CircularProgress,
   Typography,
   Button,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import Search from "../components/filtros/Search";
 import GroupsIcon from "@mui/icons-material/Groups";
+import { getFile } from "../service/service";
 
 interface Stats {
   mean: number;
@@ -471,7 +474,7 @@ type Order = "asc" | "desc";
 
 interface Props {
   studyId: number;
-  gender?: "M" | "F" | "mixto" |"";
+  gender?: "M" | "F" | "mixto" | "";
   dimensions: number[];
   percentilesList: number[];
   age_ranges: string;
@@ -498,6 +501,29 @@ const AnthropometricTable: React.FC<Props> = ({
   const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  // Estado para el menú de exportación
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openExportMenu = Boolean(anchorEl);
+  const handleExportClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const handleExportClose = () => {
+    setAnchorEl(null);
+  };
+  // Cuando elija Excel o PDF
+  const handleExport = async (format: "excel" | "pdf") => {
+    // construimos params igual que en la petición de datos
+    alert("hola");
+    const params = new URLSearchParams({
+      age_ranges,
+      gender: gender || "",
+      dimensions: dimensions.join(","),
+      percentiles: percentilesList.join(","),
+    });
+
+    await getFile(format,studyId.toString(), params);
+    handleExportClose();
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -697,10 +723,27 @@ const AnthropometricTable: React.FC<Props> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Box>
-
+        {/* 
         <Button sx={{ width: "150px" }} variant="contained">
           Exportar
-        </Button>
+        </Button> */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button variant="contained" onClick={handleExportClick}>
+            Exportar…
+          </Button>
+          <Menu
+            anchorEl={anchorEl}
+            open={openExportMenu}
+            onClose={handleExportClose}
+          >
+            <MenuItem onClick={() => handleExport("excel")}>
+              Exportar a Excel
+            </MenuItem>
+            <MenuItem onClick={() => handleExport("pdf")}>
+              Exportar a PDF
+            </MenuItem>
+          </Menu>
+        </Box>
 
         {/* <FormControlLabel
 //             control={

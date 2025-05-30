@@ -8,7 +8,7 @@ import { getPersonStudyData } from "../service/service";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import { MyTable } from "../components/TableData/Table";
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // Definir la interfaz para la respuesta de la API
 
 const StudyDetail: React.FC = () => {
@@ -37,7 +37,8 @@ const StudyDetail: React.FC = () => {
       try {
         if (id) {
           const data = await getPersonStudyData(id);
-          setDimensions((study?.dimensions as Dimension[]) || []);
+          // setDimensions((study?.dimensions as Dimension[]) || []);
+          console.log("dataRevisar", data);
           setPersons(data.persons);
         }
       } catch (error) {
@@ -55,7 +56,7 @@ const StudyDetail: React.FC = () => {
   return (
     <>
       <TableComponent
-        dimensions={dimensions}
+        dimensions={study.dimensions}
         persons={filteredPersons}
         searchTerm={searchTerm} // Pasa el término de búsqueda al componente
         study_id={study.id || 0}

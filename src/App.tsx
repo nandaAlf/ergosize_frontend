@@ -6,7 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter, useLocation } from "react-router-dom";
 import Layout from "./routes/Layout";
 import DashboardLayoutBasic from "./components/D";
-import { NotificationsProvider } from '@toolpad/core/useNotifications';
+import { NotificationsProvider } from "@toolpad/core/useNotifications";
 // import NavBar from './components/NavBar';
 // Define tu tema personalizado
 // const theme = createTheme({
@@ -52,9 +52,11 @@ function App() {
       <BrowserRouter>
         {/* <ThemeProvider theme={theme}> */}
         {/* <Layout/> */}
-        <NotificationsProvider>
-          <DashboardLayoutBasic />
-        </NotificationsProvider>
+     
+          <NotificationsProvider>
+            <DashboardLayoutBasic />
+          </NotificationsProvider>
+    
         {/* <AppRouter /> */}
         {/* <Footer /> */}
         {/* </ThemeProvider> */}

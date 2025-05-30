@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -20,6 +20,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  ListSubheader,
   Stack,
 } from "@mui/material";
 import SelectFilter from "../filtros/Selct";
@@ -37,14 +38,29 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   // Inicializar filtro de género según el estudio
   // const defaultGender = study.gender === "MF" ? "" : study.gender;
   const [genderFilter, setGenderFilter] = useState<string>("");
-  const [ageMin, setAgeMin] = useState<string>("");
-  const [ageMax, setAgeMax] = useState<string>("");
-  const {goToPage}=useNavigation()
+  const [ageMin, setAgeMin] = useState<number>(0);
+  const [ageMax, setAgeMax] = useState<number>(0);
+
+  // 1) Prepara grouped y allDims como antes:
+  const grouped = useMemo(
+    () =>
+      Object.entries(study.dimensions).map(([category, dims]) => ({
+        category,
+        dimensions: dims,
+      })),
+    [study.dimensions]
+  );
+  const allDims = useMemo(
+    () => grouped.flatMap((g) => g.dimensions),
+    [grouped]
+  );
+
+  const { goToPage } = useNavigation();
   useEffect(() => {
     if (study) {
       setGenderFilter(study.gender === "MF" ? "" : study.gender);
-      setAgeMin(study.age_min.toString());
-      setAgeMax(study.age_max.toString());
+      setAgeMin(study.age_min);
+      setAgeMax(study.age_max);
       setAgeRangesList([]);
       setSelectedDimensions([]);
       setSelectedPercentiles([]);
@@ -104,20 +120,31 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   }, [study.dimensions]);
 
   const handleDimensionsChange = (
-    event: React.ChangeEvent<HTMLInputElement> | (Event & { target: { value: number[] | string; name?: string } })  ) => {
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | (Event & { target: { value: number[] | string; name?: string } })
+  ) => {
     const {
       target: { value },
     } = event;
     setSelectedDimensions(
-      typeof value === "string" ? value.split(",").map(Number) : (value as number[])
+      typeof value === "string"
+        ? value.split(",").map(Number)
+        : (value as number[])
     );
   };
 
-  const selectAllDimensions = () => {
-    const all = study.dimensions?.map((d) => d.id_dimension) || [];
-    setSelectedDimensions(all);
-  };
+  // Al inicio de tu componente TableForm:
+  const allDimensionIds = useMemo(() => {
+    // study.dimensions es un objeto { [cat]: Dimension[] }
+    return Object.values(study.dimensions)
+      .flat() // aplanamos todas las listas
+      .map((dim) => dim.id_dimension);
+  }, [study.dimensions]);
 
+  const selectAllDimensions = () => {
+    setSelectedDimensions(allDimensionIds);
+  };
   const clearDimensions = () => {
     setSelectedDimensions([]);
   };
@@ -147,10 +174,10 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
     if (ageRangesList.length !== 0)
       params.append("age_ranges", ageRangesList.toString());
     else params.append("age_ranges", `${ageMin}-${ageMax}`);
-    params.append("size",study.size?.toString() )
-    params.append("name",study.name||"")
-    params.append("location",`${study.country}  - ${study.location}`)
-    goToPage(`/tables/${study.id}/?${params.toString()}`,)
+    params.append("size", study.size?.toString());
+    params.append("name", study.name || "");
+    params.append("location", `${study.country}  - ${study.location}`);
+    goToPage(`/tables/${study.id}/?${params.toString()}`);
     // window.open(`/tables/${study.id}/?${params.toString()}`, "_blank");
     onClose();
   };
@@ -266,6 +293,39 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
               renderValue={(selected) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {(selected as number[]).map((value) => {
+                    const dim = allDims.find((d) => d.id_dimension === value);
+                    return <Chip key={value} label={dim?.name || value} />;
+                  })}
+                </Box>
+              )}
+            >
+              {grouped.map((group) => [
+                <ListSubheader key={`subheader-${group.category}`}>
+                  {group.category}
+                </ListSubheader>,
+                group.dimensions.map((dim) => (
+                  <MenuItem key={dim.id_dimension} value={dim.id_dimension}>
+                    <Checkbox
+                      checked={selectedDimensions.includes(dim.id_dimension)}
+                    />
+                    <ListItemText primary={dim.name} />
+                  </MenuItem>
+                )),
+              ])}
+            </Select>
+          </FormControl>
+          {/* <FormControl fullWidth>
+            <InputLabel id="dimensions-label">Dimensiones</InputLabel>
+            <Select
+              labelId="dimensions-label"
+              multiple
+              size="small"
+              value={selectedDimensions}
+              onChange={handleDimensionsChange}
+              input={<OutlinedInput label="Dimensiones" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as number[]).map((value) => {
                     const dim = study.dimensions?.find(
                       (d) => d.id_dimension === value
                     );
@@ -283,7 +343,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           {/* Percentiles */}
           <Box>

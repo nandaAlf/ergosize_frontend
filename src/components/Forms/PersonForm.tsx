@@ -21,9 +21,12 @@ import {
   Tooltip,
   Autocomplete,
   InputAdornment,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Dimension, Person } from "../../types";
+import { Dimension, GroupedDimensions, Measurement, Person } from "../../types";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import DateSelect from "../filtros/date";
@@ -37,20 +40,25 @@ import CountrySelect from "../CountrySelect";
 import { useNotify } from "../../hooks/useNotifications";
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
 import useNavigation from "../../hooks/useNavigation";
+import React from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import helpDataDimenson from '@/../'
+import helpDataDimension from "../../utils/helpDataDimension.json";
 interface PersonFormProps {
   open: boolean;
   onClose: () => void;
   mode: "add" | "edit";
-  dimensions: Dimension[]; // Lista de dimensiones del grupo
+  dimensions: GroupedDimensions[]; // Lista de dimensiones del grupo
   studyId: number;
   personId?: number; // ID de la persona (si se está editando)
   onRefresh: () => void;
 }
-interface Measurement {
-  dimension_id: number;
-  value: number | null;
-  position: "P" | "S";
-  date: string;
+interface SelectedDim {
+  id: number;
+  name: string;
+  category: string;
+  graphic: string;
+  coords: { xPct: number; yPct: number };
 }
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -92,9 +100,11 @@ const PersonForm: React.FC<PersonFormProps> = ({
   );
 
   const [showImage, setShowImage] = useState(false);
-  const [selectedDimension, setSelectedDimension] = useState<number | null>(
-    null
-  );
+  // const [selectedDimension, setSelectedDimension] = useState<number | null>(
+  //   null
+  // );
+  const [selectedDimension, setSelectedDimension] =
+    useState<SelectedDim | null>(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -103,7 +113,17 @@ const PersonForm: React.FC<PersonFormProps> = ({
   const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
     setTabIndex(newIndex);
   };
-
+  // Al inicio de PersonForm, tras los hooks:
+  const groupedDimensions: GroupedDimensions[] = React.useMemo(() => {
+    // Si dimensions ya fuera un array de grupos lo devolvemos directo
+    if (Array.isArray(dimensions)) {
+      return dimensions as GroupedDimensions[];
+    }
+    // Si dimensions es un objeto { [cat]: Dimension[] }
+    return Object.entries(dimensions as Record<string, Dimension[]>).map(
+      ([category, dims]) => ({ category, dimensions: dims })
+    );
+  }, [dimensions]);
   const handleSave = async () => {
     // Validaciones
     const newErrors: { [key: string]: string } = {};
@@ -112,7 +132,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
     if (!dateOfBirth)
       newErrors.dateOfBirth = "La fecha de nacimiento es requerida";
     if (!country) newErrors.country = "El país es requerido";
-    if (!state) newErrors.state = "El estado es requerido";
+    // if (!state) newErrors.state = "El estado es requerido";
     if (!dateOfMeasurement)
       newErrors.dateOfMeasurement = "La fecha de medición es requerida";
 
@@ -146,13 +166,13 @@ const PersonForm: React.FC<PersonFormProps> = ({
     }
     try {
       setIsLoading(true);
-
+      console.log("payload", payload);
       if (mode === "add") {
-        createPerson(payload);
+        await createPerson(payload);
         notify.success("Persona añadida con éxito");
       } else if (mode === "edit" && personId) {
         // PATCH en lugar de PUT para no borrar las mediciones faltantes
-        updatePerson(payload, personId);
+        await updatePerson(payload, personId);
         notify.success("Cambios realizados con éxito");
       }
       onRefresh();
@@ -164,34 +184,63 @@ const PersonForm: React.FC<PersonFormProps> = ({
       setIsLoading(false);
     }
   };
-
+  useEffect(() => {
+    console.log("Selected Dimension:", selectedDimension?.name);
+  }, [selectedDimension, setSelectedDimension]);
   useEffect(() => {
     if (mode === "edit" && personId) {
       const fetchPerson = async () => {
-        const fullPersonData = await getPerson(personId);
+        const fullPersonData = await getPerson(personId, studyId);
         setName(fullPersonData.name);
         setGender(fullPersonData.gender);
         setDateOfBirth(dayjs(fullPersonData.date_of_birth));
         setCountry(fullPersonData.country);
         setState(fullPersonData.state);
         setProvince(fullPersonData.province);
-        setDateOfMeasurement(
-          dayjs(fullPersonData.measurements?.[0]?.date ?? "")
+        console.log("person", fullPersonData);
+        // setDateOfMeasurement(
+        //   dayjs(fullPersonData.measurements?.dimensions?.[0]?.date ?? "")
+        // );
+        // 3) Extrae la fecha de la “primera” medición si existe:
+        const firstCategory = Object.values(
+          fullPersonData.measurements || {}
+        )[0];
+        const firstDate =
+          Array.isArray(firstCategory) && firstCategory.length > 0
+            ? firstCategory[0].date
+            : undefined;
+        setDateOfMeasurement(firstDate ? dayjs(firstDate) : null);
+        const flat: Measurement[] = [];
+        Object.entries(fullPersonData.measurements || {}).forEach(
+          ([category, arr]) => {
+            // Ensure arr is an array before calling forEach
+            if (Array.isArray(arr)) {
+              arr.forEach((m) =>
+                flat.push({
+                  dimension_id: m.id_dimension,
+                  value: m.value,
+                  position: m.position,
+                  date: m.date,
+                })
+              );
+            }
+          }
         );
+        setMeasurements(flat);
         // console.log(response.data);
-        const initialMeasurements: Measurement[] = (
-          fullPersonData.measurements ?? []
-        ).map((m: Measurement) => ({
-          dimension_id: m.dimension_id,
-          value: m.value,
-          position: m.position, // "P" o "S"
-          date: m.date.split("T")[0], // "YYYY-MM-DD"
-        }));
-        setMeasurements(initialMeasurements);
+        // const initialMeasurements: Measurement[] = (
+        //   fullPersonData.measurements ?? []
+        // ).map((m: Measurement) => ({
+        //   dimension_id: m.dimension_id,
+        //   value: m.value,
+        //   position: m.position, // "P" o "S"
+        //   date: m.date.split("T")[0], // "YYYY-MM-DD"
+        // }));
+        // setMeasurements(initialMeasurements);
       };
 
       fetchPerson();
-
+      console.log("dim", dimensions);
       setIsLoading(true);
     }
   }, [personId, dimensions, mode]);
@@ -319,11 +368,16 @@ const PersonForm: React.FC<PersonFormProps> = ({
             </Box>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            <Box display="flex"  sx={{ mt: 0, minWidth:500 }}>
+            <Box
+              display="flex"
+              sx={{ mt: 0, minWidth: 550, maxHeight: 470, overflow: "hidden" }}
+            >
               {/* Left Column */}
               <Box
                 sx={{
                   flex: 1,
+                  // maxHeight: 800,
+                  overflowY: "auto",
                 }}
               >
                 {/* Toolbar */}
@@ -359,7 +413,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                     variant="outlined"
                     // size="small"
                     // margin="dense"
-                    sx={{ p:"6px", mt:"4px" }}
+                    sx={{ p: "6px", mt: "4px" }}
                     onClick={() => setShowImage((v) => !v)}
                   >
                     Ver
@@ -367,75 +421,172 @@ const PersonForm: React.FC<PersonFormProps> = ({
                   {/* <Button variant="outlined">Ayuda</Button> */}
                 </Box>
 
-                {/* Inputs */}
-                {dimensions.map((dimension) => {
-                  const m = measurements.find(
-                    (x) => x.dimension_id === dimension.id_dimension
-                  ) || {
-                    value: "",
-                    position: "P",
-                  };
-                  return (
-                    <Box
-                      key={dimension.id_dimension}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 1,
-                        p: 1,
-                        borderRadius: 1,
-                        "&:hover": { bgcolor: "grey.50" },
-                      }}
-                    >
-                      <Box flex={8} pr={1}>
-                        <TextField
-                          fullWidth
-                          label={dimension.name}
-                          type="number"
-                          size="small"
-                          value={m.value}
-                          slotProps={{
-                            input: {
-                              endAdornment: (
-                                <InputAdornment position="start">
-                                  {dimension.name != "Peso" ? "mm" : "kg"}
-                                </InputAdornment>
-                              ),
-                            },
-                          }}
-                          onFocus={() =>
-                            setSelectedDimension(dimension.id_dimension)
-                          }
-                          onChange={(e) => {
-                            handleMeasurementChange(
-                              dimension.id_dimension,
-                              e.target.value
-                            );
-                            setSelectedDimension(dimension.id_dimension);
-                          }}
-                        />
-                      </Box>
-                      <Box flex={4}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={m.position === "P"}
-                              onChange={() => {
-                                handlePositionToggle(dimension.id_dimension);
-                                setSelectedDimension(dimension.id_dimension);
-                              }}
-                            />
-                          }
-                          label={m.position === "P" ? "Parado" : "Sentado"}
-                        />
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </Box>
+                {groupedDimensions.map((group, index) => (
+                  <Accordion key={group.category}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography variant="body1">{group.category}</Typography>
+                    </AccordionSummary>
 
-              {/* Right Column: image */}
-              {showImage && selectedDimension && (
+                    <AccordionDetails>
+                      {group.dimensions.map((dimension) => {
+                        const m = measurements.find(
+                          (x) => x.dimension_id === dimension.id_dimension
+                        ) || {
+                          value: "",
+                          position: "P",
+                        };
+
+                        return (
+                          <Box
+                            key={dimension.id_dimension}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                              p: 1,
+                              borderRadius: 1,
+                              "&:hover": { bgcolor: "grey.50" },
+                            }}
+                          >
+                            <Box flex={8} pr={1}>
+                              <TextField
+                                fullWidth
+                                label={dimension.name}
+                                type="number"
+                                size="small"
+                                value={m.value}
+                                slotProps={{
+                                  input: {
+                                    endAdornment: (
+                                      <InputAdornment position="start">
+                                        {dimension.name !== "Peso"
+                                          ? "mm"
+                                          : "kg"}
+                                      </InputAdornment>
+                                    ),
+                                  },
+                                }}
+                                onFocus={() => {
+                                  type HelpCategory =
+                                    keyof typeof helpDataDimension;
+                                  const categoryKey: HelpCategory | undefined =
+                                    (
+                                      Object.keys(
+                                        helpDataDimension
+                                      ) as HelpCategory[]
+                                    ).find(
+                                      (key) =>
+                                        key === group.category ||
+                                        key === `${group.category}s`
+                                    );
+
+                                  if (!categoryKey) {
+                                    console.warn(
+                                      "No existe ayuda para categoría",
+                                      group.category
+                                    );
+                                    return;
+                                  }
+
+                                  const items = helpDataDimension[categoryKey]
+                                    .items as Record<string, unknown>;
+                                  const meta = items[dimension.name!];
+
+                                  setSelectedDimension({
+                                    id: dimension.id_dimension,
+                                    name: dimension.name!,
+                                    category: group.category,
+                                    graphic: "a",
+                                    coords: meta.coords,
+                                  });
+                                }}
+                                onChange={(e) => {
+                                  handleMeasurementChange(
+                                    dimension.id_dimension,
+                                    e.target.value
+                                  );
+                                  // Get the valid keys of helpDataDimension
+                                  type HelpCategory =
+                                    keyof typeof helpDataDimension;
+                                  const categoryKey: HelpCategory | undefined =
+                                    (
+                                      Object.keys(
+                                        helpDataDimension
+                                      ) as HelpCategory[]
+                                    ).find(
+                                      (key) =>
+                                        key === group.category ||
+                                        key === `${group.category}s`
+                                    );
+
+                                  if (!categoryKey) {
+                                    console.warn(
+                                      "No existe ayuda para categoría",
+                                      group.category
+                                    );
+                                    return;
+                                  }
+
+                                  const items = helpDataDimension[categoryKey]
+                                    .items as Record<string, unknown>;
+                                  const meta = items[dimension.name!];
+
+                                  setSelectedDimension({
+                                    id: dimension.id_dimension,
+                                    name: dimension.name!,
+                                    category: group.category,
+                                    graphic: meta.graphic[0],
+                                    coords: meta.coords,
+                                  });
+                                }}
+                              />
+                            </Box>
+                            <Box flex={4}>
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    checked={m.position === "P"}
+                                    onChange={() => {
+                                      handlePositionToggle(
+                                        dimension.id_dimension
+                                      );
+                                      // setSelectedDimension(
+                                      //   dimension.id_dimension
+                                      // );
+                                      // setSelectedDimension({
+                                      //   id: dimension.id_dimension,
+                                      //   name: dimension.name!,
+                                      //   category: group.category,
+                                      // });
+
+                                      // const meta =
+                                      //   helpDataDimension[group.category].items[
+                                      //     dimension.name
+                                      //   ];
+                                      // setSelectedDimension(meta);
+                                      //   setSelectedDimension({
+                                      //     id: dimension.id_dimension,
+                                      //     name: dimension.name!,
+                                      //     category: group.category,
+                                      //     graphic: meta.graphic,
+                                      //     coords: meta.coords,
+                                      //   });
+                                    }}
+                                  />
+                                }
+                                label={
+                                  m.position === "P" ? "Parado" : "Sentado"
+                                }
+                              />
+                            </Box>
+                          </Box>
+                        );
+                      })}
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </Box>
+              {showImage && selectedDimension != null && (
                 <Box
                   sx={{
                     ml: 2,
@@ -444,58 +595,66 @@ const PersonForm: React.FC<PersonFormProps> = ({
                     bgcolor: "background.paper",
                     borderRadius: 1,
                     boxShadow: 1,
-                    position: "relative", // Añadido para posicionamiento relativo
+                    position: "relative",
                   }}
                 >
-                  {/* <Box>Helpp</?Box> */}
-                  {/* <IconButton sx={{zIndex:2}}>f</IconButton> */}
                   <IconButton
+                    size="small"
                     sx={{
                       position: "absolute",
                       top: 8,
                       left: 8,
                       zIndex: 2,
                       backgroundColor: "rgba(255,255,255,0.8)",
-                      "&:hover": {
-                        backgroundColor: "rgba(255,255,255,0.9)",
-                      },
+                      "&:hover": { backgroundColor: "rgba(255,255,255,0.9)" },
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Lógica para mostrar ayuda
-                      e.stopPropagation();
-                      const dimension = dimensions.find(
-                        (d) => d.id_dimension === selectedDimension
-                      );
-                      if (dimension) {
-                        goToPage(
-                          `/help?item=${encodeURIComponent(dimension.name)}`
-                        );
+                      // const allDims = groupedDimensions.flatMap(
+                      //   (g) => g.dimensions
+                      // );
+                      // const dim = allDims.find(
+                      //   (d) => d.id_dimension === selectedDimension
+                      // );
+                      // goToPage(`/help?item=${encodeURIComponent(dim.name)}`);
+                      if (selectedDimension) {
+                          goToPage(`/help?category=${encodeURIComponent(selectedDimension.category)}s&item=${encodeURIComponent(selectedDimension.name)}`,undefined, true);
                       }
                     }}
                   >
-                    {/* HelpOutlinedIcon */}
                     <HelpOutlinedIcon fontSize="small" />
                   </IconButton>
+
+                  {/* Muestro la imagen anotada usando el nombre de la dimensión */}
+                  {/* {(() => {
+                    const allDims = groupedDimensions.flatMap(
+                      (g) => g.dimensions
+                    );
+                    const dim = allDims.find(
+                      (d) => d.id_dimension === selectedDimension
+                    );
+                    const label =
+                      measurements.find(
+                        (m) => m.dimension_id === selectedDimension
+                      )?.value ?? "";
+                    return (
+                      dim && ( */}
                   <AnnotatedImage
-                    src={`../${
-                      dimensions.find(
-                        (d) => d.id_dimension === selectedDimension
-                      )?.name
-                    }.jpg`}
+                    src={`../imagenes_dimensiones/${selectedDimension.category}s/${selectedDimension.id}-${selectedDimension.name}.jpg`}
+                    // src={`../imagenes_dimensiones/${selectedDimension.graphic}`}
                     width={250}
                     measurements={[
                       {
-                        xPct: 50,
-                        yPct: 50,
-                        label: `${
-                          measurements.find(
-                            (m) => m.dimension_id === selectedDimension
-                          )?.value ?? ""
-                        } cm`,
+                        xPct: selectedDimension.coords.xPct,
+                        yPct: selectedDimension.coords.yPct,
+                        // label: `${selectedDimension.name} mm`,
+                        label: `${measurements.find((m) => m.dimension_id === selectedDimension.id)?.value ?? ""} ${selectedDimension.name === "Peso" ? "kg" : "mm"}`,
                       },
                     ]}
                   />
+                  {/* )
+                    );
+                  })()} */}
                 </Box>
               )}
             </Box>

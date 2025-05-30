@@ -7,6 +7,9 @@ import Tables from "../pages/Tables";
 import TableDetail from "../pages/AnthropometricTable";
 import Login from "../components/Forms/Login";
 import ProtectedRoute from "./ProtectedRoute";
+import ChangePasswordPage from "../components/Forms/ChangePassword";
+import ForgotPassword from "../components/Forms/ForgotPassword";
+import ResetPassword from "../components/Forms/ResetPassword";
 
 export default function AppRouter() {
   return (
@@ -18,14 +21,25 @@ export default function AppRouter() {
       <Route
         path="/studies"
         element={
-          <ProtectedRoute >
+          <ProtectedRoute>
             <Studies />
           </ProtectedRoute>
         }
       />
       {/* <Route> */}
       {/* <Route path="/studies" element={<Studies />} /> */}
+
       <Route path="/tables/:id" element={<Tables />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+        path="account/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePasswordPage />
+          </ProtectedRoute>
+        }
+      />
       {/* <Route
         path="/tables/:id"
         element={

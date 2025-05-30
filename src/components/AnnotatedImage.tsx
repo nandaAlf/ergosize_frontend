@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 
 interface AnnotatedImageProps {
@@ -17,36 +17,42 @@ export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({
   src,
   measurements,
   width = 400,
-}) => (
-  <Box
-    sx={{
-      position: 'relative',
-      width,
-      height: 'auto',
-      '& img': { display: 'block', width: '100%', height: 'auto' },
-    }}
-  >
-    {/* Imagen base */}
-    <img src={src} alt="Antropométrica" />
+}) => {
+  useEffect(() => {
+    console.log('Imagen cargada',src);
+  }, [src]);
 
-    {/* Overlay de mediciones */}
-    {measurements.map((m, i) => (
-      <Typography
-        key={i}
-        variant="caption"
-        sx={{
-          position: 'absolute',
-          top: `${m.yPct}%`,
-          left: `${m.xPct}%`,
-          transform: 'translate(-50%, -100%)',
-          bgcolor: 'rgba(255,255,255,0.8)',
-          p: '2px 4px',
-          borderRadius: 1,
-          pointerEvents: 'none',
-        }}
-      >
-        {m.label}
-      </Typography>
-    ))}
-  </Box>
-);
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        width,
+        height: 'auto',
+        '& img': { display: 'block', width: '100%', height: 'auto' },
+      }}
+    >
+      {/* Imagen base */}
+      <img src={src} alt="Antropométrica" />
+
+      {/* Overlay de mediciones */}
+      {measurements.map((m, i) => (
+        <Typography
+          key={i}
+          variant="caption"
+          sx={{
+            position: 'absolute',
+            top: `${m.yPct}%`,
+            left: `${m.xPct}%`,
+            transform: 'translate(-50%, -100%)',
+            bgcolor: 'rgba(255,255,255,0.8)',
+            p: '2px 4px',
+            borderRadius: 1,
+            pointerEvents: 'none',
+          }}
+        >
+          {m.label}
+        </Typography>
+      ))}
+    </Box>
+  );
+};

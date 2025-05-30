@@ -3,15 +3,30 @@ import { Dayjs } from "dayjs";
 // types.ts (o donde tengas tus tipos)
 type Classification = "L" | "T" | "E" | "A" | "AD" | "ADM";
 type Gender = "F" | "M" | "MF";
+export type DimensionCategory =
+  | "Altura"
+  | "Longitud"
+  | "Profundidad"
+  | "Anchura"
+  | "Diametro"
+  | "Circunferencia"
+  | "Alcance"
+  | "Peso";
 
 export interface Dimension {
   id_dimension: number;
   name?: string;
   initial?: string;
   value?: number;
+  date?: string;
 }
-
-export interface StudyData {
+// 3. Mapeo categoría → array de dimensiones
+export type GroupedDimensions = {
+  // [K in DimensionCategory]?: Dimension[];
+  category: string;
+  dimensions: Dimension[];
+};
+export interface StudyBase {
   id?: number;
   name: string;
   classification: Classification | "";
@@ -19,14 +34,30 @@ export interface StudyData {
   country: string;
   location: string;
   description: string;
-  size: number | null;
-  current_size?: number | null;
+  size: number ;
+  current_size?: number ;
   age_min: number;
   age_max: number;
   start_date: string | Dayjs | null;
   end_date: string | Dayjs | null;
-  dimensions: Dimension[];
   supervisor?: number;
+ 
+  // dimensions: Dimension[];
+  // dimensions: GroupedDimensions;
+}
+
+// Lectura (GET):
+export interface StudyData extends StudyBase {
+  // dimensions: GroupedDimensions;
+  //  dimensions: Dimension[];
+  dimensions: GroupedDimensions;
+}
+
+// Escritura (POST/PUT):
+export interface StudyPayload extends StudyBase {
+  // dimensions: { id_dimension: number }[];
+  //  dimensions: GroupedDimensions;
+  dimensions: Dimension[];
 }
 // export interface Person {
 //   id: number;
@@ -58,7 +89,10 @@ export interface Person {
   country: string;
   state: string;
   province: string;
-  dimensions : Measurement[]; // Updated to match the structure used in PersonForm
+  dimensions?: GroupedDimensions[]; //` Updated to match the structure used in PersonForm
+  // dimensions?: Measurement[]; //` Updated to match the structure used in PersonForm
+  // measurements?:GroupedDimensions[]
+  measurements?: Measurement[];
 }
 
 export interface CountryType {
