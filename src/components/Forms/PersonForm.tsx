@@ -515,8 +515,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                                       ) as HelpCategory[]
                                     ).find(
                                       (key) =>
-                                        key === group.category ||
-                                        key === `${group.category}s`
+                                        key === group.category 
                                     );
 
                                   if (!categoryKey) {
@@ -618,7 +617,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                       // );
                       // goToPage(`/help?item=${encodeURIComponent(dim.name)}`);
                       if (selectedDimension) {
-                          goToPage(`/help?category=${encodeURIComponent(selectedDimension.category)}s&item=${encodeURIComponent(selectedDimension.name)}`,undefined, true);
+                          goToPage(`/help?category=${encodeURIComponent(selectedDimension.category)}&item=${encodeURIComponent(selectedDimension.name)}`,undefined, true);
                       }
                     }}
                   >
@@ -640,7 +639,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                     return (
                       dim && ( */}
                   <AnnotatedImage
-                    src={`../imagenes_dimensiones/${selectedDimension.category}s/${selectedDimension.id}-${selectedDimension.name}.jpg`}
+                    src={`../imagenes_dimensiones/${selectedDimension.category}/${selectedDimension.id}-${selectedDimension.name}.jpg`}
                     // src={`../imagenes_dimensiones/${selectedDimension.graphic}`}
                     width={250}
                     measurements={[

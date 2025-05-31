@@ -1,6 +1,5 @@
 // src/services/StudyService.ts
 
-import axios from "axios";
 import ApiService from "../api/ApiService";
 import {
   Dimension,
@@ -10,13 +9,60 @@ import {
   StudyPayload,
 } from "../types";
 
-export const getAllStudies = async (mine = false): Promise<StudyData[]> => {
+// export const getAllStudies = async (mine = false,currentPage:number,PAGE_SIZE:number): Promise<StudyData[]> => {
+//   try {
+//     // const response = await ApiService.get(
+//     //   "/studies/",
+//     //   mine ? { mine: "true" } : {}
+//     // );
+//       const response = await ApiService.get(
+//       `/studies/?page=${currentPage}&page_size=${PAGE_SIZE}`,
+//       mine ? { mine: "true" } : {}
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error en getAllStudies:", error);
+//     throw error;
+//   }
+// };
+export const getAllStudies = async (
+  mine: boolean = false,
+  currentPage: number = 1,
+  pageSize: number,
+  filters: {
+    searchTerm?: string;
+    sexoFilter?: string;
+    ordenFilter?: string;
+    fechaDesde?: string | null;
+    fechaHasta?: string | null;
+  } = {}
+): Promise<{ results: StudyData[]; count: number }> => {
   try {
+      const params: Record<string, any> = {
+      page: currentPage,
+      page_size: pageSize,
+    };
+     // Añadir filtros a los parámetros
+    if (filters.searchTerm) params['search'] = filters.searchTerm;
+    if (filters.sexoFilter) params['gender'] = filters.sexoFilter;
+    if (filters.ordenFilter) {
+      params['ordering'] = filters.ordenFilter === 'reciente' ? '-start_date' : 'start_date';
+    }
+    if (filters.fechaDesde) params['start_date__gte'] = filters.fechaDesde;
+    if (filters.fechaHasta) params['start_date__lte'] = filters.fechaHasta;
+    if (mine) params['mine'] = "true";
+
+    alert(params.toString())
+
     const response = await ApiService.get(
-      "/studies/",
+      `/studies/?page=${currentPage}&page_size=${pageSize}&sexo=${filters.sexoFilter}`,
       mine ? { mine: "true" } : {}
     );
-    return response.data;
+
+    return {
+      results: response.data.results,
+      count: response.data.count,
+    };
   } catch (error) {
     console.error("Error en getAllStudies:", error);
     throw error;
@@ -118,9 +164,13 @@ export const deleteData = async (id: number) => {
 //   }
 // };
 
-export const getFile = async (action:string,studyId: string,params: URLSearchParams) => {
+export const getFile = async (
+  action: string,
+  studyId: string,
+  params: URLSearchParams
+) => {
   const endpoint = `/export/${action}/${studyId}`;
- 
+
   try {
     const response = await ApiService.get(endpoint, params, {
       responseType: "blob", // 👈 Añade responseType como opción adicional

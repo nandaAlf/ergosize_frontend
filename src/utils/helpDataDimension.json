@@ -18,7 +18,7 @@
         "posicion": "Posición sedante (Ts), ángulo entre piernas y tronco debe ser de 90º, espalda y cabeza deben de estar verticales, inspiración forzada, cabeza en el plano de Frankfort.",
         "puntos": "Vértex",
         "instrumento": "Antropómetro?",
-        "graphic": ["Alturas/2-Altura sentado.jpg"],
+        "graphic": ["Alturas/2-Altura sentado.jpg","Alturas/2-Altura sentado2.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura del ojo de pie": {
@@ -148,7 +148,7 @@
         "posicion": "Sentado con el tórax formando un ángulo de 90 grados con el asiento y la cabeza orientada conforme al plano de Frankfort.",
         "puntos": "Exocantion (comisura exterior del ojo)",
         "instrumento": "",
-        "graphic": ["Alturas/15-Altura de los ojos sentado.jpg"],
+        "graphic": ["Alturas/15-Altura de los ojos sentado.jpg","Alturas/15-Altura de los ojos sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura del oído sentado": {
@@ -158,7 +158,7 @@
         "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
         "puntos": "Tragion",
         "instrumento": "",
-        "graphic": ["Alturas/16-Altura del oído sentado.jpg"],
+        "graphic": ["Alturas/16-Altura del oído sentado.jpg","Alturas/16-Altura del oído sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura a la vertiente humeral sentado": {
@@ -168,7 +168,7 @@
         "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
         "puntos": "Punto medio de la vertiente humeral",
         "instrumento": "",
-        "graphic": ["Alturas/17-Altura a la vertiente humeral sentado.jpg"],
+        "graphic": ["Alturas/17-Altura a la vertiente humeral sentado.jpg","Alturas/17-Altura a la vertiente humeral sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura del hombro sentado": {
@@ -178,7 +178,7 @@
         "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
         "puntos": "Acromio",
         "instrumento": "",
-        "graphic": ["Alturas/18-Altura del hombro sentado.jpg"],
+        "graphic": ["Alturas/18-Altura del hombro sentado.jpg","Alturas/18-Altura del hombro sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura del omóplato sentado": {
@@ -188,7 +188,7 @@
         "posicion": "Sentado con el tórax erguido y perpendicular al plano del asiento.",
         "puntos": "Ángulo inferior de la escápula",
         "instrumento": "",
-        "graphic": ["Alturas/19-Altura del omóplato sentado.jpg"],
+        "graphic": ["Alturas/19-Altura del omóplato sentado.jpg","Alturas/19-Altura del omóplato sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura del codo sentado": {
@@ -218,7 +218,7 @@
         "posicion": "Sentado con un ángulo de 90 grados entre el tórax y el muslo.",
         "puntos": "Punto más alto del muslo derecho a nivel inguinal, pliegue cutáneo entre el muslo y la cintura pélvica",
         "instrumento": "",
-        "graphic": ["Alturas/22-Altura del muslo sentado.jpg"],
+        "graphic": ["Alturas/22-Altura del muslo sentado.jpg","Alturas/22-Altura del muslo sentado1.jpg"],
         "coords": { "xPct": 50, "yPct": 10 }
       },
       "Altura de la rodilla sentado": {
@@ -262,7 +262,8 @@
         "posicion": "",
         "puntos": "Entrecejo (glabela), gnation",
         "instrumento": "",
-        "graphic": ["Longitudes/26-Longitud de la cara.jpg"]
+        "graphic": ["Longitudes/26-Longitud de la cara.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud de la cabeza": {
         "sigla": "LCA",
@@ -271,7 +272,8 @@
         "posicion": "",
         "puntos": "Entrecejo (glabela), opistocráneo",
         "instrumento": "",
-        "graphic": ["Longitudes/27-Longitud de la cabeza.jpg"]
+        "graphic": ["Longitudes/27-Longitud de la cabeza.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud del antebrazo": {
         "sigla": "LAN",
@@ -280,7 +282,8 @@
         "posicion": "En posición de atención antropométrica.",
         "puntos": "Punto radial, punto estilio radial",
         "instrumento": "",
-        "graphic": ["Longitudes/28-Longitud del antebrazo.jpg"]
+        "graphic": ["Longitudes/28-Longitud del antebrazo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud codo-centro de la mano": {
         "sigla": "LCCM",
@@ -289,7 +292,8 @@
         "posicion": "Formando un ángulo de 90 grados.",
         "puntos": "Centro de la mano, radial",
         "instrumento": "",
-        "graphic": ["Longitudes/29-Longitud codo-centro de la mano.jpg"]
+        "graphic": ["Longitudes/29-Longitud codo-centro de la mano.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud codo-dedos sentado": {
         "sigla": "LCDS",
@@ -298,7 +302,8 @@
         "posicion": "Sentado, formando un ángulo de 90 grados.",
         "puntos": "Dactilión del dedo medio, radial",
         "instrumento": "",
-        "graphic": ["Longitudes/30-Longitud codo-dedos sentado.jpg"]
+        "graphic": ["Longitudes/30-Longitud codo-dedos sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud sacrorótula sentado": {
         "sigla": "LSR",
@@ -307,7 +312,8 @@
         "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
         "puntos": "Vértice de la rótula derecha, plano vertical situado en la espalda",
         "instrumento": "",
-        "graphic": ["Longitudes/31-Longitud sacrorótula sentado.jpg"]
+        "graphic": ["Longitudes/31-Longitud sacrorótula sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud sacropoplítea sentado": {
         "sigla": "LSP",
@@ -316,7 +322,8 @@
         "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
         "puntos": "Depresión poplítea de la pierna derecha, plano vertical situado en la espalda",
         "instrumento": "",
-        "graphic": ["Longitudes/32-Longitud sacropoplítea sentado.jpg"]
+        "graphic": ["Longitudes/32-Longitud sacropoplítea sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud del muslo sentado": {
         "sigla": "LMS",
@@ -325,7 +332,8 @@
         "posicion": "Sentado",
         "puntos": "Vértice de la rótula derecha, punto más alto del muslo a nivel inguinal",
         "instrumento": "",
-        "graphic": ["Longitudes/33-Longitud del muslo sentado.jpg"]
+        "graphic": ["Longitudes/33-Longitud del muslo sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud nalga-punta del pie": {
         "sigla": "LNP",
@@ -334,7 +342,8 @@
         "posicion": "Sentado",
         "puntos": "Superficie más exterior de la nalga, punta del pie",
         "instrumento": "",
-        "graphic": ["Longitudes/34-Longitud nalga-punta del pie.jpg"]
+        "graphic": ["Longitudes/34-Longitud nalga-punta del pie.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud nalga-talón": {
         "sigla": "LNT",
@@ -343,7 +352,8 @@
         "posicion": "Sentado y erguido, espalda apoyada en la pared, pierna extendida.",
         "puntos": "Talón, plano de una pared",
         "instrumento": "",
-        "graphic": ["Longitudes/35-Longitud nalga-talón.jpg"]
+        "graphic": ["Longitudes/35-Longitud nalga-talón.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud palma de la mano": {
         "sigla": "LPM",
@@ -352,7 +362,8 @@
         "posicion": "",
         "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, base del dedo medio (articulación metacarpo-falángica)",
         "instrumento": "",
-        "graphic": ["Longitudes/36-Longitud palma de la mano.jpg"]
+        "graphic": ["Longitudes/36-Longitud palma de la mano.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud de la mano": {
         "sigla": "LDM",
@@ -361,7 +372,8 @@
         "posicion": "",
         "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, dactilion III",
         "instrumento": "",
-        "graphic": ["Longitudes/37-Longitud de la mano.jpg"]
+        "graphic": ["Longitudes/37-Longitud de la mano.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud del pie": {
         "sigla": "LP",
@@ -370,7 +382,8 @@
         "posicion": "",
         "puntos": "Acropodio, ternio",
         "instrumento": "",
-        "graphic": ["Longitudes/38-Longitud del pie.jpg"]
+        "graphic": ["Longitudes/38-Longitud del pie.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Longitud del metacarpal I": {
         "sigla": "LME",
@@ -379,7 +392,8 @@
         "posicion": "",
         "puntos": "",
         "instrumento": "",
-        "graphic": ["Longitudes/39-Longitud del metacarpal I.jpg"]
+        "graphic": ["Longitudes/39-Longitud del metacarpal I.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       }
     }
   },
@@ -392,7 +406,8 @@
         "posicion": "Mano situada recta y dedos unidos.",
         "puntos": "Palma superior de la mano, palma inferior de la mano incluyendo metacarpo I",
         "instrumento": "",
-        "graphic": ["Profundidades/40-Profundidad de la mano.jpg"]
+        "graphic": ["Profundidades/40-Profundidad de la mano.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Profundidad del nudillo": {
         "sigla": "PNU",
@@ -401,7 +416,8 @@
         "posicion": "Metacarpal I separado del resto.",
         "puntos": "Palma superior de la mano, palma inferior de la mano a la altura de las articulaciones del metacarpal falange",
         "instrumento": "",
-        "graphic": ["Profundidades/41-Profundidad del nudillo.jpg"]
+        "graphic": ["Profundidades/41-Profundidad del nudillo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Profundidad de la articulación del metacarpal III": {
         "sigla": "PAM",
@@ -410,7 +426,8 @@
         "posicion": "",
         "puntos": "Articulación del metacarpal III con la falange",
         "instrumento": "",
-        "graphic": ["Profundidades/42-Profundidad de la articulación del metacarpal III.jpg"]
+        "graphic": ["Profundidades/42-Profundidad de la articulación del metacarpal III.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Profundidad de la articulación del pulgar": {
         "sigla": "PP",
@@ -419,7 +436,8 @@
         "posicion": "",
         "puntos": "Metacarpal I",
         "instrumento": "",
-        "graphic": ["Profundidades/43-Profundidad de la articulación del pulgar.jpg"]
+        "graphic": ["Profundidades/43-Profundidad de la articulación del pulgar.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       }
     }
   },
@@ -432,7 +450,8 @@
         "posicion": "",
         "puntos": "",
         "instrumento": "",
-        "graphic": ["Anchuras/44-Anchura de la cara.jpg"]
+        "graphic": ["Anchuras/44-Anchura de la cara.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Ancho de la cabeza": {
         "sigla": "ADCA",
@@ -441,7 +460,8 @@
         "posicion": "",
         "puntos": "Punto eurio izquierdo, punto eurio derecho",
         "instrumento": "",
-        "graphic": ["Anchuras/45-Ancho de la cabeza.jpg"]
+        "graphic": ["Anchuras/45-Ancho de la cabeza.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura del cuello": {
         "sigla": "ACU",
@@ -450,7 +470,8 @@
         "posicion": "",
         "puntos": "Base del cuello",
         "instrumento": "",
-        "graphic": ["Anchuras/46-Anchura del cuello.jpg"]
+        "graphic": ["Anchuras/46-Anchura del cuello.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura de pecho diámetro del tórax": {
         "sigla": "APT",
@@ -459,7 +480,8 @@
         "posicion": "",
         "puntos": "Extremos del pecho (nivel pezones o cuarto espacio intercostal/esternón en mujeres)",
         "instrumento": "",
-        "graphic": ["Anchuras/47-Anchura de pecho diámetro del tórax.jpg"]
+        "graphic": ["Anchuras/47-Anchura de pecho diámetro del tórax.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Ancho de cadera parado": {
         "sigla": "ACAP",
@@ -468,7 +490,8 @@
         "posicion": "Parado",
         "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
         "instrumento": "",
-        "graphic": ["Anchuras/48-Ancho de cadera parado.jpg"]
+        "graphic": ["Anchuras/48-Ancho de cadera parado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura de la cadera sentado": {
         "sigla": "ACA",
@@ -477,7 +500,8 @@
         "posicion": "Sentado con el tórax erguido y perpendicular al plano de asiento.",
         "puntos": "Caderas (trocanteres)",
         "instrumento": "",
-        "graphic": ["Anchuras/49-Anchura de la cadera sentado.jpg"]
+        "graphic": ["Anchuras/49-Anchura de la cadera sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura de codo a codo sentado": {
         "sigla": "ACC",
@@ -486,7 +510,8 @@
         "posicion": "Sentado, formando un ángulo aproximado de 90 grados.",
         "puntos": "Radiales",
         "instrumento": "",
-        "graphic": ["Anchuras/50-Anchura de codo a codo sentado.jpg"]
+        "graphic": ["Anchuras/50-Anchura de codo a codo sentado.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura del codo": {
         "sigla": "ACOD",
@@ -495,7 +520,8 @@
         "posicion": "",
         "puntos": "Punto más lateral y medial de los epicóndilos del húmero",
         "instrumento": "",
-        "graphic": ["Anchuras/51-Anchura del codo.jpg"]
+        "graphic": ["Anchuras/51-Anchura del codo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura de la muñeca": {
         "sigla": "ALMU",
@@ -504,7 +530,8 @@
         "posicion": "",
         "puntos": "Anchura biestiloidea del cúbito y del radio",
         "instrumento": "",
-        "graphic": ["Anchuras/52-Anchura de la muñeca.jpg"]
+        "graphic": ["Anchuras/52-Anchura de la muñeca.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura del tobillo": {
         "sigla": "ATO",
@@ -513,7 +540,8 @@
         "posicion": "",
         "puntos": "Aspectos más medial y más lateral de los maléolos interno y externo",
         "instrumento": "",
-        "graphic": ["Anchuras/53-Anchura del tobillo.jpg"]
+        "graphic": ["Anchuras/53-Anchura del tobillo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura de la mano": {
         "sigla": "ADM",
@@ -522,7 +550,8 @@
         "posicion": "Mano extendida con la palma bocarriba sobre la mesa.",
         "puntos": "Articulación del metacarpal-falange I y V",
         "instrumento": "",
-        "graphic": ["Anchuras/54-Anchura de la mano.jpg"]
+        "graphic": ["Anchuras/54-Anchura de la mano.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura del nudillo": {
         "sigla": "ANU",
@@ -531,7 +560,8 @@
         "posicion": "Mano extendida sobre una mesa y la palma bocarriba.",
         "puntos": "Articulación del metacarpal-falange II y V",
         "instrumento": "",
-        "graphic": ["Anchuras/55-Anchura del nudillo.jpg"]
+        "graphic": ["Anchuras/55-Anchura del nudillo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Ancho del pie": {
         "sigla": "AHP",
@@ -540,7 +570,8 @@
         "posicion": "",
         "puntos": "Borde interno y externo del pie a nivel de la cabeza del primer y quinto metatarsiano",
         "instrumento": "",
-        "graphic": ["Anchuras/56-Ancho del pie.jpg"]
+        "graphic": ["Anchuras/56-Ancho del pie.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura bideltoideo": {
         "sigla": "AB",
@@ -549,7 +580,8 @@
         "posicion": "",
         "puntos": "Músculos deltoides",
         "instrumento": "",
-        "graphic": ["Anchuras/57-Anchura bideltoideo.jpg"]
+        "graphic": ["Anchuras/57-Anchura bideltoideo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Anchura del talón": {
         "sigla": "AT",
@@ -558,7 +590,8 @@
         "posicion": "",
         "puntos": "Cara interna del talón, cara externa del talón",
         "instrumento": "",
-        "graphic": ["Anchuras/58-Anchura del talón.jpg"]
+        "graphic": ["Anchuras/58-Anchura del talón.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       }
     }
   },
@@ -571,7 +604,8 @@
         "posicion": "",
         "puntos": "Pupila izquierda, pupila derecha",
         "instrumento": "",
-        "graphic": ["Diametros/59-Diámetro interpupilar.jpg"]
+        "graphic": ["Diametros/59-Diámetro interpupilar.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetro biacromial": {
         "sigla": "DB",
@@ -580,7 +614,8 @@
         "posicion": "En posición de atención antropométrica.",
         "puntos": "Puntos acromiales del omóplato",
         "instrumento": "",
-        "graphic": ["Diametros/60-Diámetro biacromial.jpg"]
+        "graphic": ["Diametros/60-Diámetro biacromial.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetro transversal del tórax": {
         "sigla": "DTT",
@@ -589,7 +624,8 @@
         "posicion": "De pie, con los brazos sin movimiento y relajados.",
         "puntos": "Dos pliegues externos y superiores de las axilas",
         "instrumento": "",
-        "graphic": ["Diametros/61-Diámetro transversal del tórax.jpg"]
+        "graphic": ["Diametros/61-Diámetro transversal del tórax.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetros transversos y anteroposterior del tórax": {
         "sigla": "DTAP",
@@ -598,7 +634,8 @@
         "posicion": "",
         "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
         "instrumento": "",
-        "graphic": ["Diametros/62-Diámetros transversos y anteroposterior del tórax.jpg"]
+        "graphic": ["Diametros/62-Diámetros transversos y anteroposterior del tórax.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetro bicrestal": {
         "sigla": "DBC",
@@ -607,7 +644,8 @@
         "posicion": "En posición de atención antropométrica.",
         "puntos": "Crestas iliacas",
         "instrumento": "",
-        "graphic": ["Diametros/63-Diámetro bicrestal.jpg"]
+        "graphic": ["Diametros/63-Diámetro bicrestal.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetro bitrocantérico": {
         "sigla": "DBCT",
@@ -616,7 +654,8 @@
         "posicion": "",
         "puntos": "Proyecciones más laterales de los grandes trocánteres (trocanterios)",
         "instrumento": "",
-        "graphic": ["Diametros/64-Diámetro bitrocantérico.jpg"]
+        "graphic": ["Diametros/64-Diámetro bitrocantérico.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Diámetro de empuñadura": {
         "sigla": "DE",
@@ -625,7 +664,8 @@
         "posicion": "Cerrando un círculo con los dedos índice y pulgar de la mano derecha.",
         "puntos": "Dos puntos cerrando un círculo",
         "instrumento": "Cono de empuñadura",
-        "graphic": ["Diametros/65-Diámetro de empuñadura.jpg"]
+        "graphic": ["Diametros/65-Diámetro de empuñadura.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       }
     }
   },
@@ -638,7 +678,8 @@
         "posicion": "",
         "puntos": "Protuberancias frontales, occipucio",
         "instrumento": "",
-        "graphic": ["Circunferencias/66-Circunferencia de la cabeza.jpg"]
+        "graphic": ["Circunferencias/66-Circunferencia de la cabeza.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia del cuello": {
         "sigla": "CCU",
@@ -647,7 +688,8 @@
         "posicion": "",
         "puntos": "Inmediatamente por debajo del cartílago tiroides, justo sobre la prominencia laríngea",
         "instrumento": "",
-        "graphic": ["Circunferencias/67-Circunferencia del cuello.jpg"]
+        "graphic": ["Circunferencias/67-Circunferencia del cuello.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia del brazo": {
         "sigla": "CB",
@@ -656,7 +698,8 @@
         "posicion": "Brazo colgando a lo largo del cuerpo, ligeramente separado y relajado.",
         "puntos": "Nivel del punto mesobraquial",
         "instrumento": "",
-        "graphic": ["Circunferencias/68-Circunferencia del brazo.jpg"]
+        "graphic": ["Circunferencias/68-Circunferencia del brazo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia máxima del antebrazo": {
         "sigla": "CMA",
@@ -665,16 +708,18 @@
         "posicion": "",
         "puntos": "Parte de más volumen de antebrazo (a una distancia no mayor de 6 cm de radial)",
         "instrumento": "",
-        "graphic": ["Circunferencias/69-Circunferencia máxima del antebrazo.jpg"]
+        "graphic": ["Circunferencias/69-Circunferencia máxima del antebrazo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
-      "Circunferencia de los hombros": {
+      "Circunferencia de los hombros": {  
         "sigla": "CH",
         "definition": "Es el perímetro alcanzado en el tronco tomando como referencia lateral las máximas protuberancias de los músculos deltoides y por delante, la prominencia articular del esternón y la segunda costilla.",
         "vestuario": "",
         "posicion": "",
         "puntos": "Máximas protuberancias de los músculos deltoides, prominencia articular del esternón y la segunda costilla",
         "instrumento": "",
-        "graphic": ["Circunferencias/70-Circunferencia de los hombros.jpg"]
+        "graphic": ["Circunferencias/70-Circunferencia de los hombros.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia torácica": {
         "sigla": "CT",
@@ -683,7 +728,8 @@
         "posicion": "",
         "puntos": "Nivel del punto mesoesternal",
         "instrumento": "",
-        "graphic": ["Circunferencias/71-Circunferencia torácica.jpg"]
+        "graphic": ["Circunferencias/71-Circunferencia torácica.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia de la cintura": {
         "sigla": "CCI",
@@ -692,7 +738,8 @@
         "posicion": "",
         "puntos": "Nivel del onfalio",
         "instrumento": "",
-        "graphic": ["Circunferencias/72-Circunferencia de la cintura.jpg"]
+        "graphic": ["Circunferencias/72-Circunferencia de la cintura.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia de las caderas": {
         "sigla": "CCA",
@@ -701,7 +748,8 @@
         "posicion": "",
         "puntos": "Entre la cintura y los muslos",
         "instrumento": "",
-        "graphic": ["Circunferencias/73-Circunferencia de las caderas.jpg"]
+        "graphic": ["Circunferencias/73-Circunferencia de las caderas.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia superior del muslo": {
         "sigla": "CSM",
@@ -710,7 +758,8 @@
         "posicion": "",
         "puntos": "Alrededor del muslo a uno o dos centímetros por debajo de la línea glútea",
         "instrumento": "",
-        "graphic": ["Circunferencias/74-Circunferencia superior del muslo.jpg"]
+        "graphic": ["Circunferencias/74-Circunferencia superior del muslo.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       },
       "Circunferencia de la pantorrilla": {
         "sigla": "CP",
@@ -719,7 +768,8 @@
         "posicion": "",
         "puntos": "Parte más gruesa de la pierna",
         "instrumento": "",
-        "graphic": ["Circunferencias/75-Circunferencia de la pantorrilla.jpg"]
+        "graphic": ["Circunferencias/75-Circunferencia de la pantorrilla.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 }
       }
     }
   },

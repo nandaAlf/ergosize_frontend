@@ -4,13 +4,13 @@ import { Dayjs } from "dayjs";
 type Classification = "L" | "T" | "E" | "A" | "AD" | "ADM";
 type Gender = "F" | "M" | "MF";
 export type DimensionCategory =
-  | "Altura"
-  | "Longitud"
-  | "Profundidad"
-  | "Anchura"
-  | "Diametro"
-  | "Circunferencia"
-  | "Alcance"
+  | "Alturas"
+  | "Longitudes"
+  | "Profundidadesd"
+  | "Anchuras"
+  | "Diametros"
+  | "Circunferencias"
+  | "Alcances"
   | "Peso";
 
 export interface Dimension {
