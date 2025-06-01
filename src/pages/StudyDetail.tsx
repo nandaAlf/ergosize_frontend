@@ -8,7 +8,7 @@ import { getPersonStudyData } from "../service/service";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import { MyTable } from "../components/TableData/Table";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // Definir la interfaz para la respuesta de la API
 
 const StudyDetail: React.FC = () => {

@@ -25,7 +25,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useLocation } from "react-router-dom";
 import { useNotify } from "../hooks/useNotifications";
 import { useDialogs } from "@toolpad/core/useDialogs";
-
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -38,23 +38,35 @@ const Studies: React.FC = () => {
   const notify = useNotify();
   const dialogs = useDialogs();
 
-  const [studiesData, setStudiesData] = useState<StudyData[] | null>(null); //
+  const [studiesData, setStudiesData] = useState<StudyData[]>([]); //
   const [openStudyForm, setOpenStudyForm] = useState(false);
   const [editingStudy, setEditingStudy] = useState<StudyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sexoFilter, setSexoFilter] = useState("");
-  const [ordenFilter, setOrdenFilter] = useState("");
-  const [fechaDesde, setFechaDesde] = useState<Dayjs | null>(null);
-  const [fechaHasta, setFechaHasta] = useState<Dayjs | null>(null);
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    sexoFilter: "",
+    ordenFilter: "",
+    fechaDesde: null as Dayjs | null,
+    fechaHasta: null as Dayjs | null,
+  });
+  // const [sexoFilter, setSexoFilter] = useState("");
+  // const [ordenFilter, setOrdenFilter] = useState("");
+  // const [fechaDesde, setFechaDesde] = useState<Dayjs | null>(null);
+  // const [fechaHasta, setFechaHasta] = useState<Dayjs | null>(null);
+  // const [searchTerm, setSearchTerm] = useState("");
   const [openTableForm, setOpenTableForm] = useState(false);
   const [selectedStudyForTable, setSelectedStudyForTable] =
     useState<StudyData | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
   const [refreshCounter, setRefreshCounter] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
+  // const [totalItems, setTotalItems] = useState(0);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
+  });
   // const [selectedStudy, setSelectedStudy] = useState(null);
   // const [selectedCard, setSelectedCard] = React.useState(-1);
   // const [searchType, setSearchType] = useState<"name" | "location">("name"); // Estado para el tipo de búsqueda
@@ -62,24 +74,29 @@ const Studies: React.FC = () => {
 
   // Memoized fetch function
   const fetchStudies = useCallback(async () => {
-    if (currentPage == 0) setLoading(true);
+    // if (currentPage == 0) setLoading(true);
     try {
       // alert(currentPage);
       const { results, count } = await getAllStudies(
         mine,
-        currentPage,
+        pagination.currentPage,
         PAGE_SIZE,
         {
-          searchTerm,
-          sexoFilter,
-          ordenFilter,
-          fechaDesde: fechaDesde?.format("YYYY-MM-DD") || null,
-          fechaHasta: fechaHasta?.format("YYYY-MM-DD") || null,
+          searchTerm: filters.searchTerm,
+          sexoFilter: filters.sexoFilter,
+          ordenFilter: filters.ordenFilter,
+          fechaDesde: filters.fechaDesde?.format("YYYY-MM-DD") || null,
+          fechaHasta: filters.fechaHasta?.format("YYYY-MM-DD") || null,
         }
       );
       setStudiesData(results);
-      setTotalItems(count);
-      setTotalPages(Math.ceil(count / PAGE_SIZE));
+      setPagination((prev) => ({
+        ...prev,
+        totalPages: Math.ceil(count / PAGE_SIZE),
+        totalItems: count,
+      }));
+      // setTotalItems(count);
+      // setTotalPages(Math.ceil(count / PAGE_SIZE));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Error al cargar estudios");
@@ -87,12 +104,17 @@ const Studies: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, mine, searchTerm, sexoFilter, ordenFilter, fechaDesde, fechaHasta, notify]);
+  }, [mine, pagination.currentPage, filters, notify, refreshCounter]);
 
   // Fetch data when dependencies change
   useEffect(() => {
     fetchStudies();
-  }, [refreshCounter, mine, currentPage,sexoFilter, setSexoFilter]);
+  }, [mine, pagination.currentPage, filters, notify, refreshCounter]);
+
+  // Resetear a página 1 cuando cambian los filtros
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  }, [filters]);
 
   // useEffect(() => {
   // const fetchStudies = async () => {
@@ -111,131 +133,32 @@ const Studies: React.FC = () => {
   // }, [mine, refreshCounter, currentPage]);
 
   // Componente de paginación
-  const PaginationControls = useMemo(
-    () => (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 2 }}>
-        <Button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => p - 1)}
-        >
-          Anterior
-        </Button>
 
-        <Typography sx={{ mx: 2 }}>
-          Página {currentPage} de {totalPages}
-        </Typography>
+  // const PaginationControls = useMemo(
+  //   () => (
+  //     <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 2 }}>
+  //       <Button
+  //         disabled={currentPage === 1}
+  //         onClick={() => setCurrentPage((p) => p - 1)}
+  //       >
+  //         Anterior
+  //       </Button>
 
-        <Button
-          disabled={currentPage === totalPages || totalPages === 0}
-          onClick={() => setCurrentPage((p) => p + 1)}
-        >
-          Siguiente
-        </Button>
-      </Box>
-    ),
-    [currentPage, totalPages]
-  );
-  // Memoized filtered studies
-  const filteredStudies = useMemo(() => {
-    return studiesData
-      ?.filter((study) => {
-        // 1) Búsqueda por nombre o ubicación
-        const term = searchTerm.trim().toLowerCase();
-        if (
-          term &&
-          !study.name.toLowerCase().includes(term) &&
-          !study.location?.toLowerCase().includes(term) &&
-          !study.country?.toLowerCase().includes(term)
-        ) {
-          return false;
-        }
+  //       <Typography sx={{ mx: 2 }}>
+  //         Página {currentPage} de {totalPages}
+  //       </Typography>
 
-        // 2) Filtrar por sexo
-        if (sexoFilter && study.gender !== sexoFilter) return false;
+  //       <Button
+  //         disabled={currentPage === totalPages || totalPages === 0}
+  //         onClick={() => setCurrentPage((p) => p + 1)}
+  //       >
+  //         Siguiente
+  //       </Button>
+  //     </Box>
+  //   ),
+  //   [currentPage, totalPages]
+  // );
 
-        // 3) Filtrar por rango de fecha
-        const start = study.start_date ? dayjs(study.start_date) : null;
-        const end = study.end_date ? dayjs(study.end_date) : null;
-
-        if (fechaDesde && (!start || !start.isSameOrAfter(fechaDesde, "day")))
-          return false;
-        if (fechaHasta && (!end || !end.isSameOrBefore(fechaHasta, "day")))
-          return false;
-
-        return true;
-      })
-      .sort((a, b) => {
-        if (ordenFilter === "reciente") {
-          return dayjs(b.start_date).diff(dayjs(a.start_date));
-        }
-        if (ordenFilter === "antiguo") {
-          return dayjs(a.start_date).diff(dayjs(b.start_date));
-        }
-        return 0;
-      });
-  }, [
-    studiesData,
-    searchTerm,
-    sexoFilter,
-    ordenFilter,
-    fechaDesde,
-    fechaHasta,
-  ]);
-  // const filteredStudies = studiesData
-  //   ?.filter((study) => {
-  //     // 1) Búsqueda por nombre o ubicación
-  //     const term = searchTerm.trim().toLowerCase();
-  //     const matchesSearch =
-  //       !term ||
-  //       study.name.toLowerCase().includes(term) ||
-  //       study.location.toLowerCase().includes(term) ||
-  //       study.country.toLowerCase().includes(term);
-
-  //     if (!matchesSearch) return false;
-
-  //     // 2) Filtrar por sexo
-  //     if (sexoFilter && study.gender !== sexoFilter) return false;
-
-  //     // 3) Filtrar por rango de fecha (start_date / end_date)
-  //     const start = fechaDesde ? dayjs(study.start_date) : null;
-  //     const end = fechaHasta ? dayjs(study.end_date) : null;
-
-  //     if (fechaDesde && (!start || !start.isSameOrAfter(fechaDesde, "day")))
-  //       return false;
-  //     if (fechaHasta && (!end || !end.isSameOrBefore(fechaHasta, "day")))
-  //       return false;
-
-  //     return true;
-  //   })
-  //   // 4) Ordenar según ordenFilter
-  //   .sort((a, b) => {
-  //     if (ordenFilter === "reciente") {
-  //       // más reciente primero (por start_date)
-  //       return dayjs(b.start_date).diff(dayjs(a.start_date));
-  //     }
-  //     if (ordenFilter === "antiguo") {
-  //       // más antiguo primero
-  //       return dayjs(a.start_date).diff(dayjs(b.start_date));
-  //     }
-  //     return 0; // sin orden
-  //   });
-  // Función para actualizar la lista
-  // const handleStudyUpdate = () => {
-  //   setRefreshCounter((prev) => prev + 1);
-  // };
-  // const handleCloseStudyForm = () => {
-  //   setOpenStudyForm(false);
-  //   setEditingStudy(null);
-  // };
-  // const handleEditStudy = (study: StudyData) => {
-  //   setEditingStudy(study);
-  //   setOpenStudyForm(true);
-  // };
-  // const handleOpenTableDialog = (study: StudyData) => {
-  //   setSelectedStudyForTable(study);
-  //   setOpenTableForm(true);
-  // };
-  // Memoized callbacks
   const handleStudyUpdate = useCallback(() => {
     setRefreshCounter((prev) => prev + 1);
   }, []);
@@ -254,6 +177,73 @@ const Studies: React.FC = () => {
     setSelectedStudyForTable(study);
     setOpenTableForm(true);
   }, []);
+
+  const handlePageChange = useCallback((newPage: number) => {
+    setPagination((prev) => ({ ...prev, currentPage: newPage }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleFilterChange = useCallback(
+    (newFilters: Partial<typeof filters>) => {
+      setFilters((prev) => ({ ...prev, ...newFilters }));
+    },
+    []
+  );
+
+  const clearFilters = useCallback(() => {
+    setFilters({
+      searchTerm: "",
+      sexoFilter: "",
+      ordenFilter: "",
+      fechaDesde: null,
+      fechaHasta: null,
+    });
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  }, []);
+
+  const PaginationControls = useMemo(
+    () => (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 3,
+          mb: 2,
+          gap: 2,
+        }}
+      >
+        <IconButton
+          disabled={pagination.currentPage === 1 || loading}
+          onClick={() => handlePageChange(pagination.currentPage - 1)}
+          size="small"
+        >
+          <ArrowBack />
+        </IconButton>
+
+        <Typography variant="body1">
+          Página {pagination.currentPage} de {pagination.totalPages}
+        </Typography>
+
+        <IconButton
+          disabled={
+            pagination.currentPage === pagination.totalPages ||
+            pagination.totalPages === 0 ||
+            loading
+          }
+          onClick={() => handlePageChange(pagination.currentPage + 1)}
+          size="small"
+        >
+          <ArrowForward />
+        </IconButton>
+
+        <Typography variant="caption" color="text.secondary">
+          {pagination.totalItems} estudios en total
+        </Typography>
+      </Box>
+    ),
+    [pagination, loading, handlePageChange]
+  );
 
   if (loading) {
     return (
@@ -277,7 +267,7 @@ const Studies: React.FC = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <FilterPanelLayout
+      {/* <FilterPanelLayout
         search={searchTerm}
         onSearchChange={setSearchTerm}
         sexo={sexoFilter}
@@ -290,32 +280,41 @@ const Studies: React.FC = () => {
         onFechaHastaChange={setFechaHasta}
         openStudyForm={openStudyForm}
         onOpenStudyForm={setOpenStudyForm}
+      /> */}
+      <FilterPanelLayout
+        {...filters}
+        search={filters.searchTerm}
+        sexo={filters.sexoFilter}
+        orden={filters.ordenFilter}
+        fechaDesde={filters.fechaDesde}
+        fechaHasta={filters.fechaHasta}
+        onSearchChange={(value) => handleFilterChange({ searchTerm: value })}
+        onSexoChange={(value) => handleFilterChange({ sexoFilter: value })}
+        onOrdenChange={(value) => handleFilterChange({ ordenFilter: value })}
+        onFechaDesdeChange={(value) =>
+          handleFilterChange({ fechaDesde: value })
+        }
+        onFechaHastaChange={(value) =>
+          handleFilterChange({ fechaHasta: value })
+        }
+        openStudyForm={openStudyForm}
+        onOpenStudyForm={() => setOpenStudyForm(true)}
       />
 
       {/* </Box> */}
-      {filteredStudies?.length === 0 ? (
+      {studiesData?.length === 0 ? (
         <Box sx={{ p: 3, textAlign: "center" }}>
           <Typography variant="h6">
             No se encontraron estudios con los filtros aplicados
           </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setSearchTerm("");
-              setSexoFilter("");
-              setOrdenFilter("");
-              setFechaDesde(null);
-              setFechaHasta(null);
-            }}
-            sx={{ mt: 2 }}
-          >
+          <Button variant="outlined" onClick={clearFilters} sx={{ mt: 2 }}>
             Limpiar filtros
           </Button>
         </Box>
       ) : (
         <>
           <Grid container spacing={3} sx={{ padding: "25px" }}>
-            {filteredStudies?.map((study, index) => (
+            {studiesData?.map((study, index) => (
               <Grid
                 size={{ xs: 12, sm: 6 }}
                 key={study.id}
@@ -339,8 +338,9 @@ const Studies: React.FC = () => {
         </>
       )}
 
+      {openStudyForm &&
       <StudyForm
-        open={openStudyForm}
+      open={openStudyForm}
         onClose={handleCloseStudyForm}
         onSubmit={function (): void {
           throw new Error("Function not implemented.");
@@ -348,7 +348,8 @@ const Studies: React.FC = () => {
         initialData={editingStudy ? editingStudy : undefined}
         mode={editingStudy ? "edit" : "add"}
         onSuccess={handleStudyUpdate} // Agrega esta prop
-      ></StudyForm>
+        ></StudyForm>
+      }  
 
       {/* Integración del TableForm a nivel global en la página Studies */}
       {selectedStudyForTable && (

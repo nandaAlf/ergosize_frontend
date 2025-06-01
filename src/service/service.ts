@@ -38,26 +38,28 @@ export const getAllStudies = async (
   } = {}
 ): Promise<{ results: StudyData[]; count: number }> => {
   try {
-      const params: Record<string, any> = {
+    const params: Record<string, any> = {
       page: currentPage,
       page_size: pageSize,
     };
-     // Añadir filtros a los parámetros
-    if (filters.searchTerm) params['search'] = filters.searchTerm;
-    if (filters.sexoFilter) params['gender'] = filters.sexoFilter;
+    // Añadir filtros a los parámetros
+    if (filters.searchTerm) params["search"] = filters.searchTerm;
+    if (filters.sexoFilter) params["gender"] = filters.sexoFilter;
     if (filters.ordenFilter) {
-      params['ordering'] = filters.ordenFilter === 'reciente' ? '-start_date' : 'start_date';
+      params["ordering"] =
+        filters.ordenFilter === "reciente" ? "-start_date" : "start_date";
     }
-    if (filters.fechaDesde) params['start_date__gte'] = filters.fechaDesde;
-    if (filters.fechaHasta) params['start_date__lte'] = filters.fechaHasta;
-    if (mine) params['mine'] = "true";
+    if (filters.fechaDesde) params["start_date__gte"] = filters.fechaDesde;
+    if (filters.fechaHasta) params["start_date__lte"] = filters.fechaHasta;
+    if (mine) params["mine"] = "true";
 
-    alert(params.toString())
-
-    const response = await ApiService.get(
-      `/studies/?page=${currentPage}&page_size=${pageSize}&sexo=${filters.sexoFilter}`,
-      mine ? { mine: "true" } : {}
-    );
+    // const response = await ApiService.get(
+    //   `/studies/?page=${currentPage}&page_size=${pageSize}&sexo=${filters.sexoFilter}`,
+    //   mine ? { mine: "true" } : {}
+    // );
+    // En getAllStudies, antes de hacer la solicitud:
+    console.log("Parámetros enviados:", new URLSearchParams(params).toString());
+    const response = await ApiService.get(`/studies/`, params); // Pasar params aquí
 
     return {
       results: response.data.results,

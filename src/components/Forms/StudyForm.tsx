@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Box,
   Button,
@@ -36,6 +36,21 @@ import {
 import { useNotify } from "../../hooks/useNotifications";
 import CountrySelect from "../CountrySelect";
 
+const PopulationOption = React.memo(
+  ({ option }: { option: { value: string; label: string } }) => (
+    <MenuItem key={option.value} value={option.value}>
+      {option.label}
+    </MenuItem>
+  )
+);
+// Componente memoizado para opciones de género
+const GenderOption = React.memo(
+  ({ option }: { option: { value: string; label: string } }) => (
+    <MenuItem key={option.value} value={option.value}>
+      {option.label}
+    </MenuItem>
+  )
+);
 interface StudyFormProps {
   open: boolean;
   onClose: () => void;
@@ -90,28 +105,34 @@ const genderOptions = [
 const StudyForm: React.FC<StudyFormProps> = ({
   mode = "add",
   onClose,
-  open,
+  open = false,
   onSubmit,
   onSuccess,
   initialData,
 }) => {
-  const defaultValues: StudyPayload = {
-    name: "",
-    classification: "",
-    gender: "",
-    country: "",
-    location: "",
-    description: "",
-    size: 0,
-    age_min: 0,
-    age_max: 120,
-    start_date: null,
-    end_date: null,
-    dimensions: [],
-  };
+  const defaultValues = useMemo(
+    (): StudyPayload => ({
+      name: "",
+      classification: "",
+      gender: "",
+      country: "",
+      location: "",
+      description: "",
+      size: 0,
+      age_min: 0,
+      age_max: 120,
+      start_date: null,
+      end_date: null,
+      dimensions: [],
+    }),
+    []
+  );
 
   const [formData, setFormData] = useState<StudyPayload>(defaultValues);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormErrors>>({});
+  // Solo cargar dimensiones cuando el formulario se abre
+  const [shouldLoadDimensions, setShouldLoadDimensions] = useState(false);
   const [availableDimensions, setAvailableDimensions] = useState<
     GroupedDimensions[]
   >([]);
@@ -121,6 +142,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   const notify = useNotify();
 
   useEffect(() => {
+    if (!open) return;
     if (initialData && mode === "edit") {
       // console.log("InitialDta",initialData)
       setFormData({
@@ -131,14 +153,30 @@ const StudyForm: React.FC<StudyFormProps> = ({
           : null,
         end_date: initialData.end_date ? dayjs(initialData.end_date) : null,
       });
+      // Inicializar IDs de dimensiones seleccionadas
+      const ids = Object.values(initialData.dimensions || {})
+        .flat()
+        .map((d) => d.id_dimension);
+      setSelectedDimensionIds(ids);
     } else {
       setFormData(defaultValues);
+      setSelectedDimensionIds([]);
     }
-  }, [initialData, open, mode]);
+    // Limpiar errores al abrir
+    setErrors({});
+  }, [initialData, open, mode, defaultValues]);
+  useEffect(() => {
+    if (open) {
+      setShouldLoadDimensions(true);
+    }
+  }, [open]);
+
   // Cargar dimensiones disponibles
   // Antes — cuidado: sin array de deps o con deps cambiantes → loop
   useEffect(() => {
     const loadDimensions = async () => {
+      // if (!open) return;
+      alert("hoa");
       const raw = await getAllDimensions();
       // raw es un objeto, cambia siempre la referencia → dispara setState en cada render
       const grouped = Object.entries(raw).map(([category, dims]) => ({
@@ -147,19 +185,19 @@ const StudyForm: React.FC<StudyFormProps> = ({
       }));
       setAvailableDimensions(grouped);
     };
-    loadDimensions();
-  }, []); // Asegúrate de tener aquí el array vacío
-  useEffect(() => {
-    if (initialData && mode === "edit") {
-      const allDimensionIds = Object.values(initialData.dimensions)
-        .flat() // une todos los arrays de dimensiones por categoría
-        .map((d) => d.id_dimension);
+    if (shouldLoadDimensions) loadDimensions();
+  }, [shouldLoadDimensions]); // Asegúrate de tener aquí el array vacío
+  // useEffect(() => {
+  //   if (initialData && mode === "edit") {
+  //     const allDimensionIds = Object.values(initialData.dimensions)
+  //       .flat() // une todos los arrays de dimensiones por categoría
+  //       .map((d) => d.id_dimension);
 
-      setSelectedDimensionIds(allDimensionIds);
-    } else {
-      setSelectedDimensionIds([]);
-    }
-  }, [initialData, mode]);
+  //     setSelectedDimensionIds(allDimensionIds);
+  //   } else {
+  //     setSelectedDimensionIds([]);
+  //   }
+  // }, [initialData, mode]);
 
   const handleClassificationChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -201,24 +239,96 @@ const StudyForm: React.FC<StudyFormProps> = ({
       }
     };
 
-  const handleChange =
+  // const handleChange =
+  //   (field: keyof StudyData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const value = ["size"].includes(field)
+  //       ? parseInt(e.target.value) || null
+  //       : e.target.value;
+  //     // alert(`${field},${value}`)
+  //     setFormData((prev) => ({ ...prev, [field]: value }));
+  //   };
+
+  const handleChange = useCallback(
     (field: keyof StudyData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = ["size"].includes(field)
         ? parseInt(e.target.value) || null
         : e.target.value;
-      // alert(`${field},${value}`)
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    };
 
-  const handleDateChange =
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    },
+    []
+  );
+
+  // const handleDateChange =
+  //   (field: "start_date" | "end_date") => (date: Dayjs | null) => {
+  //     setFormData((prev) => ({ ...prev, [field]: date }));
+  //   };
+
+  const handleDateChange = useCallback(
     (field: "start_date" | "end_date") => (date: Dayjs | null) => {
       setFormData((prev) => ({ ...prev, [field]: date }));
-    };
+    },
+    []
+  );
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+  // const validateForm = (): boolean => {
+  //   const newErrors: FormErrors = {};
+  //   if (formData.classification) {
+  //     const range = POPULATION_AGE_RANGES[formData.classification];
+  //     if (formData.age_min < range.min || formData.age_min > range.max) {
+  //       newErrors.age_min = `Edad mínima debe estar entre ${range.min} y ${range.max}`;
+  //     }
+
+  //     if (formData.age_max < range.min || formData.age_max > range.max) {
+  //       newErrors.age_max = `Edad máxima debe estar entre ${range.min} y ${range.max}`;
+  //     }
+  //   } else newErrors.classification = "Tipo de población requerido";
+  //   // Validación de campos requeridos
+  //   if (!formData.name) newErrors.name = "Nombre es requerido";
+
+  //   // Validación de tamaño
+  //   if (formData.size === null || formData.size <= 0) {
+  //     newErrors.size = "Tamaño debe ser mayor que 0";
+  //   }
+
+  //   // Validación de rangos de edad
+
+  //   if (formData.age_min > formData.age_max) {
+  //     newErrors.age_min = "Edad mínima no puede ser mayor que la máxima";
+  //     newErrors.age_max = "Edad máxima no puede ser menor que la mínima";
+  //   }
+
+  //   // Validación de fechas
+  //   if (!formData.start_date) {
+  //     newErrors.start_date = "Fecha de inicio es requerida";
+  //   }
+
+  //   if (!formData.end_date) {
+  //     newErrors.end_date = "Fecha de fin es requerida";
+  //   }
+
+  //   if (
+  //     formData.start_date &&
+  //     formData.end_date &&
+  //     (formData.start_date as Dayjs).isAfter(formData.end_date)
+  //   ) {
+  //     newErrors.end_date = "Fecha de fin no puede ser anterior a la de inicio";
+  //   }
+
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
+
+  const validateForm = useCallback((): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name) newErrors.name = "Nombre es requerido";
+    if (!formData.classification)
+      newErrors.classification = "Tipo de población requerido";
+
     if (formData.classification) {
       const range = POPULATION_AGE_RANGES[formData.classification];
+
       if (formData.age_min < range.min || formData.age_min > range.max) {
         newErrors.age_min = `Edad mínima debe estar entre ${range.min} y ${range.max}`;
       }
@@ -226,23 +336,17 @@ const StudyForm: React.FC<StudyFormProps> = ({
       if (formData.age_max < range.min || formData.age_max > range.max) {
         newErrors.age_max = `Edad máxima debe estar entre ${range.min} y ${range.max}`;
       }
-    } else newErrors.classification = "Tipo de población requerido";
-    // Validación de campos requeridos
-    if (!formData.name) newErrors.name = "Nombre es requerido";
-
-    // Validación de tamaño
-    if (formData.size === null || formData.size <= 0) {
-      newErrors.size = "Tamaño debe ser mayor que 0";
     }
-
-    // Validación de rangos de edad
 
     if (formData.age_min > formData.age_max) {
       newErrors.age_min = "Edad mínima no puede ser mayor que la máxima";
       newErrors.age_max = "Edad máxima no puede ser menor que la mínima";
     }
 
-    // Validación de fechas
+    if (formData.size === null || formData.size <= 0) {
+      newErrors.size = "Tamaño debe ser mayor que 0";
+    }
+
     if (!formData.start_date) {
       newErrors.start_date = "Fecha de inicio es requerida";
     }
@@ -261,45 +365,118 @@ const StudyForm: React.FC<StudyFormProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const payload = {
+  //     ...formData,
+  //     start_date: formData.start_date
+  //       ? dayjs(formData.start_date).format("YYYY-MM-DD")
+  //       : null,
+  //     end_date: formData.end_date
+  //       ? dayjs(formData.end_date).format("YYYY-MM-DD")
+  //       : null,
+  //     study_dimension: selectedDimensionIds.map((id) => ({ id_dimension: id })),
+  //   };
+  //   if (!validateForm) return;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = {
-      ...formData,
-      start_date: formData.start_date
-        ? dayjs(formData.start_date).format("YYYY-MM-DD")
-        : null,
-      end_date: formData.end_date
-        ? dayjs(formData.end_date).format("YYYY-MM-DD")
-        : null,
-      study_dimension: selectedDimensionIds.map((id) => ({ id_dimension: id })),
-    };
-    if (!validateForm) return;
+  //   try {
+  //     console.log("paylodad", payload);
+  //     if (mode === "add") {
+  //       await createStudy(payload);
+  //       notify.success("Estudio creado correctamente");
+  //     } else {
+  //       if (!payload.id) throw new Error("ID de estudio no definido");
+  //       await updateStudy(payload, payload.id);
+  //       notify.success("Estudio actualizado correctamente");
+  //     }
+  //     onClose();
+  //     if (onSuccess) onSuccess(); // Actualiza la lista padre
+  //   } catch (error) {
+  //     console.error(error);
+  //     notify.error(
+  //       mode === "add"
+  //         ? "Error al crear el estudio"
+  //         : "Error al actualizar el estudio"
+  //     );
+  //   }
+  //   // onSubmit(formData);
+  //   onClose();
+  // };
+  // Componente memoizado para opciones de población
+  // Memoizar partes costosas del formulario
 
-    try {
-      console.log("paylodad", payload);
-      if (mode === "add") {
-        await createStudy(payload);
-        notify.success("Estudio creado correctamente");
-      } else {
-        if (!payload.id) throw new Error("ID de estudio no definido");
-        await updateStudy(payload, payload.id);
-        notify.success("Estudio actualizado correctamente");
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      setIsLoading(true);
+
+      try {
+        const payload = {
+          ...formData,
+          start_date: formData.start_date
+            ? dayjs(formData.start_date).format("YYYY-MM-DD")
+            : null,
+          end_date: formData.end_date
+            ? dayjs(formData.end_date).format("YYYY-MM-DD")
+            : null,
+          study_dimension: selectedDimensionIds.map((id) => ({
+            id_dimension: id,
+          })),
+        };
+
+        if (mode === "add") {
+          await createStudy(payload);
+          notify.success("Estudio creado correctamente");
+        } else {
+          if (!payload.id) throw new Error("ID de estudio no definido");
+          await updateStudy(payload, payload.id);
+          notify.success("Estudio actualizado correctamente");
+        }
+
+        if (onSuccess) onSuccess();
+        // if (onSubmit) onSubmit(payload as StudyData);
+        onClose();
+      } catch (error) {
+        console.error(error);
+        notify.error(
+          mode === "add"
+            ? "Error al crear el estudio"
+            : "Error al actualizar el estudio"
+        );
+      } finally {
+        setIsLoading(false);
       }
-      onClose();
-      if (onSuccess) onSuccess(); // Actualiza la lista padre
-    } catch (error) {
-      console.error(error);
-      notify.error(
-        mode === "add"
-          ? "Error al crear el estudio"
-          : "Error al actualizar el estudio"
-      );
-    }
-    // onSubmit(formData);
-    onClose();
-  };
+    },
+    [
+      formData,
+      selectedDimensionIds,
+      mode,
+      validateForm,
+      notify,
+      onSuccess,
+      onClose,
+      onSubmit,
+    ]
+  );
+
+  const renderPopulationOptions = useMemo(
+    () =>
+      populationTypes.map((option) => (
+        <PopulationOption key={option.value} option={option} />
+      )),
+    []
+  );
+  const renderGenderOptions = useMemo(
+    () =>
+      genderOptions.map((option) => (
+        <GenderOption key={option.value} option={option} />
+      )),
+    []
+  );
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -329,6 +506,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
               fullWidth
               required
             >
+              {/* {renderPopulationOptions} */}
               {populationTypes.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -392,6 +570,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
                     {option.label}
                   </MenuItem>
                 ))}
+                {/* {renderGenderOptions} */}
               </TextField>
             </Box>
 

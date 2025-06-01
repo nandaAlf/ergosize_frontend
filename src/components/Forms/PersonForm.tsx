@@ -513,10 +513,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                                       Object.keys(
                                         helpDataDimension
                                       ) as HelpCategory[]
-                                    ).find(
-                                      (key) =>
-                                        key === group.category 
-                                    );
+                                    ).find((key) => key === group.category);
 
                                   if (!categoryKey) {
                                     console.warn(
@@ -617,7 +614,11 @@ const PersonForm: React.FC<PersonFormProps> = ({
                       // );
                       // goToPage(`/help?item=${encodeURIComponent(dim.name)}`);
                       if (selectedDimension) {
-                          goToPage(`/help?category=${encodeURIComponent(selectedDimension.category)}&item=${encodeURIComponent(selectedDimension.name)}`,undefined, true);
+                        goToPage(
+                          `/help?category=${encodeURIComponent(selectedDimension.category)}&item=${encodeURIComponent(selectedDimension.name)}`,
+                          undefined,
+                          true
+                        );
                       }
                     }}
                   >

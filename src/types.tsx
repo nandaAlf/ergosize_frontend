@@ -50,7 +50,7 @@ export interface StudyBase {
 export interface StudyData extends StudyBase {
   // dimensions: GroupedDimensions;
   //  dimensions: Dimension[];
-  dimensions: GroupedDimensions;
+  dimensions: GroupedDimensions[];
 }
 
 // Escritura (POST/PUT):

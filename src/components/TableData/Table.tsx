@@ -623,17 +623,6 @@ export const TableComponent: React.FC<TableProps> = ({
     categoryBoundaries.add(runningIndex);
   }
 
-  // Construir headCells para sorting
-  const headCells = [
-    { id: "name", disablePadding: true, numeric: false, label: "Name" },
-    ...flatDimensions.map((dim) => ({
-      id: dim.name || dim.id_dimension.toString(),
-      disablePadding: false,
-      numeric: true,
-      label: dim.initial,
-    })),
-  ];
-
   const {
     order,
     orderBy,
@@ -730,7 +719,7 @@ export const TableComponent: React.FC<TableProps> = ({
       />
       <Paper
         sx={{
-          padding: "25px",
+          padding: "0px",
           borderRadius: "5px",
           margin: "10px 40px",
           border: "1px solid #E5E7EB",
@@ -764,7 +753,11 @@ export const TableComponent: React.FC<TableProps> = ({
                     Nombre
                   </TableSortLabel>
                 </TableCell> */}
-                <TableCell colSpan={2} align="center"></TableCell>
+                <TableCell
+                  colSpan={2}
+                  sx={{ backgroundColor: "rgba(0, 0, 0, 0.01)" }}
+                  align="center"
+                ></TableCell>
                 {categories.map(([cat, dims], grpIdx) => {
                   const start =
                     categories
@@ -782,13 +775,15 @@ export const TableComponent: React.FC<TableProps> = ({
                         align="center"
                         colSpan={Array.isArray(dims) ? dims.length : 0}
                         sx={{
-                          borderLeft: "px solid rgba(0,0,0,0.3)",
-                          borderRight: "0.5px solid rgba(0,0,0,0.3)",
-                          // backgroundColor: "blue",
+                          borderLeft: "0.5px solid rgba(0,0,0,0.1)",
+                          p: 2,
+                          // font
+                          // borderRight: "0.5px solid rgba(0,0,0,0.3)",
+                          backgroundColor: "rgba(0, 0, 0, 0.01)",
                           // marginlLeft:"2px"
                         }}
                       >
-                        {cat}
+                        {cat != "Peso" ? `${cat} (mm)` : `${cat} (kg)`}
                       </TableCell>
                     </>
                   );
@@ -827,9 +822,10 @@ export const TableComponent: React.FC<TableProps> = ({
                       align="right"
                       sortDirection={orderBy === dim.name ? order : false}
                       sx={{
-                        borderRight: isBoundary
-                          ? "2px solid rgba(0,0,0,0.3)"
-                          : undefined,
+                        borderLeft: "2px solid rgba(0,0,0,0.1)",
+                        // borderRight: isBoundary
+                        //   ? "2px solid rgba(0,0,0,0.3)"
+                        //   : undefined,
                       }}
                     >
                       <TableSortLabel
@@ -837,6 +833,7 @@ export const TableComponent: React.FC<TableProps> = ({
                         direction={orderBy === dim.name ? order : "asc"}
                         onClick={(e) => handleRequestSort(e, dim.name!)}
                       >
+                        {/* {dim.name.length>20?dim.initial :dim.name} */}
                         {dim.initial}
                       </TableSortLabel>
                     </TableCell>
@@ -868,9 +865,10 @@ export const TableComponent: React.FC<TableProps> = ({
                           key={dim.id_dimension}
                           align="right"
                           sx={{
-                            borderRight: isBoundary
-                              ? "2px solid rgba(0,0,0,0.3)"
-                              : undefined,
+                            borderLeft: "2px solid rgba(0,0,0,0.1)",
+                            // borderRight: isBoundary
+                            //   ? "2px solid rgba(0,0,0,0.3)"
+                            //   : undefined,
                           }}
                         >
                           {person.dimensions[dim.name!] || ""}

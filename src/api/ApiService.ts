@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // services/ApiService.ts
-import { patch } from '@mui/material';
+
 import axios, { AxiosRequestConfig, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 const BASE_URL = 'http://localhost:8000/api';
