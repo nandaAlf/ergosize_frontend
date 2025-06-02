@@ -34,12 +34,12 @@ import ApiService from "../api/ApiService";
 
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Main items" },
-  {
-    kind: "page",
-    segment: "dashboard",
-    title: "Home",
-    icon: <DashboardIcon />,
-  },
+  // {
+  //   kind: "page",
+  //   segment: "home",
+  //   title: "Home",
+  //   icon: <DashboardIcon />,
+  // },
   {
     kind: "page",
     segment: "studies",
@@ -112,7 +112,7 @@ function LayoutSwitcher() {
   const location = useLocation();
 
   // Do not render dashboard sidebar for /help
-  if (location.pathname.startsWith("/help")) {
+  if (location.pathname.startsWith("/help") || location.pathname.startsWith("/login") || location.pathname ==="/") {
     return <AppRouter />;
   }
 
@@ -173,49 +173,6 @@ export default function DashboardLayoutBasic() {
     [navigate]
   );
 
-  // Estado para el menú del avatar
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleAvatarClick = (e: React.MouseEvent<HTMLElement>) =>
-    setAnchorEl(e.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
-  // Componente que renderiza en la toolbar
-  // const CustomUserMenu: React.FC = () => {
-  //   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  //   const open = Boolean(anchorEl);
-  //   const handleClick = (e: React.MouseEvent<HTMLElement>) =>
-  //     setAnchorEl(e.currentTarget);
-  //   const handleClose = () => setAnchorEl(null);
-
-  //   if (!session) return null;
-
-  //   return (
-  //     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-  //       <Typography variant="body2">{session.user.name}</Typography>
-  //       <IconButton onClick={handleClick} size="small">
-  //         <Avatar src={session.user.image} alt={session.user.name} />
-  //       </IconButton>
-  //       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-  //         <MenuItem
-  //           onClick={() => {
-  //             handleClose();
-  //             navigate("/change-password");
-  //           }}
-  //         >
-  //           Cambiar contraseña
-  //         </MenuItem>
-  //         <MenuItem
-  //           onClick={() => {
-  //             handleClose();
-  //             authentication.signOut();
-  //           }}
-  //         >
-  //           Cerrar sesión
-  //         </MenuItem>
-  //       </Menu>
-  //     </Box>
-  //   );
-  // };
   return (
     <Box position="relative">
       <AppProvider
@@ -229,13 +186,7 @@ export default function DashboardLayoutBasic() {
           homeUrl: "/",
         }}
       >
-        {/* <Box sx={{ position: "absolute", top: 8, right: 79, zIndex: 1901 }}>
-          <CustomUserMenu />
-        </Box> */}
-        {/* <DialogsProvider> */}
-        {/* Render the custom user menu above or below the layout as needed */}
         <LayoutSwitcher />
-        {/* </DialogsProvider> */}
       </AppProvider>
     </Box>
   );

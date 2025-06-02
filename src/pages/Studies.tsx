@@ -116,48 +116,6 @@ const Studies: React.FC = () => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   }, [filters]);
 
-  // useEffect(() => {
-  // const fetchStudies = async () => {
-  //   try {
-  //     const data = await getAllStudies(mine, currentPage, PAGE_SIZE);
-  //     console.log(data);
-  //     // const result = await dialogs.open(MyCustomDialog);
-  //     setStudiesData(data);
-  //   } catch (err) {
-  //     setError(`No se pudieron obtener los estudios`);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  //   fetchStudies();
-  // }, [mine, refreshCounter, currentPage]);
-
-  // Componente de paginación
-
-  // const PaginationControls = useMemo(
-  //   () => (
-  //     <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 2 }}>
-  //       <Button
-  //         disabled={currentPage === 1}
-  //         onClick={() => setCurrentPage((p) => p - 1)}
-  //       >
-  //         Anterior
-  //       </Button>
-
-  //       <Typography sx={{ mx: 2 }}>
-  //         Página {currentPage} de {totalPages}
-  //       </Typography>
-
-  //       <Button
-  //         disabled={currentPage === totalPages || totalPages === 0}
-  //         onClick={() => setCurrentPage((p) => p + 1)}
-  //       >
-  //         Siguiente
-  //       </Button>
-  //     </Box>
-  //   ),
-  //   [currentPage, totalPages]
-  // );
 
   const handleStudyUpdate = useCallback(() => {
     setRefreshCounter((prev) => prev + 1);
@@ -267,20 +225,7 @@ const Studies: React.FC = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* <FilterPanelLayout
-        search={searchTerm}
-        onSearchChange={setSearchTerm}
-        sexo={sexoFilter}
-        onSexoChange={setSexoFilter}
-        orden={ordenFilter}
-        onOrdenChange={setOrdenFilter}
-        fechaDesde={fechaDesde}
-        onFechaDesdeChange={setFechaDesde}
-        fechaHasta={fechaHasta}
-        onFechaHastaChange={setFechaHasta}
-        openStudyForm={openStudyForm}
-        onOpenStudyForm={setOpenStudyForm}
-      /> */}
+
       <FilterPanelLayout
         {...filters}
         search={filters.searchTerm}
@@ -350,8 +295,6 @@ const Studies: React.FC = () => {
         onSuccess={handleStudyUpdate} // Agrega esta prop
         ></StudyForm>
       }  
-
-      {/* Integración del TableForm a nivel global en la página Studies */}
       {selectedStudyForTable && (
         <TableForm
           open={openTableForm}
@@ -359,8 +302,6 @@ const Studies: React.FC = () => {
           study={selectedStudyForTable}
         />
       )}
-
-      {/* <PaginationControls /> */}
     </Box>
   );
 };
