@@ -77,9 +77,13 @@ import {
   Login,
   HowToReg,
 } from "@mui/icons-material";
-
+import { useLocation } from "react-router-dom";
 const LoginForm: React.FC = () => {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialMode = queryParams.get('mode') === 'register' ? 'register' : 'login';
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
+  // const [mode, setMode] = useState<"login" | "register">("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -108,6 +112,11 @@ const LoginForm: React.FC = () => {
 
     try {
       if (mode === "login") {
+        if(!username || !password) {
+          setError("Por favor, complete todos los campos.");
+          setIsLoading(false);
+          return;
+        }
         await ApiService.login(username, password);
       } else {
         await ApiService.post("/accounts/users/", {
@@ -399,9 +408,11 @@ const LoginForm: React.FC = () => {
                   <Link
                     component="button"
                     variant="body2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault()
                       setMode(mode === "login" ? "register" : "login");
                       clear();
+                   
                     }}
                     sx={{ fontWeight: 600 }}
                   >

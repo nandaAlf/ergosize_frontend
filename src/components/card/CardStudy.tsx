@@ -17,6 +17,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import useNavigation from "../../hooks/useNavigation";
 import LongMenu from "../Menu";
@@ -24,6 +25,7 @@ import {
   LocationOnOutlined as LocationIcon,
   GroupsOutlined as GroupsIcon,
   CalendarMonthOutlined as CalendarIcon,
+  TableChart,
 } from "@mui/icons-material";
 import { deleteData } from "../../service/service";
 import { useConfirmDialog } from "../../hooks/useConfirmation";
@@ -31,6 +33,7 @@ import { parseJwt } from "../../hooks/parseJwt";
 import { useNotify } from "../../hooks/useNotifications";
 // import CircularWithValueLabel from "../CircularProgress";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface CardStudyProps {
   study: StudyData;
@@ -185,19 +188,20 @@ const CardStudy: React.FC<CardStudyProps> = memo(
     onSuccess,
   }) => {
     const { goToPage } = useNavigation();
-    const { confirm } = useConfirmDialog(); // Eliminado dialog si no se usa
+    const { confirm, dialog } = useConfirmDialog(); // Eliminado dialog si no se usa
     const token = localStorage.getItem("access_token") || "";
     const payload = useMemo(() => (token ? parseJwt(token) : null), [token]);
     const currentUserId = payload?.user_id;
     const currentUserRole = payload?.role;
     const notify = useNotify();
-
+    const theme = useTheme();
     const isOwner = currentUserId === study.supervisor;
     const isAdmin = currentUserRole === "admin";
 
     const handleDeleteStudy = useCallback(
       async (studyId: number) => {
         try {
+          alert("kk");
           const isConfirmed = await confirm({
             title: "Eliminar estudio",
             description:
@@ -206,9 +210,13 @@ const CardStudy: React.FC<CardStudyProps> = memo(
             cancelLabel: "Cancelar",
           });
           if (isConfirmed) {
+            alert("confirn")
             await deleteData(studyId);
             if (onSuccess) onSuccess();
             notify.success("Estudio eliminado correctamente");
+          }
+          else{
+            alert("no confir")
           }
         } catch (error) {
           console.error("Error al eliminar estudio:", error);
@@ -262,11 +270,31 @@ const CardStudy: React.FC<CardStudyProps> = memo(
           sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
         >
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-            {(isOwner || isAdmin) && (
+            {isOwner || isAdmin ? (
               <LongMenu
                 options={["Editar", "Eliminar", "Ver mediciones", "Tablas"]}
                 onAction={handleMenuAction}
               />
+            ) : (
+              <>
+                <IconButton
+                  onClick={() => onOpenTable(study)}
+                  sx={{
+                    color:
+                      theme.palette.mode === "dark"
+                        ? "#fff"
+                        : theme.palette.primary.main,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.light}20, ${theme.palette.secondary.light}20)`,
+                    "&:hover": {
+                      background: `linear-gradient(45deg, ${theme.palette.primary.light}30, ${theme.palette.secondary.light}30)`,
+                    },
+                    mr:-1,
+                    ml:-1,
+                  }}
+                >
+                 <MoreVertIcon/>
+                </IconButton>
+              </>
             )}
 
             <Typography
@@ -340,6 +368,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
             ))}
           </Box>
         </CardContent>
+        {dialog}
       </Card>
     );
   }
@@ -373,20 +402,16 @@ const StudyInfoItem = memo(
 
 export default CardStudy;
 
-
-
-
-
 //REVISAR NUEVOS ESTILOS
 // import React, { memo, useCallback, useMemo, useState } from "react";
-// import { 
-//   Box, Typography, Divider, Accordion, AccordionSummary, AccordionDetails, 
-//   CircularProgress, IconButton, Menu, MenuItem, Paper, Stack, Tooltip, 
+// import {
+//   Box, Typography, Divider, Accordion, AccordionSummary, AccordionDetails,
+//   CircularProgress, IconButton, Menu, MenuItem, Paper, Stack, Tooltip,
 //   useTheme, Badge, Button
 // } from "@mui/material";
-// import { 
-//   CalendarToday, LocationOn, People, ExpandMore, MoreVert, 
-//   Description, TableChart, Visibility, Edit, Delete, 
+// import {
+//   CalendarToday, LocationOn, People, ExpandMore, MoreVert,
+//   Description, TableChart, Visibility, Edit, Delete,
 //   CheckCircle, Error
 // } from "@mui/icons-material";
 // import { StudyData, Dimension } from "../../types";
@@ -548,18 +573,18 @@ export default CardStudy;
 //   );
 // });
 
-// const LongMenu = memo(({ options, onAction }: { 
-//   options: string[]; 
-//   onAction: (action: string) => void 
+// const LongMenu = memo(({ options, onAction }: {
+//   options: string[];
+//   onAction: (action: string) => void
 // }) => {
 //   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 //   const open = Boolean(anchorEl);
-  
+
 //   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 //     event.stopPropagation();
 //     setAnchorEl(event.currentTarget);
 //   };
-  
+
 //   const handleClose = (event: React.MouseEvent, action?: string) => {
 //     event.stopPropagation();
 //     setAnchorEl(null);
@@ -585,7 +610,7 @@ export default CardStudy;
 //         aria-haspopup="true"
 //         onClick={handleClick}
 //         size="small"
-//         sx={{ 
+//         sx={{
 //           color: 'inherit',
 //           '&:hover': {
 //             backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -611,8 +636,8 @@ export default CardStudy;
 //         }}
 //       >
 //         {options.map((option) => (
-//           <MenuItem 
-//             key={option} 
+//           <MenuItem
+//             key={option}
 //             onClick={(e) => handleClose(e, option)}
 //             sx={{ gap: 1 }}
 //           >
@@ -639,7 +664,7 @@ export default CardStudy;
 //     const { confirm } = useConfirmDialog();
 //     const notify = useNotify();
 //     const theme = useTheme();
-    
+
 //     const token = localStorage.getItem("access_token") || "";
 //     const payload = useMemo(() => (token ? parseJwt(token) : null), [token]);
 //     const currentUserId = payload?.user_id;
@@ -713,7 +738,7 @@ export default CardStudy;
 //           borderRadius: '16px',
 //           overflow: 'hidden',
 //           background: theme.palette.background.paper,
-//           "&:hover": { 
+//           "&:hover": {
 //             transform: 'translateY(-5px)',
 //             boxShadow: theme.shadows[8],
 //           },
@@ -737,7 +762,7 @@ export default CardStudy;
 //         }}>
 //           {isComplete ? 'COMPLETADO' : 'EN PROGRESO'}
 //         </Box>
-        
+
 //         {/* Encabezado con gradiente */}
 //         <Box
 //           sx={{
@@ -824,7 +849,7 @@ export default CardStudy;
 //             <Typography variant="subtitle2" color="text.primary" sx={{ fontWeight: 600, mb: 1 }}>
 //               Clasificación de dimensiones
 //             </Typography>
-            
+
 //             <Box sx={{ mt: 1 }}>
 //               {groupedDimensions.map(({ category, dims }) => (
 //                 <DimensionCategoryItem
@@ -837,9 +862,9 @@ export default CardStudy;
 //           </Box>
 //         </Box>
 
-//         <Box sx={{ 
-//           p: 2, 
-//           display: 'flex', 
+//         <Box sx={{
+//           p: 2,
+//           display: 'flex',
 //           justifyContent: 'space-between',
 //           borderTop: `1px solid ${theme.palette.divider}`,
 //           bgcolor: theme.palette.background.default,
@@ -850,20 +875,20 @@ export default CardStudy;
 //               Progreso
 //             </Typography>
 //           </Box>
-          
+
 //           <Box>
-//             <Button 
-//               variant="outlined" 
-//               size="small" 
+//             <Button
+//               variant="outlined"
+//               size="small"
 //               startIcon={<Description />}
 //               onClick={() => onViewMeasurements(study)}
 //               sx={{ mr: 1 }}
 //             >
 //               Mediciones
 //             </Button>
-//             <Button 
-//               variant="contained" 
-//               size="small" 
+//             <Button
+//               variant="contained"
+//               size="small"
 //               startIcon={<TableChart />}
 //               onClick={() => onOpenTable(study)}
 //               sx={{
@@ -897,11 +922,11 @@ export default CardStudy;
 //     progress?: number;
 //   }) => {
 //     const theme = useTheme();
-    
+
 //     return (
-//       <Box sx={{ 
-//         display: "flex", 
-//         alignItems: "center", 
+//       <Box sx={{
+//         display: "flex",
+//         alignItems: "center",
 //         gap: 1.5,
 //         bgcolor: theme.palette.background.default,
 //         p: 1.5,

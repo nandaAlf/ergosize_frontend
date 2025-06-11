@@ -450,11 +450,13 @@ import {
   Button,
   MenuItem,
   Menu,
+  Container,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import Search from "../components/filtros/Search";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { getFile } from "../service/service";
+import { CalendarMonth, CalendarMonthOutlined } from "@mui/icons-material";
 
 interface Stats {
   mean: number;
@@ -481,6 +483,9 @@ interface Props {
   tableTitle: string;
   location: string;
   size: number;
+  description: string;
+  start_date: string;
+  end_date: string;
 }
 
 const AnthropometricTable: React.FC<Props> = ({
@@ -492,6 +497,9 @@ const AnthropometricTable: React.FC<Props> = ({
   tableTitle,
   location,
   size,
+  description,
+  start_date,
+  end_date,
 }) => {
   const [data, setData] = useState<ApiEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -521,7 +529,7 @@ const AnthropometricTable: React.FC<Props> = ({
       percentiles: percentilesList.join(","),
     });
 
-    await getFile(format,studyId.toString(), params);
+    await getFile(format, studyId.toString(), params);
     handleExportClose();
   };
 
@@ -624,7 +632,7 @@ const AnthropometricTable: React.FC<Props> = ({
   if (!data.length) return <Typography>No hay datos</Typography>;
 
   return (
-    <>
+    <Box sx={{ padding: "5px", margin: "25px 20px" }}>
       {/* <Paper> */}
       {/* <Typography
         sx={{ flex: "1 1 100%",
@@ -646,7 +654,7 @@ const AnthropometricTable: React.FC<Props> = ({
       >
         Lugar: {location} Muestra :{size}
       </Typography> */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 3 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 0 }}>
         <Typography
           variant="h5"
           component="h2"
@@ -699,15 +707,50 @@ const AnthropometricTable: React.FC<Props> = ({
             </Box>
             {size}
           </Typography>
+          <Typography
+            variant="body1"
+            component="div"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              color: "text.secondary",
+            }}
+          >
+            <CalendarMonth fontSize="small" />
+            <Box component="span" sx={{ fontWeight: 500 }}>
+              Inicio
+            </Box>
+            {start_date} /
+            <Box component="span" sx={{ fontWeight: 500 }}>
+              Fin
+            </Box>
+            {end_date || "-"}
+          </Typography>
         </Box>
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{  
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            color: "text.secondary",
+          }}
+        >
+          <GroupsIcon fontSize="small" />
+          <Box component="span" sx={{ fontWeight: 500 }}></Box>
+          {description}
+        </Typography>
       </Box>
       {/* </Paper> */}
       <Box
         display="flex"
         flexWrap="wrap"
-        justifyContent="space-between"
+        // justifyContent="space-between"
+        gap={2}
         mt={4}
-        mb={4}
+        mb={2}
         //           sx={{
         //             p: 2,
         //             display: "flex",
@@ -893,7 +936,7 @@ const AnthropometricTable: React.FC<Props> = ({
           />
         </Box>
       </Paper>
-    </>
+    </Box>
   );
 };
 

@@ -1,10 +1,5 @@
-import Navbar from "./components/AppBar/AppBar";
-import ManiquiViewer from "./components/ManiquiViewer";
-import ResponsiveAppBar from "./components/ResponsiveAppBar";
 // import { AppRouter } from "./routes/AppRouter";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter, useLocation } from "react-router-dom";
-import Layout from "./routes/Layout";
+import { BrowserRouter } from "react-router-dom";
 import DashboardLayoutBasic from "./components/D";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 // import NavBar from './components/NavBar';
@@ -28,21 +23,21 @@ import { NotificationsProvider } from "@toolpad/core/useNotifications";
 //     },
 //   },
 // });
-const theme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: "data-toolpad-color-scheme",
-  },
-  colorSchemes: { light: true, dark: true },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
+// const theme = createTheme({
+//   cssVariables: {
+//     colorSchemeSelector: "data-toolpad-color-scheme",
+//   },
+//   colorSchemes: { light: true, dark: true },
+//   breakpoints: {
+//     values: {
+//       xs: 0,
+//       sm: 600,
+//       md: 600,
+//       lg: 1200,
+//       xl: 1536,
+//     },
+//   },
+// });
 
 function App() {
   // const [count, setCount] = useState(0)

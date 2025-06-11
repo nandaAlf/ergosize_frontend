@@ -203,7 +203,7 @@ export const getFile = async (
 
 export const getFilePerson = async (params: URLSearchParams) => {
   const endpoint = `/report/`;
-  alert(params);
+  // alert(params);
   try {
     const response = await ApiService.get(endpoint, params, {
       responseType: "blob", // 👈 Añade responseType como opción adicional

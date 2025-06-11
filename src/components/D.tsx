@@ -31,7 +31,11 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { parseJwt } from "../hooks/parseJwt";
 import ApiService from "../api/ApiService";
-
+import Navbar from "./AppBar/AppBar";
+import { CustomThemeProvider, useThemeContext } from "./ThemeContext";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useState } from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Main items" },
   // {
@@ -85,7 +89,7 @@ const NAVIGATION: Navigation = [
 function useReactRouterAdapter() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  //  const theme = useTheme();
   // Provide the minimal router interface required by ToolpadCore
   return React.useMemo(
     () => ({
@@ -110,16 +114,23 @@ function useReactRouterAdapter() {
 }
 function LayoutSwitcher() {
   const location = useLocation();
-
+  const { mode, toggleTheme } = useThemeContext();
   // Do not render dashboard sidebar for /help
-  if (location.pathname.startsWith("/help") || location.pathname.startsWith("/login") || location.pathname ==="/") {
+  if (
+    location.pathname.startsWith("/help") ||
+    location.pathname.startsWith("/auth") ||
+    location.pathname.startsWith("/forgot-password") ||
+    location.pathname.startsWith("/reset-password") ||
+    location.pathname.startsWith("/account") ||
+    location.pathname === "/"
+  ) {
     return <AppRouter />;
   }
 
   return (
-    <DashboardLayout>
+
       <AppRouter />
-    </DashboardLayout>
+ 
   );
 }
 export default function DashboardLayoutBasic() {
@@ -172,9 +183,30 @@ export default function DashboardLayoutBasic() {
     }),
     [navigate]
   );
+  const [darkMode, setDarkMode] = useState(false);
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+      primary: {
+        main: "#3f51b5",
+      },
+      secondary: {
+        main: "#f50057",
+      },
+    },
+  });
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    const mode=darkMode? "light":"dark"
+    localStorage.setItem("toolpad-mode",mode)
+  };
 
   return (
-    <Box position="relative">
+    <Box position="relative"
+    //  sx={{ backgroundColor: "#f2f6faff"}}
+    >
       <AppProvider
         session={session}
         authentication={authentication}
@@ -186,7 +218,14 @@ export default function DashboardLayoutBasic() {
           homeUrl: "/",
         }}
       >
-        <LayoutSwitcher />
+        {/* <CustomThemeProvider> */}
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+
+          <LayoutSwitcher />
+        </ThemeProvider>
+        {/* </CustomThemeProvider> */}
       </AppProvider>
     </Box>
   );

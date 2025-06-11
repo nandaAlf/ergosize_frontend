@@ -243,7 +243,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       console.log("dim", dimensions);
       setIsLoading(true);
     }
-  }, [personId, dimensions, mode]);
+  }, [personId, dimensions, mode, studyId]);
 
   const handleMeasurementChange = (dimensionId: number, value: string) => {
     const numericValue = value === "" ? null : parseFloat(value);

@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   FormControl,
   InputLabel,
   ListItemText,
@@ -16,6 +17,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -176,7 +178,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   useEffect(() => {
     const loadDimensions = async () => {
       // if (!open) return;
-      alert("hoa");
+
       const raw = await getAllDimensions();
       // raw es un objeto, cambia siempre la referencia → dispara setState en cada render
       const grouped = Object.entries(raw).map(([category, dims]) => ({
@@ -481,11 +483,13 @@ const StudyForm: React.FC<StudyFormProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        {mode === "edit" ? "Editar Estudio" : "Crear Nuevo Estudio"}
+        {/* <Typography > */}
+          {mode === "edit" ? `Editar estudio: ${formData.name}  ` : "Crear nuevo estudio antropométrico"}
+        {/* </Typography> */}
       </DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
-          <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField
               label="Nombre del estudio"
               fullWidth
@@ -593,6 +597,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
               /> */}
               <TextField
                 label="Locación"
+                margin="dense"
                 value={formData.location}
                 onChange={handleChange("location")}
                 size="small"
@@ -632,7 +637,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
                 />
               </Box>
             </LocalizationProvider>
-            <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+            <FormControl fullWidth size="small" >
               <InputLabel>Dimensiones a medir</InputLabel>
               <Select
                 multiple

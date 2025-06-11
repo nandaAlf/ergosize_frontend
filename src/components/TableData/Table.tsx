@@ -703,7 +703,7 @@ export const TableComponent: React.FC<TableProps> = ({
   };
 
   return (
-    <Box>
+    <Box sx={{  width: "100%",ml:1 }}>
       <EnhancedTableToolbar
         numSelected={selected.length}
         onAddPerson={handleAddPerson}
@@ -719,14 +719,17 @@ export const TableComponent: React.FC<TableProps> = ({
       />
       <Paper
         sx={{
-          padding: "0px",
+          // padding: "0px",
           borderRadius: "5px",
-          margin: "10px 40px",
+          // margin: "10px 40px",
+          padding: "5px",
+          margin: "0 20px",
           border: "1px solid #E5E7EB",
+          // height:"100%"
         }}
         elevation={1}
       >
-        <TableContainer sx={{ maxHeight: 400 }}>
+        <TableContainer sx={{ maxHeight: 450 }}>
           <Table size={dense ? "small" : "medium"} stickyHeader>
             <TableHead>
               <TableRow>
@@ -823,6 +826,7 @@ export const TableComponent: React.FC<TableProps> = ({
                       sortDirection={orderBy === dim.name ? order : false}
                       sx={{
                         borderLeft: "2px solid rgba(0,0,0,0.1)",
+                        
                         // borderRight: isBoundary
                         //   ? "2px solid rgba(0,0,0,0.3)"
                         //   : undefined,
@@ -834,7 +838,7 @@ export const TableComponent: React.FC<TableProps> = ({
                         onClick={(e) => handleRequestSort(e, dim.name!)}
                       >
                         {/* {dim.name.length>20?dim.initial :dim.name} */}
-                        {dim.initial}
+                        {dim.name}
                       </TableSortLabel>
                     </TableCell>
                   );

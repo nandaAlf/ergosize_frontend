@@ -29,7 +29,7 @@ interface ProtectedProps {
 const ProtectedRoute: React.FC<ProtectedProps> = ({ children, roles }) => {
   const token = localStorage.getItem('access_token');
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth?mode=login" replace />;
   }
   if (roles && roles.length > 0) {
     const payload: any = parseJwt(token);

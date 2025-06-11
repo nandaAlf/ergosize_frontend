@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ChangePasswordPage from "../components/Forms/ChangePassword";
 import ForgotPassword from "../components/Forms/ForgotPassword";
 import ResetPassword from "../components/Forms/ResetPassword";
+import AuthPage from "../pages/AuthPage";
 
 export default function AppRouter() {
   return (
@@ -18,7 +19,8 @@ export default function AppRouter() {
       <Route path="/home" element={<Home />} />
       <Route path="/" element={<Home />} />
       <Route path="/help/" element={<HelpMenu />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/auth" element={<Login />} />
+      {/* <Route path="/login" element={<AuthPage />} /> */}
       <Route
         path="/studies"
         element={

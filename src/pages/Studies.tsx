@@ -29,7 +29,7 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-const PAGE_SIZE = 2; // Estudios por página
+const PAGE_SIZE = 3; // Estudios por página
 
 const Studies: React.FC = () => {
   const { search } = useLocation();
@@ -109,7 +109,7 @@ const Studies: React.FC = () => {
   // Fetch data when dependencies change
   useEffect(() => {
     fetchStudies();
-  }, [mine, pagination.currentPage, filters, notify, refreshCounter]);
+  }, [mine, pagination.currentPage, filters ,refreshCounter]);
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
@@ -166,8 +166,8 @@ const Studies: React.FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          mt: 3,
-          mb: 2,
+          // mt: 3,
+          // mb: 2,
           gap: 2,
         }}
       >
@@ -224,7 +224,7 @@ const Studies: React.FC = () => {
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", height:"100vh" }}>
 
       <FilterPanelLayout
         {...filters}
@@ -245,7 +245,7 @@ const Studies: React.FC = () => {
         openStudyForm={openStudyForm}
         onOpenStudyForm={() => setOpenStudyForm(true)}
       />
-
+    {/* {PaginationControls} */}
       {/* </Box> */}
       {studiesData?.length === 0 ? (
         <Box sx={{ p: 3, textAlign: "center" }}>
@@ -258,10 +258,10 @@ const Studies: React.FC = () => {
         </Box>
       ) : (
         <>
-          <Grid container spacing={3} sx={{ padding: "25px" }}>
+          <Grid container spacing={3} sx={{ padding: "5px" , margin:"0 20px"}}>
             {studiesData?.map((study, index) => (
               <Grid
-                size={{ xs: 12, sm: 6 }}
+                size={{ xs: 12, sm: 6,md:4 }}
                 key={study.id}
                 sx={{ minHeight: "65%" }}
               >
@@ -303,6 +303,7 @@ const Studies: React.FC = () => {
         />
       )}
     </Box>
+    
   );
 };
 

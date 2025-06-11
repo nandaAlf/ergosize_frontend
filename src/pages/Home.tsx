@@ -16,6 +16,7 @@ import {
 import ButtonGroup from "../components/ButtonGroup";
 import RecentItems from "../components/RecentItems";
 import ExcelUploade from "../components/ExcelUploade";
+import Fade from '@mui/material/Fade';
 // import ManiquiViewer from "../components/ManiquiViewer";
 const ManiquiViewer = React.lazy(() => import("../components/ManiquiViewer"));
 import {
@@ -28,6 +29,8 @@ import {
   Science,
 } from "@mui/icons-material";
 import useNavigation from "../hooks/useNavigation";
+import Navbar from "../components/AppBar/AppBar";
+// import AuthPage from "./AuthPage";
 
 const Home: React.FC = () => {
   const theme = useTheme();
@@ -47,10 +50,11 @@ const Home: React.FC = () => {
   //     },
   //   },
   // });
-  const {goToPage} = useNavigation();
+  const { goToPage } = useNavigation();
   const handleDimensionHelpClick = () => goToPage(`/help`, undefined, true);
-  const handleLoginClick = () => goToPage(`/login`);
-
+  // const handleLoginClick = () => goToPage(`/login`);
+  const handleLoginClick = () => goToPage("/auth?mode=login");
+  const handleRegisterClick = () => goToPage("/auth?mode=register");
 
   return (
     <Box
@@ -64,6 +68,7 @@ const Home: React.FC = () => {
     >
       <Container maxWidth="xl">
         {/* Header */}
+        {/* <Navbar></Navbar> */}
         <Box
           sx={{
             display: "flex",
@@ -84,16 +89,22 @@ const Home: React.FC = () => {
             Ergosizes
           </Typography>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" color="primary" onClick={handleLoginClick}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleLoginClick}
+            >
               Iniciar sesión
             </Button>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary"  onClick={handleRegisterClick}>
               Registrarse
             </Button>
           </Stack>
         </Box>
 
+        {/* <AuthPage/> */}
         {/* Hero Section */}
+
         <Grid container spacing={4} alignItems="center" sx={{ mb: 6 }}>
           <Grid size={{ xs: 12, md: 7 }}>
             <Typography
@@ -163,9 +174,8 @@ const Home: React.FC = () => {
                     boxShadow: theme.shadows[8],
                   },
                 }}
-                onClick={handleDimensionHelpClick }
-                
-                >
+                onClick={handleDimensionHelpClick}
+              >
                 Consultar Dimensiones
               </Button>
               <Button
@@ -272,6 +282,8 @@ const Home: React.FC = () => {
         </Grid>
 
         {/* Features Section */}
+        {/* <Fade> */}
+
         <Typography
           variant="h4"
           component="h2"
@@ -320,8 +332,8 @@ const Home: React.FC = () => {
                   borderRadius: "16px",
                   background:
                     theme.palette.mode === "dark" ? "#1e293b" : "#ffffff",
-                  boxShadow: theme.shadows[3],
-                  transition: "transform 0.3s, box-shadow 0.3s",
+                    boxShadow: theme.shadows[3],
+                    transition: "transform 0.3s, box-shadow 0.3s",
                   "&:hover": {
                     transform: "translateY(-5px)",
                     boxShadow: theme.shadows[8],
@@ -337,7 +349,7 @@ const Home: React.FC = () => {
                     bgcolor: theme.palette.primary.light,
                     color: theme.palette.primary.contrastText,
                   }}
-                >
+                  >
                   {feature.icon}
                 </Box>
                 <Typography
@@ -355,6 +367,7 @@ const Home: React.FC = () => {
           ))}
         </Grid>
 
+        {/* </Fade> */}
         {/* CTA Section */}
         <Paper
           sx={{
@@ -429,5 +442,4 @@ const Home: React.FC = () => {
     </Box>
   );
 };
-
-export default Home;
+ export default Home;

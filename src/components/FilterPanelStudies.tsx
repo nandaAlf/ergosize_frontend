@@ -98,20 +98,41 @@ export default function FilterPanelLayout({
             text="Buscar"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
+            onFilterClick={toggleDrawer}
           />
         </Box>
         <Stack direction="row" spacing={1}>
-          <Button variant="outlined" size="small" onClick={toggleDrawer}>
+          {/* <Button variant="outlined" size="small" onClick={toggleDrawer}>
             <FilterListIcon /> Filtrar
-          </Button>
+          </Button> */}
           {canCreate && (
             <Button
               variant="contained"
               size="small"
+              // margin="dense"
               onClick={() => onOpenStudyForm(true)}
+              sx={{
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                p: "7px",
+              }}
             >
-              <AddIcon /> Crear
+              <AddIcon /> Crear estudio
             </Button>
+          // ) : (
+          //   <>
+          //     <Button
+          //       variant="contained"
+          //       size="small"
+          //       // margin="dense"
+          //       onClick={() => onOpenStudyForm(true)}
+          //       sx={{
+          //         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+          //         p: "7px",
+          //       }}
+          //     >
+          //       <AddIcon /> Generar tabla
+          //     </Button>
+          //   </>
           )}
         </Stack>
       </Box>
@@ -151,10 +172,9 @@ export default function FilterPanelLayout({
         ModalProps={{ keepMounted: true }}
         sx={{
           zIndex: theme.zIndex.appBar + 150,
-    
         }}
       >
-        <Box p={3}  width={300}>
+        <Box p={3} width={300}>
           <Typography variant="h6" gutterBottom>
             Filtros
           </Typography>
