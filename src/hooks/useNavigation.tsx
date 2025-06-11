@@ -20,7 +20,6 @@ const useNavigation = () => {
       }
       window.open(url, "_blank");
     } else {
-      alert(state)
       navigate(path, { state });
     }
   };

@@ -39,7 +39,7 @@ export const FilterPanelToobar: React.FC<FilterPanelProps> = ({
         return;
       }
       
-      alert(params)
+   
       // Si los parámetros son correctos, proceder con la exportación
       await getFilePerson(params);
     } catch (err) {

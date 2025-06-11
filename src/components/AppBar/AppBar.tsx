@@ -405,17 +405,22 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
     navigate(path);
     handleMenuClose();
   };
+    const deleteToken= () => {
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
+    handleNavigation("/auth?mode=login")
+  };
 
   const menuItems = [
     { label: "Inicio", path: "/", icon: <Home /> },
     { label: "Estudios", path: "/studies", icon: <Dashboard /> },
-    { label: "Ayudas Antropométricas", path: "/tools", icon: <Help /> },
+    { label: "Ayudas Antropométricas", path: "/help", icon: <Help /> },
   ];
 
   const userMenuItems = [
     { label: "Notificaciones", icon: <Notifications />, action: () => {} },
     { label: "Configuración", icon: <Settings />, action: () => handleNavigation("/settings") },
-    { label: "Cerrar Sesión", icon: <ExitToApp />, action: () => handleNavigation("/logout") },
+    { label: "Cerrar Sesión", icon: <ExitToApp />, action: () => deleteToken()},
   ];
 
   // Estilo para botones activos

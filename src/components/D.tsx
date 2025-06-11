@@ -127,12 +127,9 @@ function LayoutSwitcher() {
     return <AppRouter />;
   }
 
-  return (
-
-      <AppRouter />
- 
-  );
+  return <AppRouter />;
 }
+
 export default function DashboardLayoutBasic() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -194,18 +191,23 @@ export default function DashboardLayoutBasic() {
       secondary: {
         main: "#f50057",
       },
+      background: {
+        default: darkMode ? "#121212ff": "#f5f7faff" , // Un azul oscuro en modo oscuro / gris claro en modo claro
+        paper: darkMode ? "#212121ff" : "#ffffff", // Un azul más intenso en modo oscuro / blanco en modo claro
+      },
     },
   });
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
-    const mode=darkMode? "light":"dark"
-    localStorage.setItem("toolpad-mode",mode)
+    const mode = darkMode ? "light" : "dark";
+    localStorage.setItem("toolpad-mode", mode);
   };
 
   return (
-    <Box position="relative"
-    //  sx={{ backgroundColor: "#f2f6faff"}}
+    <Box
+      position="relative"
+      //  sx={{ backgroundColor: "#f2f6faff"}}
     >
       <AppProvider
         session={session}

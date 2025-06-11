@@ -101,7 +101,6 @@ export const deleteData = async (id: number) => {
 };
 
 // export const getFile = async (action: string, id: number, params: string) => {
-//   alert("adios");
 //   const url = `http://127.0.0.1:8000/api/export/${action}/${id}/?${params}`;
 
 //   // try {
@@ -203,7 +202,6 @@ export const getFile = async (
 
 export const getFilePerson = async (params: URLSearchParams) => {
   const endpoint = `/report/`;
-  // alert(params);
   try {
     const response = await ApiService.get(endpoint, params, {
       responseType: "blob", // 👈 Añade responseType como opción adicional

@@ -76,7 +76,6 @@ const Studies: React.FC = () => {
   const fetchStudies = useCallback(async () => {
     // if (currentPage == 0) setLoading(true);
     try {
-      // alert(currentPage);
       const { results, count } = await getAllStudies(
         mine,
         pagination.currentPage,

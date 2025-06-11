@@ -25,7 +25,6 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   }), [mode]);
 
   const toggleTheme = () => {
-    alert("aaaaa");
     setMode(prev => prev === 'light' ? 'dark' : 'dark');
   };
 

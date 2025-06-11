@@ -703,7 +703,7 @@ export const TableComponent: React.FC<TableProps> = ({
   };
 
   return (
-    <Box sx={{  width: "100%",ml:1 }}>
+    <Box sx={{  width: "100%",ml:1, height:"100vh" }}>
       <EnhancedTableToolbar
         numSelected={selected.length}
         onAddPerson={handleAddPerson}
@@ -729,7 +729,7 @@ export const TableComponent: React.FC<TableProps> = ({
         }}
         elevation={1}
       >
-        <TableContainer sx={{ maxHeight: 450 }}>
+        <TableContainer sx={{ maxHeight: 450 , }}>
           <Table size={dense ? "small" : "medium"} stickyHeader>
             <TableHead>
               <TableRow>
@@ -793,7 +793,7 @@ export const TableComponent: React.FC<TableProps> = ({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" sx={{      backgroundColor: "rgba(0, 0, 0, 0.01)", }}>
                   <Checkbox
                     indeterminate={
                       selected.length > 0 && selected.length < persons.length
@@ -807,6 +807,7 @@ export const TableComponent: React.FC<TableProps> = ({
                 <TableCell
                   rowSpan={2}
                   sortDirection={orderBy === "name" ? order : false}
+                  sx={{     backgroundColor: "rgba(0, 0, 0, 0.01)",  }}
                 >
                   <TableSortLabel
                     active={orderBy === "name"}
@@ -826,7 +827,7 @@ export const TableComponent: React.FC<TableProps> = ({
                       sortDirection={orderBy === dim.name ? order : false}
                       sx={{
                         borderLeft: "2px solid rgba(0,0,0,0.1)",
-                        
+                             backgroundColor: "rgba(0, 0, 0, 0.01)",
                         // borderRight: isBoundary
                         //   ? "2px solid rgba(0,0,0,0.3)"
                         //   : undefined,
