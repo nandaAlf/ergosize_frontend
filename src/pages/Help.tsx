@@ -83,11 +83,11 @@ export default function HelpMenu() {
         display: "flex",
         height: "100vh",
         overflow: "hidden",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        // position: "fixed",
+        // top: 0,
+        // left: 0,
+        // right: 0,
+        // bottom: 0,
       }}
     >
       {/* Panel izquierdo - Menú de navegación */}
@@ -201,7 +201,7 @@ export default function HelpMenu() {
             }}
           >
             {/* Información textual */}
-            <Box sx={{ flex: 1, overflowY: "auto", p: 4, maxWidth: "60%" }}>
+            <Box sx={{ flex: 1, overflowY: "auto", p: 2, maxWidth: "60%" }}>
               <Paper
                 elevation={0}
                 sx={{ p: 3, borderRadius: 2, height: "100%" }}
@@ -293,10 +293,13 @@ export default function HelpMenu() {
               sx={{
                 width: 400,
                 height: "100%",
-                overflowY: "auto",
-                bgcolor: "grey.100",
+                overflowY: "hidden",
+                bgcolor: "transparent",
                 borderLeft: "1px solid #eee",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                 p: 3,
+                mt: 2,
+                borderRadius: 2,
               }}
             >
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
@@ -313,7 +316,7 @@ export default function HelpMenu() {
                       alt={`${selectedItem} - Imagen ${index + 1}`}
                       sx={{
                         width: "100%",
-                        height: "auto",
+                        height: "70vh",
                         objectFit: "contain",
                         borderRadius: 1,
                         boxShadow: 2,

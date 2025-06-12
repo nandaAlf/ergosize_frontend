@@ -17,22 +17,25 @@ import {
   Button,
   MenuItem,
   Menu,
-  Container,
   Chip,
   FormControl,
   Select,
   Tabs,
   Tab,
   InputLabel,
+  Grid,
+  Divider,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import Search from "../components/filtros/Search";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { getFile } from "../service/service";
-import { CalendarMonth, CalendarMonthOutlined } from "@mui/icons-material";
-import { ComparisonChart } from "../components/charts/barChart";
+import { CalendarMonth } from "@mui/icons-material";
+// import {
+//   GenderComparisonChart,
+// } from "../components/charts/barChart";
 import PercentilesLineChart from "../components/charts/LineChart";
-import PercentilesDemo from "../components/charts/LineChart";
+import { GenderComparisonChart } from "../components/charts/BarChart";
 
 interface Stats {
   mean: number;
@@ -109,13 +112,14 @@ const AnthropometricTable: React.FC<Props> = ({
   // Estado para el menú de exportación
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openExportMenu = Boolean(anchorEl);
-  const handleExportClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleExportClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleExportClose = () => {
     setAnchorEl(null);
   };
-
+  // Dentro de AnthropometricTable.tsx
+  const [selectedPercentile, setSelectedPercentile] = useState<number>(50); // Valor inicial
   // Cuando elija Excel o PDF
   const handleExport = async (format: "excel" | "pdf") => {
     // construimos params igual que en la petición de datos
@@ -145,6 +149,9 @@ const AnthropometricTable: React.FC<Props> = ({
       .catch(() => setError("Error al cargar datos"))
       .finally(() => setLoading(false));
   }, [studyId, gender, dimensions, percentilesList, age_ranges]);
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
 
   // Géneros y rangos detectados
   const genders = useMemo(
@@ -224,7 +231,7 @@ const AnthropometricTable: React.FC<Props> = ({
       id: `p${p}`,
       data: ageRanges.map((age) => ({
         x: age,
-        y: row.by_gender[chartGender]?.[age]?.percentiles[p] ?? 0,
+        y: row.by_gender[chartGender]?.[age]?.percentiles[p] ?? null,
       })),
     }));
   }, [data, chartDim, chartGender, percentilesList, ageRanges]);
@@ -237,14 +244,23 @@ const AnthropometricTable: React.FC<Props> = ({
       setOrder("asc");
     }
   };
-  // Inicialización mejorada
-  // useEffect(() => {
-  //   if (data.length && genders.length) {
-  //     if (!chartDim) setChartDim(data[0].dimension);
-  //     if (!chartGender) setChartGender(genders[0]);
-  //   }
-  // }, [data, genders, chartDim, chartGender]);
 
+  // Dentro de AnthropometricTable.tsx
+  const comparisonData = useMemo(() => {
+    return ageRanges.map((age) => {
+      const row = data.find((d) => d.dimension === chartDim);
+      const maleValue =
+        row?.by_gender["M"]?.[age]?.percentiles[selectedPercentile] ?? null;
+      const femaleValue =
+        row?.by_gender["F"]?.[age]?.percentiles[selectedPercentile] ?? null;
+
+      return {
+        ageRange: age,
+        maleValue,
+        femaleValue,
+      };
+    });
+  }, [chartDim, selectedPercentile, ageRanges, data]); // Añade data como dependencia
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
     setTabIndex(newIndex);
@@ -272,7 +288,8 @@ const AnthropometricTable: React.FC<Props> = ({
     >
       <Tabs value={tabIndex} onChange={handleTabChange}>
         <Tab label="Tabla antropométrica" />
-        <Tab label="Evolución de los perceptiles" />
+        <Tab label="Evolución de los percentiles" />
+        <Tab label="Comparación de géneros" />
       </Tabs>
 
       <TabPanel value={tabIndex} index={0}>
@@ -543,6 +560,7 @@ const AnthropometricTable: React.FC<Props> = ({
           </Box>
         </Paper>
       </TabPanel>
+      {/* GRAFICO DE LINEAS PARA PERCENTILES */}
       <TabPanel value={tabIndex} index={1}>
         {/* CONTROLES para seleccionar dimensión/género */}
         <Box display="flex" gap={2} mb={3}>
@@ -552,6 +570,7 @@ const AnthropometricTable: React.FC<Props> = ({
               value={chartDim}
               label="Dimensión"
               onChange={(e) => setChartDim(e.target.value)}
+              sx={{ minWidth: 200 }}
             >
               {data.map((r) => (
                 <MenuItem key={r.dimension} value={r.dimension}>
@@ -567,6 +586,7 @@ const AnthropometricTable: React.FC<Props> = ({
               value={chartGender}
               label="Género"
               onChange={(e) => setChartGender(e.target.value)}
+              sx={{ minWidth: 200 }}
             >
               {genders.map((g) => (
                 <MenuItem key={g} value={g}>
@@ -585,6 +605,141 @@ const AnthropometricTable: React.FC<Props> = ({
             height={400}
           />
         </Paper>
+      </TabPanel>
+
+      {/** GRÁFICO DE COMPARACIÓN DE GÉNERO */}
+      <TabPanel value={tabIndex} index={2}>
+        <Box display="flex" gap={2} mb={3}>
+          <FormControl size="small">
+            <InputLabel>Dimensión</InputLabel>
+            <Select
+              value={chartDim}
+              label="Dimensión"
+              onChange={(e) => setChartDim(e.target.value)}
+              sx={{ minWidth: 200 }}
+            >
+              {data.map((r) => (
+                <MenuItem key={r.dimension} value={r.dimension}>
+                  {r.dimension}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Selector de percentil - NUEVO */}
+          <FormControl size="small">
+            <InputLabel>Percentil</InputLabel>
+            <Select
+              value={selectedPercentile}
+              label="Percentil"
+              onChange={(e) => setSelectedPercentile(Number(e.target.value))}
+              sx={{ minWidth: 120 }}
+            >
+              {percentilesList.map((p) => (
+                <MenuItem key={p} value={p}>
+                  P{p}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {chartDim && (
+          <Paper elevation={3} sx={{ p: 2, mb: 4, borderRadius: 2 }}>
+            <GenderComparisonChart
+              data={comparisonData}
+              dimension={chartDim}
+              percentile={selectedPercentile}
+            />
+          </Paper>
+        )}
+        {/* Leyenda profesional */}
+        <Box mt={3}>
+          <Divider sx={{ mb: 2 }} />
+
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Typography
+                variant="subtitle2"
+                color="textSecondary"
+                gutterBottom
+              >
+                <Box
+                  component="span"
+                  sx={{ color: "#1f77b4", fontWeight: "bold" }}
+                >
+                  ● Hombres
+                </Box>{" "}
+                vs
+                <Box
+                  component="span"
+                  sx={{ color: "#e377c2", fontWeight: "bold" }}
+                >
+                  {" "}
+                  ● Mujeres
+                </Box>
+              </Typography>
+
+              <Typography variant="body2" paragraph>
+                Comparación del percentil {selectedPercentile} para{" "}
+                {chartDim.toLowerCase()} en {location}. Los datos cubren el
+                período {new Date(start_date).toLocaleDateString()} al{" "}
+                {new Date(end_date).toLocaleDateString()}.
+              </Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper variant="outlined" sx={{ p: 1.5, bgcolor: "#fafafa" }}>
+                {/* <Typography
+                  variant="caption"
+                  component="div"
+                  color="textSecondary"
+                >
+                  <strong>Patrón observado:</strong>{" "}
+                  {comparisonData.filter((d) => d.maleValue && d.femaleValue)
+                    .length > 0
+                    ? comparisonData.filter(
+                        (d) => d.maleValue! > d.femaleValue!
+                      ).length >
+                      comparisonData.filter(
+                        (d) => d.femaleValue! > d.maleValue!
+                      ).length
+                      ? "Valores consistentemente mayores en hombres"
+                      : "Valores consistentemente mayores en mujeres"
+                    : "Sin diferencias significativas"}
+                </Typography> */}
+                <Typography variant="caption" component="div">
+                  <strong>Patrón observado:</strong>{" "}
+                  {(() => {
+                    const validData = comparisonData.filter(
+                      (d) => d.maleValue && d.femaleValue
+                    );
+                    if (validData.length < 3) return "Datos insuficientes";
+
+                    const maleWins = validData.filter(
+                      (d) => d.maleValue! > d.femaleValue!
+                    ).length;
+                    const femaleWins = validData.length - maleWins;
+
+                    if (maleWins / validData.length >= 0.6)
+                      return "Valores consistentemente mayores en hombres";
+                    if (femaleWins / validData.length >= 0.6)
+                      return "Valores consistentemente mayores en mujeres";
+                    if (Math.abs(maleWins - femaleWins) <= 2)
+                      return "Sin diferencias significativas";
+                    return "Diferencias variables por edad";
+                  })()}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Box mt={1} textAlign="right">
+            <Typography variant="caption" color="textSecondary">
+              Fuente: {tableTitle} | Muestra: {size} participantes
+            </Typography>
+          </Box>
+        </Box>
       </TabPanel>
     </Box>
   );

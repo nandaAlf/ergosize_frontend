@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/services/StudyService.ts
 
 import ApiService from "../api/ApiService";

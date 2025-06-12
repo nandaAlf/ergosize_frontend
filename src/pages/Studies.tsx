@@ -26,6 +26,7 @@ import { useLocation } from "react-router-dom";
 import { useNotify } from "../hooks/useNotifications";
 import { useDialogs } from "@toolpad/core/useDialogs";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -108,13 +109,12 @@ const Studies: React.FC = () => {
   // Fetch data when dependencies change
   useEffect(() => {
     fetchStudies();
-  }, [mine, pagination.currentPage, filters ,refreshCounter]);
+  }, [mine, pagination.currentPage, filters, refreshCounter]);
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   }, [filters]);
-
 
   const handleStudyUpdate = useCallback(() => {
     setRefreshCounter((prev) => prev + 1);
@@ -210,7 +210,7 @@ const Studies: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "70vh",
+          height: "100vh",
           width: "100%",
         }}
       >
@@ -223,8 +223,19 @@ const Studies: React.FC = () => {
   }
 
   return (
-    <Box sx={{ width: "100%", height:"100vh" }}>
-
+    <Box
+      sx={{
+        // width: "100%",
+        // height: "100vh",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+        // padding: 3,
+        margin: "0px 20px",
+        // backgroundColor: "#f8f9fa",
+        borderRadius: 2,
+        // boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+        height: "100vh",
+      }}
+    >
       <FilterPanelLayout
         {...filters}
         search={filters.searchTerm}
@@ -244,7 +255,7 @@ const Studies: React.FC = () => {
         openStudyForm={openStudyForm}
         onOpenStudyForm={() => setOpenStudyForm(true)}
       />
-    {/* {PaginationControls} */}
+      {/* {PaginationControls} */}
       {/* </Box> */}
       {studiesData?.length === 0 ? (
         <Box sx={{ p: 3, textAlign: "center" }}>
@@ -257,10 +268,10 @@ const Studies: React.FC = () => {
         </Box>
       ) : (
         <>
-          <Grid container spacing={3} sx={{ padding: "5px" , margin:"0 20px"}}>
+          <Grid container spacing={3} sx={{ padding: "5px", margin: "0 20px" }}>
             {studiesData?.map((study, index) => (
               <Grid
-                size={{ xs: 12, sm: 6,md:4 }}
+                size={{ xs: 12, sm: 6, md: 4 }}
                 key={study.id}
                 sx={{ minHeight: "65%" }}
               >
@@ -282,18 +293,18 @@ const Studies: React.FC = () => {
         </>
       )}
 
-      {openStudyForm &&
-      <StudyForm
-      open={openStudyForm}
-        onClose={handleCloseStudyForm}
-        onSubmit={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        initialData={editingStudy ? editingStudy : undefined}
-        mode={editingStudy ? "edit" : "add"}
-        onSuccess={handleStudyUpdate} // Agrega esta prop
+      {openStudyForm && (
+        <StudyForm
+          open={openStudyForm}
+          onClose={handleCloseStudyForm}
+          onSubmit={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          initialData={editingStudy ? editingStudy : undefined}
+          mode={editingStudy ? "edit" : "add"}
+          onSuccess={handleStudyUpdate} // Agrega esta prop
         ></StudyForm>
-      }  
+      )}
       {selectedStudyForTable && (
         <TableForm
           open={openTableForm}
@@ -302,7 +313,6 @@ const Studies: React.FC = () => {
         />
       )}
     </Box>
-    
   );
 };
 

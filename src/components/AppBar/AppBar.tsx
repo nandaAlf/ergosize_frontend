@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // // src/components/NavigationBar.tsx
 // import React from "react";
 // import {
@@ -94,7 +95,6 @@
 
 // export default Navbar;
 
-
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 // import {
@@ -137,7 +137,7 @@
 //   const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(null);
 //   const theme = useTheme();
 //   const navigate = useNavigate();
-  
+
 //   const isMenuOpen = Boolean(anchorEl);
 //   const isMobileMenuOpen = Boolean(mobileAnchorEl);
 
@@ -234,7 +234,7 @@
 //           john.doe@ergosizes.com
 //         </Typography>
 //       </Box>
-      
+
 //       {userMenuItems.map((item, index) => (
 //         <MenuItem key={index} onClick={item.action}>
 //           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -340,8 +340,7 @@
 
 // export default NavBar;
 
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -372,21 +371,60 @@ import {
   Notifications,
   Settings,
   ExitToApp,
+  Login,
+  HowToReg,
 } from "@mui/icons-material";
+import ApiService from "../../api/ApiService";
 
 interface NavBarProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
 }
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+  institucion: string;
+  profesion: string;
+}
 
 const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(null);
-  const theme = useTheme();
-  const navigate = useNavigate();
-  
+  const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+  const [user, setUser] = useState<User | null>(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileAnchorEl);
+  const theme = useTheme();
+  const navigate = useNavigate();
+  // Función para obtener las iniciales del usuario
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase() || "U";
+  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        try {
+          const userData = await ApiService.get("accounts/users/me/");
+          console.log("User data fetched successfully:", userData);
+          setUser(userData.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // Si hay un error al obtener los datos del usuario, limpiamos el token
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+        }
+      }
+      // setLoading(false);
+    };
+
+    fetchUser();
+  }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -405,10 +443,11 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
     navigate(path);
     handleMenuClose();
   };
-    const deleteToken= () => {
-    localStorage.removeItem("access_token")
-    localStorage.removeItem("refresh_token")
-    handleNavigation("/auth?mode=login")
+  const deleteToken = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setUser(null);
+    handleNavigation("/auth?mode=login");
   };
 
   const menuItems = [
@@ -418,11 +457,30 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
   ];
 
   const userMenuItems = [
-    { label: "Notificaciones", icon: <Notifications />, action: () => {} },
-    { label: "Configuración", icon: <Settings />, action: () => handleNavigation("/settings") },
-    { label: "Cerrar Sesión", icon: <ExitToApp />, action: () => deleteToken()},
+    // { label: "Notificaciones", icon: <Notifications />, action: () => {} },
+    {
+      label: "Cambiar contraseña",
+      icon: <Settings />,
+      action: () => handleNavigation("account/change-password"),
+    },
+    {
+      label: "Cerrar Sesión",
+      icon: <ExitToApp />,
+      action: () => deleteToken(),
+    },
   ];
-
+  const authMenuItems = [
+    {
+      label: "Iniciar Sesión",
+      icon: <Login />,
+      action: () => handleNavigation("/auth?mode=login"),
+    },
+    {
+      label: "Registrarse",
+      icon: <HowToReg />,
+      action: () => handleNavigation("/auth?mode=register"),
+    },
+  ];
   // Estilo para botones activos
   const activeButtonStyle = {
     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -435,8 +493,12 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
       position="sticky"
       elevation={4}
       sx={{
-        background: darkMode ? theme.palette.grey[900] : theme.palette.background.paper,
-        color: darkMode ? theme.palette.common.white : theme.palette.text.primary,
+        background: darkMode
+          ? theme.palette.grey[900]
+          : theme.palette.background.paper,
+        color: darkMode
+          ? theme.palette.common.white
+          : theme.palette.text.primary,
         borderBottom: `1px solid ${theme.palette.divider}`,
         transition: "all 0.3s ease",
       }}
@@ -501,7 +563,9 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
                     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                     color: theme.palette.common.white,
                   },
-                  ...(window.location.pathname === item.path ? activeButtonStyle : {}),
+                  ...(window.location.pathname === item.path
+                    ? activeButtonStyle
+                    : {}),
                 }}
               >
                 {item.label}
@@ -535,31 +599,50 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
               {darkMode ? <Brightness7 /> : <Brightness4 />}
             </IconButton>
 
-            {/* Avatar y menú de usuario */}
-            <IconButton
-              edge="end"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-              sx={{
-                ml: 1,
-                borderRadius: "50%",
-                background: theme.palette.action.hover,
-                p: 0.8,
-              }}
-            >
-              <Badge badgeContent={3} color="primary">
-                <Avatar
-                  alt="User Avatar"
+            {/* Avatar y menú de usuario o botones de autenticación */}
+            {user ? (
+              <IconButton
+                edge="end"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+                sx={{
+                  ml: 1,
+                  borderRadius: "50%",
+                  background: theme.palette.action.hover,
+                  p: 0.8,
+                }}
+              >
+                {/* <Badge badgeContent={3} color="primary"> */}
+                  <Avatar
+                    alt={`${user.first_name} ${user.last_name}`}
+                    sx={{
+                      bgcolor: theme.palette.secondary.main,
+                      width: 32,
+                      height: 32,
+                    }}
+                  >
+                    {getInitials(user.first_name, user.last_name)}
+                  </Avatar>
+                {/* </Badge> */}
+              </IconButton>
+            ) : (
+              // <Box display="flex" alignItems="center">
+                <Button
+                  color="inherit"
+                  onClick={() => handleNavigation("/auth?mode=login")}
+                  startIcon={<Login />}
                   sx={{
-                    bgcolor: theme.palette.secondary.main,
-                    width: 32,
-                    height: 32,
+                    mx: 1,
+                    fontWeight: 500,
+                    borderRadius: "8px",
+                    display: { xs: "none", md: "flex" },
                   }}
                 >
-                  U
-                </Avatar>
-              </Badge>
-            </IconButton>
+                  Iniciar Sesión
+                </Button>
+               
+              // </Box>
+            )}
           </Stack>
         </Toolbar>
       </Container>
@@ -577,7 +660,9 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
             onClick={() => handleNavigation(item.path)}
             sx={{
               minWidth: 200,
-              ...(window.location.pathname === item.path ? activeButtonStyle : {}),
+              ...(window.location.pathname === item.path
+                ? activeButtonStyle
+                : {}),
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -588,9 +673,81 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
             </Box>
           </MenuItem>
         ))}
+        {!user && (
+          <Box>
+            <Divider />
+            {authMenuItems.map((item, index) => (
+              <MenuItem key={`auth-${index}`} onClick={item.action}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {item.icon}
+                  <Typography variant="body1" sx={{ ml: 1.5 }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Box>
+        )}
       </Menu>
 
       {/* Menú de usuario desplegable */}
+      {/* <Menu
+        anchorEl={anchorEl}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        {user ? (
+          <>
+            <Box
+              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
+            >
+              <Typography variant="subtitle1" fontWeight="bold">
+                {`${user.first_name} ${user.last_name}`}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {user.email}
+              </Typography>
+            </Box>
+
+            {userMenuItems.map((item, index) => (
+              <MenuItem key={index} onClick={item.action}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {item.icon}
+                  <Typography variant="body1" sx={{ ml: 1.5 }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </>
+        ) : (
+          <>
+            <Box
+              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
+            >
+              <Typography variant="subtitle1" fontWeight="bold">
+                No has iniciado sesión
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Inicia sesión para acceder a todas las funciones
+              </Typography>
+            </Box>
+
+            {authMenuItems.map((item, index) => (
+              <MenuItem key={`auth-${index}`} onClick={item.action}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {item.icon}
+                  <Typography variant="body1" sx={{ ml: 1.5 }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </>
+        )}
+      </Menu> */}
       <Menu
         anchorEl={anchorEl}
         open={isMenuOpen}
@@ -598,25 +755,55 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Box sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
-          <Typography variant="subtitle1" fontWeight="bold">
-            John Doe
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            john.doe@ergosizes.com
-          </Typography>
-        </Box>
-        
-        {userMenuItems.map((item, index) => (
-          <MenuItem key={index} onClick={item.action}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              {item.icon}
-              <Typography variant="body1" sx={{ ml: 1.5 }}>
-                {item.label}
+        {user ? (
+          <Box>
+            <Box
+              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
+            >
+              <Typography variant="subtitle1" fontWeight="bold">
+                {`${user.first_name} ${user.last_name}`}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {user.email}
               </Typography>
             </Box>
-          </MenuItem>
-        ))}
+
+            {userMenuItems.map((item, index) => (
+              <MenuItem key={index} onClick={item.action}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {item.icon}
+                  <Typography variant="body1" sx={{ ml: 1.5 }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Box>
+        ) : (
+          <Box>
+            <Box
+              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
+            >
+              <Typography variant="subtitle1" fontWeight="bold">
+                No has iniciado sesión
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Inicia sesión para acceder a todas las funciones
+              </Typography>
+            </Box>
+
+            {authMenuItems.map((item, index) => (
+              <MenuItem key={`auth-${index}`} onClick={item.action}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {item.icon}
+                  <Typography variant="body1" sx={{ ml: 1.5 }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Box>
+        )}
       </Menu>
     </AppBar>
   );

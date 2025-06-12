@@ -36,6 +36,7 @@ import { CustomThemeProvider, useThemeContext } from "./ThemeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
+import Footer from "./Footer";
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Main items" },
   // {
@@ -116,18 +117,23 @@ function LayoutSwitcher() {
   const location = useLocation();
   const { mode, toggleTheme } = useThemeContext();
   // Do not render dashboard sidebar for /help
-  if (
-    location.pathname.startsWith("/help") ||
-    location.pathname.startsWith("/auth") ||
-    location.pathname.startsWith("/forgot-password") ||
-    location.pathname.startsWith("/reset-password") ||
-    location.pathname.startsWith("/account") ||
-    location.pathname === "/"
-  ) {
-    return <AppRouter />;
-  }
+  // if (
+  //   location.pathname.startsWith("/help") ||
+  //   location.pathname.startsWith("/auth") ||
+  //   location.pathname.startsWith("/forgot-password") ||
+  //   location.pathname.startsWith("/reset-password") ||
+  //   location.pathname.startsWith("/account") ||
+  //   location.pathname === "/"
+  // ) {
+  //   return <AppRouter />;
+  // }
 
-  return <AppRouter />;
+  return (
+    <>
+      <AppRouter />
+      {/* <Footer /> */}
+    </>
+  );
 }
 
 export default function DashboardLayoutBasic() {
@@ -192,7 +198,7 @@ export default function DashboardLayoutBasic() {
         main: "#f50057",
       },
       background: {
-        default: darkMode ? "#121212ff": "#f5f7faff" , // Un azul oscuro en modo oscuro / gris claro en modo claro
+        default: darkMode ? "#121212ff" : "#f5f7faff", // Un azul oscuro en modo oscuro / gris claro en modo claro
         paper: darkMode ? "#212121ff" : "#ffffff", // Un azul más intenso en modo oscuro / blanco en modo claro
       },
     },
@@ -210,8 +216,8 @@ export default function DashboardLayoutBasic() {
       //  sx={{ backgroundColor: "#f2f6faff"}}
     >
       <AppProvider
-        session={session}
-        authentication={authentication}
+        // session={session}
+        // authentication={authentication}
         navigation={NAVIGATION}
         router={useReactRouterAdapter()}
         branding={{
@@ -224,7 +230,7 @@ export default function DashboardLayoutBasic() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-
+          {/* <Footer /> */}
           <LayoutSwitcher />
         </ThemeProvider>
         {/* </CustomThemeProvider> */}
