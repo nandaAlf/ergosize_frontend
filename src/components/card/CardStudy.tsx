@@ -201,7 +201,6 @@ const CardStudy: React.FC<CardStudyProps> = memo(
     const handleDeleteStudy = useCallback(
       async (studyId: number) => {
         try {
-          alert("kk");
           const isConfirmed = await confirm({
             title: "Eliminar estudio",
             description:
@@ -210,13 +209,9 @@ const CardStudy: React.FC<CardStudyProps> = memo(
             cancelLabel: "Cancelar",
           });
           if (isConfirmed) {
-            alert("confirn")
             await deleteData(studyId);
             if (onSuccess) onSuccess();
             notify.success("Estudio eliminado correctamente");
-          }
-          else{
-            alert("no confir")
           }
         } catch (error) {
           console.error("Error al eliminar estudio:", error);

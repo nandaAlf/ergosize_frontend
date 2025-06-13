@@ -147,6 +147,7 @@ export default function DashboardLayoutBasic() {
       try {
         const { data: me } = await ApiService.get("accounts/users/me/");
         // setSession({ user: me.user});
+        
         setSession({
           user: {
             // Por ejemplo, construimos el nombre completo:
@@ -215,7 +216,7 @@ export default function DashboardLayoutBasic() {
       position="relative"
       //  sx={{ backgroundColor: "#f2f6faff"}}
     >
-      <AppProvider
+      {/* <AppProvider
         // session={session}
         // authentication={authentication}
         navigation={NAVIGATION}
@@ -225,16 +226,17 @@ export default function DashboardLayoutBasic() {
           title: "ERGOsizes",
           homeUrl: "/",
         }}
-      >
+      > */}
         {/* <CustomThemeProvider> */}
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
           {/* <Footer /> */}
-          <LayoutSwitcher />
+          {/* <LayoutSwitcher /> */}
+             <AppRouter />
         </ThemeProvider>
         {/* </CustomThemeProvider> */}
-      </AppProvider>
+      {/* </AppProvider> */}
     </Box>
   );
 }

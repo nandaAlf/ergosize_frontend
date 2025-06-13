@@ -37,7 +37,6 @@ const Studies: React.FC = () => {
   const params = new URLSearchParams(search);
   const mine = params.get("mine") === "true";
   const notify = useNotify();
-  const dialogs = useDialogs();
 
   const [studiesData, setStudiesData] = useState<StudyData[]>([]); //
   const [openStudyForm, setOpenStudyForm] = useState(false);

@@ -65,7 +65,7 @@ import {
   useTheme,
   CircularProgress,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";g
 import {
   AccountCircle,
   Lock,
@@ -78,11 +78,14 @@ import {
   HowToReg,
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
+import useNavigation from "../../hooks/useNavigation";
+import { useAuth } from "../../context/AuthContext";
 const LoginForm: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const initialMode = queryParams.get('mode') === 'register' ? 'register' : 'login';
-  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
+  const initialMode =
+    queryParams.get("mode") === "register" ? "register" : "login";
+  const [mode, setMode] = useState<"login" | "register">(initialMode);
   // const [mode, setMode] = useState<"login" | "register">("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -92,8 +95,10 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useAuth();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const { goToPage } = useNavigation();
   const theme = useTheme();
 
   const clear = () => {
@@ -112,12 +117,15 @@ const LoginForm: React.FC = () => {
 
     try {
       if (mode === "login") {
-        if(!username || !password) {
+        if (!username || !password) {
           setError("Por favor, complete todos los campos.");
           setIsLoading(false);
           return;
         }
-        await ApiService.login(username, password);
+        const userToken = await ApiService.login(username, password);
+        const userData = await ApiService.get("accounts/users/me/");
+        console.log("User data fetched successfully 55:", userData);
+        setUser(userData.data);
       } else {
         await ApiService.post("/accounts/users/", {
           username,
@@ -133,7 +141,8 @@ const LoginForm: React.FC = () => {
       }
 
       setIsLoading(false);
-      navigate("/studies");
+      // navigate("/");
+      goToPage("/");
     } catch (e: any) {
       setIsLoading(false);
       const detail =
@@ -167,9 +176,9 @@ const LoginForm: React.FC = () => {
       }}
     >
       <Grid container justifyContent="center">
-        <Grid size={{xs:12, sm:10, md:8,lg:12}}  >
-        {/* // xs={12} sm={10} md={8} lg={6} */}
-       
+        <Grid size={{ xs: 12, sm: 10, md: 8, lg: 12 }}>
+          {/* // xs={12} sm={10} md={8} lg={6} */}
+
           <Paper
             elevation={6}
             sx={{
@@ -409,10 +418,9 @@ const LoginForm: React.FC = () => {
                     component="button"
                     variant="body2"
                     onClick={(e) => {
-                      e.preventDefault()
+                      e.preventDefault();
                       setMode(mode === "login" ? "register" : "login");
                       clear();
-                   
                     }}
                     sx={{ fontWeight: 600 }}
                   >
@@ -427,7 +435,11 @@ const LoginForm: React.FC = () => {
                     <Link
                       component="button"
                       variant="body2"
-                      onClick={() => navigate("/forgot-password")}
+                      // onClick={() => navigate("/forgot-password")}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        goToPage("/forgot-password");
+                      }}
                       sx={{ fontWeight: 600 }}
                     >
                       ¿Olvidaste tu contraseña?

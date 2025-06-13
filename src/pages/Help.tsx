@@ -23,7 +23,7 @@ interface DimensionDetail {
   definition: string;
   vestuario: string;
   posicion: string;
-  puntos: string;
+  umidad: string;
   instrumento: string;
   graphic: string;
 }
@@ -259,29 +259,28 @@ export default function HelpMenu() {
                     </Box>
                   )}
 
-                  {shouldShowSection(detail.puntos) && (
-                    <Box>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: 600, mb: 0.5 }}
-                      >
-                        Puntos Anatómicos
-                      </Typography>
-                      <Typography variant="body1">{detail.puntos}</Typography>
-                    </Box>
-                  )}
-
                   {shouldShowSection(detail.instrumento) && (
                     <Box>
                       <Typography
                         variant="subtitle1"
                         sx={{ fontWeight: 600, mb: 0.5 }}
-                      >
+                        >
                         Instrumento
                       </Typography>
                       <Typography variant="body1">
                         {detail.instrumento}
                       </Typography>
+                    </Box>
+                  )}
+                  {shouldShowSection(detail.unidad) && (
+                    <Box>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: 600, mb: 0.5 }}
+                      >
+                        Unidad de medida
+                      </Typography>
+                      <Typography variant="body1">{detail.unidad}</Typography>
                     </Box>
                   )}
                 </Box>

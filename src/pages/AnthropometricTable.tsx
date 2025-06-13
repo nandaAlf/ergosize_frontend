@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import PlaceIcon from "@mui/icons-material/Place";
+
 import {
   Box,
   Table,
@@ -31,11 +31,16 @@ import Search from "../components/filtros/Search";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { getFile } from "../service/service";
 import { CalendarMonth } from "@mui/icons-material";
+import PlaceIcon from "@mui/icons-material/Place";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+// import HeaderCard from "../components/card/tableheaderCard"
+
 // import {
 //   GenderComparisonChart,
 // } from "../components/charts/barChart";
 import PercentilesLineChart from "../components/charts/LineChart";
 import { GenderComparisonChart } from "../components/charts/BarChart";
+import { HeaderCard } from "../components/card/tableheaderCard";
 
 interface Stats {
   mean: number;
@@ -294,7 +299,25 @@ const AnthropometricTable: React.FC<Props> = ({
 
       <TabPanel value={tabIndex} index={0}>
         {/* Study Header Card */}
-        <Paper
+        <HeaderCard
+          title={tableTitle}
+          description={description}
+          buttons={[
+            {
+              label: "Exportar",
+              onClick: handleExportClick,
+              icon: <FileDownloadIcon />,
+              variant: "contained",
+            },
+          ]}
+          metadata={[
+            { icon: <PlaceIcon />, label: `Lugar: ${location}` },
+            { icon: <GroupsIcon />, label: `Muestra: ${size}` },
+            { icon: <CalendarMonth />, label: `${start_date} → ${end_date}` },
+          ]}
+        />
+
+        {/* <Paper
           sx={{
             mb: 3,
             p: 3,
@@ -350,7 +373,7 @@ const AnthropometricTable: React.FC<Props> = ({
               Exportar
             </Button>
           </Box>
-        </Paper>
+        </Paper> */}
 
         <Box
           display="flex"

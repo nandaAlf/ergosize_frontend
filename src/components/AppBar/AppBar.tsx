@@ -373,8 +373,10 @@ import {
   ExitToApp,
   Login,
   HowToReg,
+  Science,
 } from "@mui/icons-material";
 import ApiService from "../../api/ApiService";
+import { useAuth } from "../../context/AuthContext";
 
 interface NavBarProps {
   darkMode: boolean;
@@ -391,40 +393,42 @@ interface User {
   profesion: string;
 }
 
+// Función para obtener las iniciales del usuario
+const getInitials = (firstName: string, lastName: string) => {
+  return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase() || "U";
+};
+
 const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(
     null
   );
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileAnchorEl);
   const theme = useTheme();
   const navigate = useNavigate();
-  // Función para obtener las iniciales del usuario
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase() || "U";
-  };
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("access_token");
-      if (token) {
-        try {
-          const userData = await ApiService.get("accounts/users/me/");
-          console.log("User data fetched successfully:", userData);
-          setUser(userData.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          // Si hay un error al obtener los datos del usuario, limpiamos el token
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-        }
-      }
-      // setLoading(false);
-    };
+  const { user, logout } = useAuth();
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const token = localStorage.getItem("access_token");
+  //     if (token) {
+  //       try {
+  //         const userData = await ApiService.get("accounts/users/me/");
+  //         console.log("User data fetched successfully:", userData);
+  //         setUser(userData.data);
+  //       } catch (error) {
+  //         console.error("Error fetching user data:", error);
+  //         // Si hay un error al obtener los datos del usuario, limpiamos el token
+  //         localStorage.removeItem("access_token");
+  //         localStorage.removeItem("refresh_token");
+  //       }
+  //     }
+  //     // setLoading(false);
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -444,18 +448,37 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
     handleMenuClose();
   };
   const deleteToken = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setUser(null);
-    handleNavigation("/auth?mode=login");
+    logout();
+    // localStorage.removeItem("access_token");
+    // localStorage.removeItem("refresh_token");
+    // setUser(null);
+    handleNavigation("/");
   };
 
-  const menuItems = [
+  const baseMenuItems = [
     { label: "Inicio", path: "/", icon: <Home /> },
-    { label: "Estudios", path: "/studies", icon: <Dashboard /> },
     { label: "Ayudas Antropométricas", path: "/help", icon: <Help /> },
+    { label: "Estudios", path: "/studies", icon: <Dashboard /> },
   ];
+  // Item adicional para ciertos roles
+  const myStudiesMenuItem = {
+    label: "Mis Estudios",
+    path: "/studies?mine=true",
+    icon: <Science />,
+  };
 
+  // Función para obtener los items del menú según el rol
+  const getMenuItems = () => {
+    if (!user) return baseMenuItems;
+
+    // Mostrar "Mis Estudios" solo a usuarios generales y admin
+    if (user.role === "investigador" || user.role === "admin") {
+      return [...baseMenuItems, myStudiesMenuItem];
+    }
+
+    return baseMenuItems;
+  };
+  const menuItems = getMenuItems();
   const userMenuItems = [
     // { label: "Notificaciones", icon: <Notifications />, action: () => {} },
     {
@@ -613,34 +636,34 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
                 }}
               >
                 {/* <Badge badgeContent={3} color="primary"> */}
-                  <Avatar
-                    alt={`${user.first_name} ${user.last_name}`}
-                    sx={{
-                      bgcolor: theme.palette.secondary.main,
-                      width: 32,
-                      height: 32,
-                    }}
-                  >
-                    {getInitials(user.first_name, user.last_name)}
-                  </Avatar>
+                <Avatar
+                  alt={`${user.first_name} ${user.last_name}`}
+                  sx={{
+                    bgcolor: theme.palette.secondary.main,
+                    width: 32,
+                    height: 32,
+                  }}
+                >
+                  {getInitials(user.first_name, user.last_name)}
+                </Avatar>
                 {/* </Badge> */}
               </IconButton>
             ) : (
               // <Box display="flex" alignItems="center">
-                <Button
-                  color="inherit"
-                  onClick={() => handleNavigation("/auth?mode=login")}
-                  startIcon={<Login />}
-                  sx={{
-                    mx: 1,
-                    fontWeight: 500,
-                    borderRadius: "8px",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                >
-                  Iniciar Sesión
-                </Button>
-               
+              <Button
+                color="inherit"
+                onClick={() => handleNavigation("/auth?mode=login")}
+                startIcon={<Login />}
+                sx={{
+                  mx: 1,
+                  fontWeight: 500,
+                  borderRadius: "8px",
+                  display: { xs: "none", md: "flex" },
+                }}
+              >
+                Iniciar Sesión
+              </Button>
+
               // </Box>
             )}
           </Stack>
@@ -690,64 +713,6 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
         )}
       </Menu>
 
-      {/* Menú de usuario desplegable */}
-      {/* <Menu
-        anchorEl={anchorEl}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        {user ? (
-          <>
-            <Box
-              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
-            >
-              <Typography variant="subtitle1" fontWeight="bold">
-                {`${user.first_name} ${user.last_name}`}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {user.email}
-              </Typography>
-            </Box>
-
-            {userMenuItems.map((item, index) => (
-              <MenuItem key={index} onClick={item.action}>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {item.icon}
-                  <Typography variant="body1" sx={{ ml: 1.5 }}>
-                    {item.label}
-                  </Typography>
-                </Box>
-              </MenuItem>
-            ))}
-          </>
-        ) : (
-          <>
-            <Box
-              sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}
-            >
-              <Typography variant="subtitle1" fontWeight="bold">
-                No has iniciado sesión
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Inicia sesión para acceder a todas las funciones
-              </Typography>
-            </Box>
-
-            {authMenuItems.map((item, index) => (
-              <MenuItem key={`auth-${index}`} onClick={item.action}>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {item.icon}
-                  <Typography variant="body1" sx={{ ml: 1.5 }}>
-                    {item.label}
-                  </Typography>
-                </Box>
-              </MenuItem>
-            ))}
-          </>
-        )}
-      </Menu> */}
       <Menu
         anchorEl={anchorEl}
         open={isMenuOpen}

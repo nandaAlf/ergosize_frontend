@@ -2,6 +2,7 @@
 import { BrowserRouter } from "react-router-dom";
 import DashboardLayoutBasic from "./components/D";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
+import { AuthProvider } from "./context/AuthContext";
 // import NavBar from './components/NavBar';
 // Define tu tema personalizado
 // const theme = createTheme({
@@ -47,11 +48,11 @@ function App() {
       <BrowserRouter>
         {/* <ThemeProvider theme={theme}> */}
         {/* <Layout/> */}
-     
+        <AuthProvider>
           <NotificationsProvider>
             <DashboardLayoutBasic />
           </NotificationsProvider>
-    
+        </AuthProvider>
         {/* <AppRouter /> */}
         {/* <Footer /> */}
         {/* </ThemeProvider> */}

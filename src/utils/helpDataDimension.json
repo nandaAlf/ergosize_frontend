@@ -4,252 +4,241 @@
       "Estatura": {
         "sigla": "E",
         "definition": "Distancia desde el vértex al piso.",
-        "vestuario": "El individuo debe tener poca vestimenta",
+        "vestuario": "El individuo debe tener poca vestimenta.",
         "posicion": "El sujeto debe estar de pie sobre una superficie plana, con los talones juntos y los pies formando un ángulo de 45º. Los talones, glúteos, espalda y región occipital deben de estar en contacto con la superficie vertical del antropómetro. El registro se toma en milímetros, en una inspiración forzada el sujeto y con una leve tracción del antropometrista desde el maxilar inferior, manteniendo al sujeto con la cabeza en el plano de Frankfort. El registro se toma en milímetros",
-        "puntos": "Vértex",
         "instrumento": "Se mide con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/1-Estatura.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado se registra en milímetros."
       },
       "Altura sentado": {
         "sigla": "ASE",
         "definition": "Es la distancia desde el vértex a la superficie horizontal donde está sentado el sujeto, expresada en milímetros. ",
-        "vestuario": "El individuo debe tener poca vestimenta",
+        "vestuario": "El individuo debe tener poca vestimenta.",
         "posicion": "Se puede tomar la altura desde el suelo al banco y luego restar la altura del banco, o bien, tomar la altura desde el banco al vértex directamente. El ángulo entre piernas y tronco debe ser de 90º. La espalda y la cabeza deben de estar verticales y se realiza la medición durante una inspiración forzada y con la cabeza en el plano de Frankfort. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto. El resultado se registra en milímetros",
-        "puntos": "Vértex",
         "instrumento": "Se mide con el tallímetro o antropómetro",
         "graphic": ["Alturas/2-Altura sentado2.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } ,
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del ojo de pie": {
         "sigla": "AOP",
         "definition": "Distancia desde el exocantion (comisura exterior del ojo) al suelo",
-        "vestuario": "El individuo debe tener poca vestimenta",
+        "vestuario": "El individuo debe tener poca vestimenta.",
         "posicion": "De pie sobre una superficie plana con los talones unidos y tocando la base de la parte vertical del instrumento. La cabeza orientada conforme al plano de Frankfort. El peso del cuerpo debe ser distribuido de forma pareja entre ambos pies. Los brazos deben estar colgando libremente a ambos lados del cuerpo El resultado se registra en milímetros",
-        "puntos": "Exocantion (comisura exterior del ojo)",
         "instrumento": "Se mide  con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/3-Altura del ojo de pie.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado se registra en milímetros."
       },
       "Altura del oído": {
         "sigla": "AOI",
         "definition": "Distancia comprendida del tragion (punto sobre el borde superior del trago donde se une con el hélix) al suelo",
-        "vestuario": "El individuo debe tener poca vestimenta",
+        "vestuario": "El individuo debe tener poca vestimenta.",
         "posicion": "De pie con la cabeza orientada conforme al plano de Frankfort. Debe colocarse de pie sobre una superficie plana en ángulo recto con la parte vertical del instrumento, con los talones unidos y tocando la base de la parte vertical del instrumento. El peso del cuerpo debe ser distribuido de forma pareja entre ambos pies. Los brazos deben estar colgando libremente a ambos lados del cuerpo. El resultado se registra en milímetros",
-        "puntos": "Tragion",
         "instrumento": "Se mide  con el tallímetro ó el antropómetro. El instrumento debe estar colocado perpendicular a la superficie del suelo ",
         "graphic": ["Alturas/4-Altura del oído.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura a la vertiente humeral": {
         "sigla": "AVH",
         "definition": "Longitud comprendida entre el punto medio de la vertiente humeral y el piso, estando el sujeto de pie.",
         "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
         "posicion": "El sujeto de pie con la cabeza orientada conforme al plano de Frankfort. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros",
-        "puntos": "Punto medio de la vertiente humeral",
         "instrumento": "Se mide  con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/5-Altura a la vertiente humeral.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura hasta el hombro de pie": {
         "sigla": "AHH",
         "definition": "Distancia comprendida entre el punto más alto y externo de la curvatura del hombro y el piso, estando el sujeto de pie",
-        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
         "posicion": "Posición de atención antropométrica de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros",
-        "puntos": "Acromio",
         "instrumento": "Se mide  con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/6-Altura hasta el hombro de pie.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura hasta el omóplato": {
         "sigla": "AHO",
         "definition": "Distancia vertical medida desde el ángulo inferior de la escápula hasta el piso, estando el sujeto de pie.",
-        "vestuario": "",
-        "posicion": "De pie",
-        "puntos": "Ángulo inferior de la escápula",
-        "instrumento": "Antropómetro",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto de pie con la cabeza orientada conforme al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con el tallímetro ó el antropómetro ",
         "graphic": ["Alturas/7-Altura hasta el omóplato.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del codo parado": {
         "sigla": "ACP",
-        "definition": "Distancia vertical desde el suelo hasta el punto radial, la depresión que forma la unión del brazo y antebrazo (punto más alto de la cabeza del radio).",
-        "vestuario": "",
-        "posicion": "Parado",
-        "puntos": "Punto radial",
-        "instrumento": "Antropómetro",
+        "definition": "Distancia vertical desde el suelo hasta el punto radial y la depresión que forma la unión del brazo y antebrazo (punto más alto de la cabeza del radio).",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica: el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros.",
+        "instrumento": "Se mide con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/8-Altura del codo parado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura de la muñeca": {
         "sigla": "AMU",
         "definition": "Distancia desde el suelo al punto estilo-radial estando el sujeto de pie.",
-        "vestuario": "",
-        "posicion": "De pie",
-        "puntos": "Punto estilo-radial",
-        "instrumento": "Antropómetro",
+        "vestuario": "Debe estar descalzo o con medias finas",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros",
+        "instrumento": "Se mide  con el tallímetro ó el antropómetro. El instrumento debe estar colocado perpendicular a la superficie del suelo ",
         "graphic": ["Alturas/9-Altura de la muñeca.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } ,
+         "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del nudillo": {
         "sigla": "ALNU",
         "definition": "Distancia tomada desde el suelo hasta el nudillo del dedo medio estando el sujeto parado en posición de atención antropométrica.",
-        "vestuario": "",
-        "posicion": "Parado en posición de atención antropométrica.",
-        "puntos": "Nudillo del dedo medio",
-        "instrumento": "Antropómetro",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros",
+        "instrumento": "El instrumento debe estar colocado perpendicular a la superficie del suelo.",
         "graphic": ["Alturas/10-Altura del nudillo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } ,
+         "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del dedo medio": {
         "sigla": "ADM",
         "definition": "Es la distancia desde el dactilio al piso, estando el sujeto de pie con los dedos extendidos en posición de atención antropométrica.",
-        "vestuario": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
         "posicion": "De pie con los dedos extendidos en posición de atención antropométrica.",
         "puntos": "Dactilio",
-        "instrumento": "Antropómetro",
+        "instrumento": "Se mide con la cinta métrica ó el antropómetro. El instrumento debe estar colocado perpendicular a la superficie del suelo. ",
         "graphic": ["Alturas/11-Altura del dedo medio.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura ileocrestal": {
         "sigla": "AI",
         "definition": "Distancia vertical desde el suelo hasta el punto ileocrestal en posición de atención antropométrica.",
-        "vestuario": "",
-        "posicion": "En posición de atención antropométrica.",
-        "puntos": "Punto ileocrestal",
-        "instrumento": "Antropómetro",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros.",
+        "instrumento": "Se mide con la cinta métrica ó el antropómetro. El instrumento debe estar colocado perpendicular a la superficie del suelo.",
         "graphic": ["Alturas/12-Altura ileocrestal.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura de la rodilla parado": {
         "sigla": "ARP",
         "definition": "Distancia vertical desde el suelo hasta el vértice de la rótula a la altura del punto tibial.",
-        "vestuario": "",
-        "posicion": "Parado",
-        "puntos": "Vértice de la rótula, punto tibial",
-        "instrumento": "Antropómetro",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. Para tomar este punto se le pide al sujeto que se siente, con la pierna derecha cruzada sobre la izquierda. Se busca el espacio entre la articulación del fémur con la tibia y se sigue hasta el punto más medial y proximal de la tibia. El punto tibial coincide con el vértice inferior de la rótula, por lo que no resulta difícil su ubicación. Una vez marcado el punto de medición se le pide que se incorpore a la posición de atención antropométrica y se realiza la medición. El resultado se registra en milímetros",
+        "instrumento": "Se mide con la cinta métrica ó el antropómetro",
         "graphic": ["Alturas/13-Altura de la rodilla parado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } ,
+         "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del tobillo (maleolar o esfirión)": {
         "sigla": "ADT",
         "definition": "Es la distancia desde el piso hasta el vértice inferior del maleolar o esfirión externo del pie derecho.",
-        "vestuario": "",
-        "posicion": "De pie",
-        "puntos": "Vértice inferior del maleolar o esfirión externo del pie derecho",
-        "instrumento": "Antropómetro",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. Para localizar este punto antropométrico se le pide al sujeto que se siente, con la pierna derecha cruzada sobre la izquierda. Una vez marcado se le pide que se incorpore a la posición de atención antropométrica y se realiza la medición. El resultado se registra en milímetros",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro ",
         "graphic": ["Alturas/14-Altura del tobillo (maleolar o esfirión).jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , 
+        "unidad":"El resultado de registra el milíímetros"
       },
       "Altura de los ojos sentado": {
         "sigla": "AO",
         "definition": "Distancia desde el exocantion (comisura exterior del ojo) hasta la superficie horizontal del asiento con el tórax formando un ángulo de 90 grados con el asiento y la cabeza orientada conforme al plano de Frankfort.",
-        "vestuario": "",
-        "posicion": "Sentado con el tórax formando un ángulo de 90 grados con el asiento y la cabeza orientada conforme al plano de Frankfort.",
-        "puntos": "Exocantion (comisura exterior del ojo)",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro estando el sujeto con poca vestimenta. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto ",
         "graphic": ["Alturas/15-Altura de los ojos sentado.jpg","Alturas/15-Altura de los ojos sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } ,
+         "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del oído sentado": {
         "sigla": "AOS",
         "definition": "Distancia comprendida del tragion (punto sobre el borde superior del trago donde se une con el hélix) a la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
-        "vestuario": "",
-        "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
-        "puntos": "Tragion",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/16-Altura del oído sentado.jpg","Alturas/16-Altura del oído sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura a la vertiente humeral sentado": {
         "sigla": "AVHS",
         "definition": "Longitud comprendida entre el punto medio de la vertiente humeral y la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
-        "vestuario": "",
-        "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
-        "puntos": "Punto medio de la vertiente humeral",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/17-Altura a la vertiente humeral sentado.jpg","Alturas/17-Altura a la vertiente humeral sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del hombro sentado": {
         "sigla": "AMHS",
-        "definition": "Distancia comprendida entre el punto más alto y externo de la curvatura del hombro (el acromio) y la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
-        "vestuario": "",
-        "posicion": "Sentado con la cabeza orientada conforme al plano de Frankfort.",
-        "puntos": "Acromio",
-        "instrumento": "",
+        "definition": "Distancia comprendida entre el punto más alto y externo de la curvatura del hombro y la superficie del asiento con la cabeza orientada conforme al plano de Frankfort.",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto correctamente ubicado en la silla antropométrica o en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/18-Altura del hombro sentado.jpg","Alturas/18-Altura del hombro sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del omóplato sentado": {
         "sigla": "AS",
-        "definition": "Distancia vertical medida desde el ángulo inferior de la escápula hasta el plano del asiento cuando el sujeto esta con el tórax erguido y perpendicular al plano del asiento.",
-        "vestuario": "",
-        "posicion": "Sentado con el tórax erguido y perpendicular al plano del asiento.",
-        "puntos": "Ángulo inferior de la escápula",
-        "instrumento": "",
-        "graphic": ["Alturas/19-Altura del omóplato sentado.jpg","Alturas/19-Altura del omóplato sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "definition": "Distancia vertical medida desde el ángulo inferior de la escápula hasta el plano del asiento cuando el sujeto esta con el tórax erguido y perpendicular al plano del asiento",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
+        "graphic": ["Alturas/19-Altura del omóplato sentado1.jpg"],
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del codo sentado": {
         "sigla": "AC",
         "definition": "Distancia vertical desde el plano del asiento hasta la depresión que forma la unión del brazo y antebrazo (punto más alto de la cabeza del radio), cuando el sujeto tiene su brazo paralelo a la línea media del tronco y el antebrazo formando constantemente un ángulo aproximado de 90 grados.",
-        "vestuario": "",
-        "posicion": "Sentado con el brazo paralelo a la línea media del tronco y el antebrazo formando un ángulo aproximado de 90 grados.",
-        "puntos": "Punto más alto de la cabeza del radio (punto radial)",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. En el momento de la medición el brazo debe estar colgado relajadamente y el antebrazo y mano extendidos de forma horizontal hacia adelante, con codo a 90°. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/20-Altura del codo sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura ileocrestal sentado": {
         "sigla": "AIS",
         "definition": "Distancia vertical desde el plano del asiento hasta el punto iliocrestal con el tronco perpendicular al plano del asiento formando un ángulo de 90 grados con los muslos.",
-        "vestuario": "",
-        "posicion": "Sentado con el tronco perpendicular al plano del asiento formando un ángulo de 90 grados con los muslos.",
-        "puntos": "Punto iliocrestal",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/21-Altura ileocrestal sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura del muslo sentado": {
         "sigla": "AM",
-        "definition": "Distancia vertical desde el punto más alto del muslo derecho a nivel inguinal, tomando como referencia el pliegue cutáneo entre el muslo y la cintura pélvica con un ángulo de 90 grados entre el tórax y el muslo.",
-        "vestuario": "",
-        "posicion": "Sentado con un ángulo de 90 grados entre el tórax y el muslo.",
-        "puntos": "Punto más alto del muslo derecho a nivel inguinal, pliegue cutáneo entre el muslo y la cintura pélvica",
-        "instrumento": "",
+        "definition": "Distancia vertical desde el punto más alto del muslo derecho a nivel inguinal, tomando como referencia el pliegue cutáneo entre el muslo y la cintura pélvica con un ángulo de 90 grados entre el tórax y el muslo",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/22-Altura del muslo sentado.jpg","Alturas/22-Altura del muslo sentado1.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura de la rodilla sentado": {
         "sigla": "AR",
         "definition": "Distancia vertical desde el suelo hasta el vértice de la rótula a la altura del punto tibial cuando el sujeto tiene el muslo en posición horizontal formando un ángulo de 90 grados con la pierna.",
-        "vestuario": "",
-        "posicion": "Sentado con el muslo en posición horizontal formando un ángulo de 90 grados con la pierna.",
-        "puntos": "Vértice de la rótula, punto tibial",
-        "instrumento": "",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujetp correctamente ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. Se mide la distancia entre el talón y la parte más alta de la articulación de la rodilla, por la parte lateral externa, con la pierna flexionada en el individuo sentado y formando un ángulo de 90° entre el muslo y la pantorrilla. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/23-Altura de la rodilla sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura poplítea sentado": {
         "sigla": "AP",
-        "definition": "Distancia vertical medida desde el plano del asiento hasta el piso, cuando el sujeto se encuentra con ambos pies apoyados, el borde anterior del asiento no ejerce presiones en la cara posterior del muslo derecho y este forma un ángulo de 90 grados con el tronco y las piernas.",
-        "vestuario": "",
-        "posicion": "Sentado con ambos pies apoyados, el borde anterior del asiento no ejerce presiones en la cara posterior del muslo derecho y este forma un ángulo de 90 grados con el tronco y las piernas.",
-        "puntos": "Depresión poplítea de la pierna derecha",
-        "instrumento": "",
+        "definition": "Distancia vertical medida desde el plano del asiento hasta el piso, cuando el sujeto se encuentra con ambos pies apoyados, el borde anterior del asiento no ejerce presiones en la cara posterior del muslo derecho y esta forma un ángulo de 90 grados con el tronco y las piernas.",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "El sujeto correctamente ubicado en la silla antropométrica en posición sedente, erecta, mirando hacia el frente, con rodillas y tobillos en ángulo el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima. El borde anterior del asiento no puede ejercer presiones en la cara posterior del muslo derecho (hueco popliteal) y este forma un ángulo de 90 grados con el tronco y las piernas. El resultado se registra en milímetros.",
+        "instrumento": "Se mide  con la cinta métrica ó el antropómetro. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto.",
         "graphic": ["Alturas/24-Altura poplítea sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Altura de la cabeza": {
         "sigla": "ADC",
-        "definition": "Distancia vertical comprendida desde el vértex al tragón.",
-        "vestuario": "",
-        "posicion": "",
-        "puntos": "Vértex, tragón",
-        "instrumento": "",
+        "definition": "Distancia vertical comprendida desde el vértex al tragón",
+        "vestuario": "El individuo debe tener poca vestimenta para observar la colocación del cuerpo. Debe estar descalzo o con medias finas.",
+        "posicion": "Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí. El resultado se registra en milímetros.",
+        "instrumento": "Se mide con la cinta métrica ó el antropómetro.",
         "graphic": ["Alturas/25-Altura de la cabeza.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
@@ -258,142 +247,142 @@
       "Longitud de la cara": {
         "sigla": "LCAR",
         "definition": "Distancia limitada por el entrecejo (glabela) a la parte más inferior y anterior de la mandíbula (gnation).",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide  estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Entrecejo (glabela), gnation",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/26-Longitud de la cara.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud de la cabeza": {
         "sigla": "LCA",
         "definition": "Es la distancia comprendida entre el entrecejo (glabela) y el opistocráneo.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide  con estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Entrecejo (glabela), opistocráneo",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/27-Longitud de la cabeza.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud del antebrazo": {
         "sigla": "LAN",
         "definition": "Distancia desde el punto radial hasta el punto estilio radial en posición de atención antropométrica.",
-        "vestuario": "",
-        "posicion": "En posición de atención antropométrica.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Punto radial, punto estilio radial",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/28-Longitud del antebrazo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud codo-centro de la mano": {
         "sigla": "LCCM",
         "definition": "Distancia horizontal desde el centro de la mano al radial (punto extremo de la cabeza del radio, que forma la unión del brazo y antebrazo) formando estos un ángulo de 90 grados.",
-        "vestuario": "",
-        "posicion": "Formando un ángulo de 90 grados.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas para hacer más cómoda la medición. El antebrazo se flexiona en un ángulo de 90 grados",
         "puntos": "Centro de la mano, radial",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/29-Longitud codo-centro de la mano.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud codo-dedos sentado": {
         "sigla": "LCDS",
-        "definition": "Distancia horizontal desde el dactilión del dedo medio al radial Punto extremo de la cabeza del radio, que forma la unión del brazo y antebrazo formando estos un ángulo de 90 grados.",
-        "vestuario": "",
-        "posicion": "Sentado, formando un ángulo de 90 grados.",
+        "definition": "Distancia horizontal desde el dactilión del dedo medio al radial punto extremo de la cabeza del radio, que forma la unión del brazo y antebrazo formando estos un ángulo de 90 grados.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas para hacer más cómoda la medición. El antebrazo se flexiona en un ángulo de 90 grados.",
         "puntos": "Dactilión del dedo medio, radial",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/30-Longitud codo-dedos sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud sacrorótula sentado": {
         "sigla": "LSR",
         "definition": "Distancia horizontal medida desde el punto correspondiente al vértice de la rótula derecha hasta el plano vertical situado en la espalda del individuo, cuando este tiene su muslo en posición horizontal y formando un ángulo de 90 grados con las piernas y el tronco.",
-        "vestuario": "",
-        "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas para hacer más cómoda la medición.",
         "puntos": "Vértice de la rótula derecha, plano vertical situado en la espalda",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/31-Longitud sacrorótula sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud sacropoplítea sentado": {
         "sigla": "LSP",
         "definition": "Distancia horizontal medida desde el punto correspondiente a la depresión poplítea de la pierna derecha hasta el plano vertical, situado en la espalda del individuo cuando este tiene el muslo en posición horizontal y formando un ángulo de 90 grados con las piernas y el tronco.",
-        "vestuario": "",
-        "posicion": "Sentado, muslo en posición horizontal, formando un ángulo de 90 grados con las piernas y el tronco.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas para hacer más cómoda la medición.",
         "puntos": "Depresión poplítea de la pierna derecha, plano vertical situado en la espalda",
-        "instrumento": "",
+        "instrumento": "Instrumentos: cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/32-Longitud sacropoplítea sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud del muslo sentado": {
         "sigla": "LMS",
         "definition": "Distancia horizontal medida desde el vértice de la rótula derecha hasta el punto más alto del muslo a nivel inguinal, tomando como referencia el pliegue cutáneo que se forma entre el muslo y la cintura pélvica.",
-        "vestuario": "",
-        "posicion": "Sentado",
+        "vestuario": "Distancia horizontal medida desde el vértice de la rótula derecha hasta el punto más alto del muslo a nivel inguinal, tomando como referencia el pliegue cutáneo que se forma entre el muslo y la cintura pélvica.",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas que deben quedar formando un ángulo de 90 grados con los muslos que se encuentran en posición horizontal.",
         "puntos": "Vértice de la rótula derecha, punto más alto del muslo a nivel inguinal",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/33-Longitud del muslo sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud nalga-punta del pie": {
         "sigla": "LNP",
-        "definition": "Distancia horizontal que se toma desde la superficie más exterior de la nalga hasta la punta del pie.",
-        "vestuario": "",
-        "posicion": "Sentado",
+        "definition": "Distancia horizontal que se toma desde la superficie más exterior de la nalga hasta la punta del pie",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de sus piernas que deben quedar formando un ángulo de 90 grados con los muslos que se encuentran en posición horizontal.",
         "puntos": "Superficie más exterior de la nalga, punta del pie",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/34-Longitud nalga-punta del pie.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud nalga-talón": {
         "sigla": "LNT",
         "definition": "Distancia horizontal que se toma desde el talón hasta el plano de una pared donde la persona sentada y erguida apoya la espalda teniendo, además, la pierna perfectamente extendida hacia adelante a lo largo de la superficie del asiento.",
-        "vestuario": "",
-        "posicion": "Sentado y erguido, espalda apoyada en la pared, pierna extendida.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con una silla antropométrica que permita la correcta ubicación del sujeto sentado y de su pierna derecha completamente extendida.",
         "puntos": "Talón, plano de una pared",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/35-Longitud nalga-talón.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud palma de la mano": {
         "sigla": "LPM",
         "definition": "Es la distancia del doblez más cercano a la región del metacarpo de la muñeca, a la base del dedo medio, sobre la articulación metacarpo-falángica.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "No existen requerimientos importantes para esta medición",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre el doblez más cercano a la región del metacarpo de la muñeca, a la base del dedo medio, sobre la articulación metacarpo-falángica.",
         "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, base del dedo medio (articulación metacarpo-falángica)",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/36-Longitud palma de la mano.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud de la mano": {
         "sigla": "LDM",
         "definition": "Es la distancia limitada por el doblez más cercano a la región del metacarpo de la muñeca, al vértice del dedo medio (dactilion III).",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "No existen requerimientos importantes para esta medición",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre el doblez más cercano a la región del metacarpo de la muñeca, al vértice del dedo medio (dactilion III).",
         "puntos": "Doblez más cercano a la región del metacarpo de la muñeca, dactilion III",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/37-Longitud de la mano.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud del pie": {
         "sigla": "LP",
         "definition": "Es la distancia desde el punto más anterior del mayor de los dedos del pie, acropodio, a la parte más posterior del talón, ternio (ternio-acropodio).Distancia entre el pternio y el acropodio.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Los pies deben estar separados ligeramente para permitir la colocación del equipo de medición. El instrumento debe quedar colocado de modo tal que el segmento utilizado siga la dirección paralela al eje longitudinal del pie.",
         "puntos": "Acropodio, ternio",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/38-Longitud del pie.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Longitud del metacarpal I": {
         "sigla": "LME",
-        "definition": "",
-        "vestuario": "",
-        "posicion": "",
+        "definition": "Máximo largo vertical del metacarpal I.",
+        "vestuario": "Máximo largo vertical del metacarpal I.",
+        "posicion": "Se sugiere realizar la medición apoyando el codo sobre cualquier superficie plana. La medición se realiza directamente entre el punto  más externo del metacarpal I y el punto donde se inicia la muñeca.",
         "puntos": "",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Longitudes/39-Longitud del metacarpal I.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
@@ -402,42 +391,42 @@
       "Profundidad de la mano": {
         "sigla": "PMA",
         "definition": "Ancho medido con la mano situada recta y los dedos unidos desde la palma superior de la mano a la inferior incluyendo el metacarpo I.",
-        "vestuario": "",
-        "posicion": "Mano situada recta y dedos unidos.",
+        "vestuario": "No existen requerimientos importantes para esta medición.",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre la articulación del metacarpal-falange I y V cuando la manos está extendida con la palma bocarriba sobre la mesa.",
         "puntos": "Palma superior de la mano, palma inferior de la mano incluyendo metacarpo I",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Profundidades/40-Profundidad de la mano.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Profundidad del nudillo": {
         "sigla": "PNU",
         "definition": "Ancho medido con el metacarpal I separado del resto desde la palma superior de la mano a la inferior a la altura de las articulaciones del metacarpal falange sin incluir el metacarpal I.",
-        "vestuario": "",
-        "posicion": "Metacarpal I separado del resto.",
+        "vestuario": "No existen requerimientos importantes para esta medición",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre la articulación del metacarpal-falange II y V cuando la mano se encuentra  extendida sobre una mesa y la palma de la mano bocarriba.",
         "puntos": "Palma superior de la mano, palma inferior de la mano a la altura de las articulaciones del metacarpal falange",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Profundidades/41-Profundidad del nudillo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Profundidad de la articulación del metacarpal III": {
         "sigla": "PAM",
         "definition": "Máxima profundidad del metacarpal III en la articulación de la falange.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "No existen requerimientos importantes para esta medición.",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente en el metacarpal III justo en la articulación de la falange cuando la manos está extendida.",
         "puntos": "Articulación del metacarpal III con la falange",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Profundidades/42-Profundidad de la articulación del metacarpal III.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Profundidad de la articulación del pulgar": {
         "sigla": "PP",
         "definition": "Máxima profundidad del metacarpal I",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "No existen requerimientos importantes para esta medición.",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente en el metacarpal I justo en la articulación de la falange cuando la manos está extendida.",
         "puntos": "Metacarpal I",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Profundidades/43-Profundidad de la articulación del pulgar.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
@@ -445,33 +434,33 @@
     "items": {
       "Anchura de la cara": {
         "sigla": "ACAR",
-        "definition": "",
-        "vestuario": "",
-        "posicion": "",
+        "definition": "Es la distancia máxima que queda limitada entre el arco cigomático izquierdo y el derecho.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/44-Anchura de la cara.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Ancho de la cabeza": {
         "sigla": "ADCA",
         "definition": "Distancia horizontal comprendida entre el punto eurio izquierdo y el derecho.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Punto eurio izquierdo, punto eurio derecho",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/45-Ancho de la cabeza.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura del cuello": {
         "sigla": "ACU",
         "definition": "Es la dimensión mayor en la base del cuello, ubicada donde cambia de dirección su perfil para formar los hombros.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Base del cuello",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/46-Anchura del cuello.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura de pecho diámetro del tórax": {
         "sigla": "APT",
@@ -481,117 +470,117 @@
         "puntos": "Extremos del pecho (nivel pezones o cuarto espacio intercostal/esternón en mujeres)",
         "instrumento": "",
         "graphic": ["Anchuras/47-Anchura de pecho diámetro del tórax.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Ancho de cadera parado": {
         "sigla": "ACAP",
-        "definition": "Frecuentemente se utiliza para esta medición el borde superior de la articulación condroesternal, el punto xifoideo o un nivel alto de las axilas o donde se obtenga una lectura máxima.",
-        "vestuario": "",
-        "posicion": "Parado",
+        "definition": "Parte más ancha entre la espina ileocrestal y el trocánter desde el lado izquierdo al derecho.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, los brazos deben estar cruzados o colgando separados del cuerpo. Las proyecciones más laterales de los trocánteres se identifican mediante la palpación presionando el instrumento de medición contra las protuberancias para comprimir y desplazar los tejidos que cubren al hueso. El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/48-Ancho de cadera parado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura de la cadera sentado": {
         "sigla": "ACA",
-        "definition": "Distancia horizontal que existe entre las caderas (trocanteres), encontrándose el sujeto sentado con el tórax erguido y perpendicular al plano de asiento.",
-        "vestuario": "",
-        "posicion": "Sentado con el tórax erguido y perpendicular al plano de asiento.",
+        "definition": "Distancia horizontal más amplia que existe entre las caderas (trocanteres), encontrándose el sujeto sentado con el tórax erguido y perpendicular al plano de asiento.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo. ",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima.",
         "puntos": "Caderas (trocanteres)",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/49-Anchura de la cadera sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura de codo a codo sentado": {
         "sigla": "ACC",
         "definition": "Distancia horizontal entre los radiales (puntos extremos de la cabeza del radio, que forma la unión del brazo y antebrazo) formando estos un ángulo aproximado de 90 grados.",
-        "vestuario": "",
-        "posicion": "Sentado, formando un ángulo aproximado de 90 grados.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo",
+        "posicion": "SDebe estar descalzo o con medias finas. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto el cual debe permanecer con las piernas descolgadas, las manos en cruz, muslos unidos y después debe realizar un estiramiento que le permita alcanzar su altura máxima.",
         "puntos": "Radiales",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/50-Anchura de codo a codo sentado.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura del codo": {
         "sigla": "ACOD",
         "definition": "Es la distancia entre el punto más lateral y medial de los epicóndilos del húmero.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, las extremidades superiores relajadas a lo largo del cuerpo y los dedos extendidos. Las palmas de las manos orientadas hacia el cuerpo (en pronación). El peso del cuerpo debe estar apoyado por igual entre ambas piernas mientras que los pies se colocan con los talones unidos y formando un ángulo de 45° entre sí.",
         "puntos": "Punto más lateral y medial de los epicóndilos del húmero",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/51-Anchura del codo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura de la muñeca": {
         "sigla": "ALMU",
         "definition": "Es la anchura biestiloidea del cúbito y del radio.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort, su brazo derecho horizontal y su antebrazo flexionado en el codo a un ángulo de 90 grados y la palma de la mano mirando hacia sí mismo, el medidor tomará la medición ejerciendo presión con el instrumento el cual se coloca de modo tal que se obtenga una distancia estiloidea lineal máxima. ",
         "puntos": "Anchura biestiloidea del cúbito y del radio",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/52-Anchura de la muñeca.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura del tobillo": {
         "sigla": "ATO",
-        "definition": "Es la distancia medida entre los aspectos más medial y más lateral de los maléolos interno y externo.",
-        "vestuario": "",
-        "posicion": "",
+        "definition": "Es la distancia medida entre los puntos más medial y más lateral de los maléolos interno y externo.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Posición de atención antropométrica, el sujeto se encuentra de pie, con la cabeza orientada al plano de Frankfort. La medición de este diámetro no se mide desde los puntos somatométricos señalados sino desde los puntos de superficie del instrumento que son tangentes a la parte ósea donde se va a medir.",
         "puntos": "Aspectos más medial y más lateral de los maléolos interno y externo",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/53-Anchura del tobillo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura de la mano": {
         "sigla": "ADM",
         "definition": "Ancho de la mano entre la articulación del metacarpal-falange I y V cuando la manos está extendida con la palma bocarriba sobre la mesa.",
-        "vestuario": "",
-        "posicion": "Mano extendida con la palma bocarriba sobre la mesa.",
+        "vestuario": "No existen requerimientos importantes para esta medición.",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre la articulación del metacarpal-falange I y V cuando la manos está extendida con la palma bocarriba sobre la mesa.",
         "puntos": "Articulación del metacarpal-falange I y V",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/54-Anchura de la mano.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura del nudillo": {
         "sigla": "ANU",
-        "definition": "Ancho de la mano entre la articulación del metacarpal-falange II y V cuando la mano se encuentra extendida sobre una mesa y la palma de la mano bocarriba.",
-        "vestuario": "",
-        "posicion": "Mano extendida sobre una mesa y la palma bocarriba.",
+        "definition": "AAncho de la mano entre la articulación del metacarpal-falange II y V cuando la mano se encuentra extendida sobre una mesa y la palma de la mano bocarriba.",
+        "vestuario": "No existen requerimientos importantes para esta medición.",
+        "posicion": "Se sugiere realizar la medición colocando la palma de la mano sobre cualquier superficie plana, los dedos bien unidos y estirados. La medición se realiza directamente entre la articulación del metacarpal-falange I y V cuando la manos está extendida con la palma bocarriba sobre la mesa.",
         "puntos": "Articulación del metacarpal-falange II y V",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/55-Anchura del nudillo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Ancho del pie": {
         "sigla": "AHP",
         "definition": "Distancia comprendida entre el borde interno y externo del pie a nivel de la cabeza del primer y quinto metatarsiano.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Los pies deben estar separados ligeramente para permitir la colocación del equipo de medición. El instrumento debe quedar colocado de modo tal que el segmento utilizado siga la dirección paralela al eje longitudinal del pie",
         "puntos": "Borde interno y externo del pie a nivel de la cabeza del primer y quinto metatarsiano",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/56-Ancho del pie.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura bideltoideo": {
         "sigla": "AB",
-        "definition": "Distancia horizontal máxima que separa los músculos deltoides.",
-        "vestuario": "",
-        "posicion": "",
+        "definition": "Distancia horizontal máxima que separa los puntos más prominentes laterales de los músculos deltoides.",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Se debe contar con un banco o silla antropométrica que permita la correcta ubicación del sujeto el cual debe permanecer con las piernas que deben quedar formando un ángulo de 90 grados con los muslos que se encuentran en posición horizontal.",
         "puntos": "Músculos deltoides",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/57-Anchura bideltoideo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Anchura del talón": {
         "sigla": "AT",
         "definition": "Es el grosor máximo de la cara interna del talón a la externa.",
-        "vestuario": "",
-        "posicion": "",
+        "vestuario": "Se mide estando el sujeto con poca vestimenta para observar la colocación del cuerpo.",
+        "posicion": "Debe estar descalzo o con medias finas. Los pies deben estar separados ligeramente para permitir la colocación del equipo de medición. El instrumento debe quedar colocado de modo tal que el segmento utilizado siga la dirección paralela al eje longitudinal del pie.",
         "puntos": "Cara interna del talón, cara externa del talón",
-        "instrumento": "",
+        "instrumento": "Cinta métrica ó el antropómetro",
         "graphic": ["Anchuras/58-Anchura del talón.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
@@ -605,7 +594,7 @@
         "puntos": "Pupila izquierda, pupila derecha",
         "instrumento": "",
         "graphic": ["Diametros/59-Diámetro interpupilar.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetro biacromial": {
         "sigla": "DB",
@@ -615,7 +604,7 @@
         "puntos": "Puntos acromiales del omóplato",
         "instrumento": "",
         "graphic": ["Diametros/60-Diámetro biacromial.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetro transversal del tórax": {
         "sigla": "DTT",
@@ -625,7 +614,7 @@
         "puntos": "Dos pliegues externos y superiores de las axilas",
         "instrumento": "",
         "graphic": ["Diametros/61-Diámetro transversal del tórax.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetros transversos y anteroposterior del tórax": {
         "sigla": "DTAP",
@@ -635,7 +624,7 @@
         "puntos": "Borde superior de la articulación condroesternal, punto xifoideo, nivel alto de las axilas o lectura máxima",
         "instrumento": "",
         "graphic": ["Diametros/62-Diámetros transversos y anteroposterior del tórax.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetro bicrestal": {
         "sigla": "DBC",
@@ -645,7 +634,7 @@
         "puntos": "Crestas iliacas",
         "instrumento": "",
         "graphic": ["Diametros/63-Diámetro bicrestal.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetro bitrocantérico": {
         "sigla": "DBCT",
@@ -655,7 +644,7 @@
         "puntos": "Proyecciones más laterales de los grandes trocánteres (trocanterios)",
         "instrumento": "",
         "graphic": ["Diametros/64-Diámetro bitrocantérico.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Diámetro de empuñadura": {
         "sigla": "DE",
@@ -665,7 +654,7 @@
         "puntos": "Dos puntos cerrando un círculo",
         "instrumento": "Cono de empuñadura",
         "graphic": ["Diametros/65-Diámetro de empuñadura.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
@@ -679,7 +668,7 @@
         "puntos": "Protuberancias frontales, occipucio",
         "instrumento": "",
         "graphic": ["Circunferencias/66-Circunferencia de la cabeza.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia del cuello": {
         "sigla": "CCU",
@@ -689,7 +678,7 @@
         "puntos": "Inmediatamente por debajo del cartílago tiroides, justo sobre la prominencia laríngea",
         "instrumento": "",
         "graphic": ["Circunferencias/67-Circunferencia del cuello.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia del brazo": {
         "sigla": "CB",
@@ -699,7 +688,7 @@
         "puntos": "Nivel del punto mesobraquial",
         "instrumento": "",
         "graphic": ["Circunferencias/68-Circunferencia del brazo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia máxima del antebrazo": {
         "sigla": "CMA",
@@ -709,7 +698,7 @@
         "puntos": "Parte de más volumen de antebrazo (a una distancia no mayor de 6 cm de radial)",
         "instrumento": "",
         "graphic": ["Circunferencias/69-Circunferencia máxima del antebrazo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia de los hombros": {  
         "sigla": "CH",
@@ -719,7 +708,7 @@
         "puntos": "Máximas protuberancias de los músculos deltoides, prominencia articular del esternón y la segunda costilla",
         "instrumento": "",
         "graphic": ["Circunferencias/70-Circunferencia de los hombros.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia torácica": {
         "sigla": "CT",
@@ -729,7 +718,7 @@
         "puntos": "Nivel del punto mesoesternal",
         "instrumento": "",
         "graphic": ["Circunferencias/71-Circunferencia torácica.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia de la cintura": {
         "sigla": "CCI",
@@ -739,7 +728,7 @@
         "puntos": "Nivel del onfalio",
         "instrumento": "",
         "graphic": ["Circunferencias/72-Circunferencia de la cintura.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia de las caderas": {
         "sigla": "CCA",
@@ -749,7 +738,7 @@
         "puntos": "Entre la cintura y los muslos",
         "instrumento": "",
         "graphic": ["Circunferencias/73-Circunferencia de las caderas.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia superior del muslo": {
         "sigla": "CSM",
@@ -759,7 +748,7 @@
         "puntos": "Alrededor del muslo a uno o dos centímetros por debajo de la línea glútea",
         "instrumento": "",
         "graphic": ["Circunferencias/74-Circunferencia superior del muslo.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       },
       "Circunferencia de la pantorrilla": {
         "sigla": "CP",
@@ -769,7 +758,7 @@
         "puntos": "Parte más gruesa de la pierna",
         "instrumento": "",
         "graphic": ["Circunferencias/75-Circunferencia de la pantorrilla.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 }
+        "coords": { "xPct": 50, "yPct": 10 } , "unidad":"El resultado de registra el milíímetros"
       }
     }
   },
