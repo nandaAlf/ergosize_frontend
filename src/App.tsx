@@ -46,16 +46,11 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {/* <ThemeProvider theme={theme}> */}
-        {/* <Layout/> */}
         <AuthProvider>
           <NotificationsProvider>
             <DashboardLayoutBasic />
           </NotificationsProvider>
         </AuthProvider>
-        {/* <AppRouter /> */}
-        {/* <Footer /> */}
-        {/* </ThemeProvider> */}
       </BrowserRouter>
     </>
   );

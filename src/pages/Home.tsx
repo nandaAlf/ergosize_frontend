@@ -10,12 +10,9 @@ import {
   Typography,
   useTheme,
   IconButton,
-  createTheme,
   CircularProgress,
 } from "@mui/material";
-import ButtonGroup from "../components/ButtonGroup";
-import RecentItems from "../components/RecentItems";
-import ExcelUploade from "../components/ExcelUploade";
+
 import Fade from "@mui/material/Fade";
 import { Slide } from "@mui/material";
 // import ManiquiViewer from "../components/ManiquiViewer";
@@ -35,9 +32,8 @@ import useNavigation from "../hooks/useNavigation";
 const Home: React.FC = () => {
   const theme = useTheme();
   const { goToPage } = useNavigation();
-  const handleDimensionHelpClick = () => goToPage(`/help`, undefined, true);
-  const handleLoginClick = () => goToPage("/auth?mode=login");
-  const handleRegisterClick = () => goToPage("/auth?mode=register");
+  const handleDimensionHelpClick = () => goToPage(`/help`);
+
 
   return (
     <Box
@@ -55,42 +51,7 @@ const Home: React.FC = () => {
       }}
     >
       <Container maxWidth="xl">
-        {/* Header */}
-        {/* <Navbar></Navbar> */}
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 4,
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Ergosizes
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleLoginClick}
-            >
-              Iniciar sesión
-            </Button>
-            <Button variant="contained" color="primary"  onClick={handleRegisterClick}>
-              Registrarse
-            </Button>
-          </Stack>
-        </Box> */}
-
-        {/* <AuthPage/> */}
+\
         {/* Hero Section */}
         <Slide direction="right" in={true} timeout={1000}>
           <Grid container spacing={4} alignItems="center" sx={{ mb: 6 }}>
@@ -409,6 +370,7 @@ const Home: React.FC = () => {
                 bgcolor: theme.palette.secondary.dark,
               },
             }}
+           onClick={()=>goToPage("auth?mode=register")}
           >
             Registrarse Gratis
           </Button>

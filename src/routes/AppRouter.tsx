@@ -4,23 +4,18 @@ import Studies from "../pages/Studies";
 import StudyDetail from "../pages/StudyDetail";
 import HelpMenu from "../pages/Help";
 import Tables from "../pages/Tables";
-import TableDetail from "../pages/AnthropometricTable";
 import Login from "../components/Forms/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import ChangePasswordPage from "../components/Forms/ChangePassword";
 import ForgotPassword from "../components/Forms/ForgotPassword";
 import ResetPassword from "../components/Forms/ResetPassword";
-import AuthPage from "../pages/AuthPage";
 
 export default function AppRouter() {
   return (
-    // <Router>
     <Routes>
-      <Route path="/home" element={<Home />} />
       <Route path="/" element={<Home />} />
       <Route path="/help/" element={<HelpMenu />} />
       <Route path="/auth" element={<Login />} />
-      {/* <Route path="/login" element={<AuthPage />} /> */}
       <Route
         path="/studies"
         element={
@@ -29,9 +24,6 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />
-      {/* <Route> */}
-      {/* <Route path="/studies" element={<Studies />} /> */}
-
       <Route path="/tables/:id" element={<Tables />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
@@ -43,17 +35,7 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />
-      {/* <Route
-        path="/tables/:id"
-        element={
-          <ProtectedRoute>
-            <Tables />
-          </ProtectedRoute>
-        }
-      /> */}
-      {/* <Route path="/tables/:id" element={<TableDetail />} /> */}
       <Route path="/studies/:id" element={<StudyDetail />} />
     </Routes>
-    // {/* </Router> */}
   );
 }

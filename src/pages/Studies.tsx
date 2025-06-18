@@ -4,28 +4,22 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { StudyData } from "../types";
 import CardStudy from "../components/card/CardStudy";
 // import Grid from "@mui/material/Grid2";
-import Search from "../components/filtros/Search";
-import SelectFilter from "../components/filtros/Selct";
 import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StudyForm from "../components/Forms/StudyForm";
 import TableForm from "../components/Forms/TableForm";
-import ApiService from "../api/ApiService";
-import CircularProgress, {
-  CircularProgressProps,
-} from "@mui/material/CircularProgress";
+
 import { getAllStudies } from "../service/service";
-import { Container, Grid, IconButton, Stack, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
 import FilterPanelLayout from "../components/FilterPanelStudies";
 import dayjs, { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useLocation } from "react-router-dom";
 import { useNotify } from "../hooks/useNotifications";
-import { useDialogs } from "@toolpad/core/useDialogs";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { FullPageLoader } from "../components/LoadComponent";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -103,7 +97,7 @@ const Studies: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [mine, pagination.currentPage, filters, notify, refreshCounter]);
+  }, [mine, pagination.currentPage, filters, notify]);
 
   // Fetch data when dependencies change
   useEffect(() => {
@@ -203,21 +197,7 @@ const Studies: React.FC = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100%",
-        }}
-      >
-        <CircularProgress size={60} />
-        <Typography variant="body2" mt={3}>
-          Cargando estudios...
-        </Typography>
-      </Box>
+      <FullPageLoader open={loading} />
     );
   }
 
@@ -296,9 +276,9 @@ const Studies: React.FC = () => {
         <StudyForm
           open={openStudyForm}
           onClose={handleCloseStudyForm}
-          onSubmit={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          // onSubmit={function (): void {
+          //   throw new Error("Function not implemented.");
+          // }}
           initialData={editingStudy ? editingStudy : undefined}
           mode={editingStudy ? "edit" : "add"}
           onSuccess={handleStudyUpdate} // Agrega esta prop

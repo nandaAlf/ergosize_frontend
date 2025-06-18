@@ -147,7 +147,7 @@ export default function DashboardLayoutBasic() {
       try {
         const { data: me } = await ApiService.get("accounts/users/me/");
         // setSession({ user: me.user});
-        
+
         setSession({
           user: {
             // Por ejemplo, construimos el nombre completo:
@@ -216,27 +216,27 @@ export default function DashboardLayoutBasic() {
       position="relative"
       //  sx={{ backgroundColor: "#f2f6faff"}}
     >
-      {/* <AppProvider
-        // session={session}
-        // authentication={authentication}
-        navigation={NAVIGATION}
-        router={useReactRouterAdapter()}
-        branding={{
-          logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
-          title: "ERGOsizes",
-          homeUrl: "/",
-        }}
-      > */}
+      <AppProvider
+      // session={session}
+      // authentication={authentication}
+      // navigation={NAVIGATION}
+      // router={useReactRouterAdapter()}
+      // branding={{
+      //   logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+      //   title: "ERGOsizes",
+      //   homeUrl: "/",
+      // }}
+      >
         {/* <CustomThemeProvider> */}
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
           {/* <Footer /> */}
           {/* <LayoutSwitcher /> */}
-             <AppRouter />
+          <AppRouter />
         </ThemeProvider>
         {/* </CustomThemeProvider> */}
-      {/* </AppProvider> */}
+      </AppProvider>
     </Box>
   );
 }

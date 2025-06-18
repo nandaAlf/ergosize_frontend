@@ -1,14 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   Autocomplete,
   Box,
   TextField,
-//   AutocompleteProps,
-} from '@mui/material';
-import { countries } from '../utils/countries';
+  //   AutocompleteProps,
+} from "@mui/material";
+import { countries } from "../utils/countries";
 
 // Lista de países. Puedes importar esto desde otro archivo si lo prefieres.
-
 
 interface CountrySelectProps {
   value: string;
@@ -22,63 +21,63 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
   value,
   onChange,
   error = false,
-  helperText = '',
-  label = 'País',
+  helperText = "",
+  label = "País",
 }) => {
-return (
+  return (
     <Autocomplete
-        freeSolo
-        autoHighlight
-        options={countries.map((c) => c.label)}
-        value={value}
-        // margin="dense"
-        onInputChange={(_, newValue) => onChange(newValue)}
-        renderOption={(props, option) => {
-            const country = countries.find((c) => c.label === option);
-            return (
-                <Box
-                    component="li"
-                    {...props}
-                    sx={{ '& > img': { mr: 1, flexShrink: 0 } }}
-                >
-                    {country && (
-                        <img
-                            loading="lazy"
-                            width="20"
-                            src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`}
-                            srcSet={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x`}
-                            alt=""
-                        />
-                    )}
-                    {option}
-                </Box>
-            );
-        }}
-        renderInput={(params) => (
-            <TextField
-                {...params}
-                label={label}
-                size="small"
-                margin="dense"
-                fullWidth
-                error={error}
-                helperText={helperText}
-            />
-        )}
-        // slotProps={{
-        //     textField: {
-        //         inputProps: {
-        //             autoComplete: 'new-password', // desactiva autofill
-        //         },
-        //     },
-        // }}
-        sx={{ width: '100%' }}
+      freeSolo
+      autoHighlight
+      options={countries.map((c) => c.label)}
+      value={value}
+      // margin="dense"
+      onInputChange={(_, newValue) => onChange(newValue)}
+      renderOption={(props, option) => {
+        const country = countries.find((c) => c.label === option);
+        return (
+          <Box
+            component="li"
+            {...props}
+            sx={{ "& > img": { mr: 1, flexShrink: 0 } }}
+          >
+            {country && (
+              <img
+                loading="lazy"
+                width="20"
+                src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`}
+                srcSet={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x`}
+                alt=""
+              />
+            )}
+            {option}
+          </Box>
+        );
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          size="small"
+          margin="dense"
+          fullWidth
+          error={error}
+             required
+        //   helperText={helperText}
+        />
+      )}
+      // slotProps={{
+      //     textField: {
+      //         inputProps: {
+      //             autoComplete: 'new-password', // desactiva autofill
+      //         },
+      //     },
+      // }}
+      sx={{ width: "100%" }}
     />
-);
+  );
 };
 
 export default CountrySelect;
-
 
 //   <Autocomplete
 //                 freeSolo

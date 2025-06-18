@@ -33,7 +33,7 @@ import { parseJwt } from "../../hooks/parseJwt";
 import { useNotify } from "../../hooks/useNotifications";
 // import CircularWithValueLabel from "../CircularProgress";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 interface CardStudyProps {
   study: StudyData;
@@ -283,11 +283,11 @@ const CardStudy: React.FC<CardStudyProps> = memo(
                     "&:hover": {
                       background: `linear-gradient(45deg, ${theme.palette.primary.light}30, ${theme.palette.secondary.light}30)`,
                     },
-                    mr:-1,
-                    ml:-1,
+                    mr: -1,
+                    ml: -1,
                   }}
                 >
-                 <MoreVertIcon/>
+                  <MoreVertIcon />
                 </IconButton>
               </>
             )}
@@ -302,9 +302,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
 
             <ProgressIndicator study={study} />
           </Box>
-
           <Divider />
-
           <Stack spacing={1.5} mt={1}>
             <StudyInfoItem
               icon={
@@ -346,14 +344,12 @@ const CardStudy: React.FC<CardStudyProps> = memo(
               </Typography>
             </Box>
           </Stack>
-
           <Divider textAlign="left" sx={{ my: 1 }}>
-            <Typography variant="subtitle2" color="text.primary">
+            {/* <Typography variant="subtitle2" color="text.primary">
               Clasificación de dimensiones
-            </Typography>
+            </Typography> */}
           </Divider>
-
-          <Box sx={{ mt: 1 }}>
+          {/* <Box sx={{ mt: 1 }}>
             {groupedDimensions.map(({ category, dims }) => (
               <DimensionCategoryItem
                 key={category}
@@ -361,6 +357,17 @@ const CardStudy: React.FC<CardStudyProps> = memo(
                 dims={dims}
               />
             ))}
+          </Box> */}
+
+          <Box sx={{ mt: 1 }}>
+            {/* <Grid container spacing={1}> */}
+            {groupedDimensions.map(({ category, dims }) => (
+              // <Grid size={{ xs: 12, sm: 6 }} key={category}>
+
+              <DimensionCategoryItem category={category} dims={dims} />
+              // </Grid>
+            ))}
+            {/* </Grid> */}
           </Box>
         </CardContent>
         {dialog}

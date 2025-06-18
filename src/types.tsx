@@ -1,8 +1,14 @@
 import { Dayjs } from "dayjs";
 
 // types.ts (o donde tengas tus tipos)
+
 type Classification = "L" | "T" | "E" | "A" | "AD" | "ADM";
 type Gender = "F" | "M" | "MF";
+export const genderOptions = [
+  { value: "F", label: "Femenino" },
+  { value: "M", label: "Masculino" },
+  { value: "MF", label: "Mixto" },
+] as const;
 export type DimensionCategory =
   | "Alturas"
   | "Longitudes"
@@ -13,6 +19,24 @@ export type DimensionCategory =
   | "Alcances"
   | "Peso";
 
+export const POPULATION_AGE_RANGES = {
+  L: { min: 0, max: 1 },
+  T: { min: 1, max: 3 },
+  E: { min: 4, max: 10 },
+  A: { min: 11, max: 18 },
+  AD: { min: 19, max: 59 },
+  ADM: { min: 60, max: 120 },
+} as const;
+
+export const populationTypes = [
+  { value: "L", label: "Lactante" },
+  { value: "T", label: "Transicional" },
+  { value: "E", label: "Escolar" },
+  { value: "A", label: "Adolescente" },
+  { value: "AD", label: "Adulto" },
+  { value: "ADM", label: "Adulto Mayor" },
+] as const;
+
 export interface Dimension {
   id_dimension: number;
   name?: string;
@@ -22,7 +46,6 @@ export interface Dimension {
 }
 // 3. Mapeo categoría → array de dimensiones
 export type GroupedDimensions = {
-  // [K in DimensionCategory]?: Dimension[];
   category: string;
   dimensions: Dimension[];
 };
@@ -48,8 +71,6 @@ export interface StudyBase {
 
 // Lectura (GET):
 export interface StudyData extends StudyBase {
-  // dimensions: GroupedDimensions;
-  //  dimensions: Dimension[];
   dimensions: GroupedDimensions[];
 }
 
@@ -101,3 +122,27 @@ export interface CountryType {
   phone: string;
   suggested?: boolean;
 }
+
+
+//Person Type
+
+
+export interface MetaType {
+  graphic: string[];
+  coords: { xPct: number; yPct: number };
+}
+
+export interface SelectedDim {
+  id: number;
+  name: string;
+  category: string;
+  graphic: string;
+  coords: { xPct: number; yPct: number };
+}
+
+export interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+

@@ -1,49 +1,49 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
   Button,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
+  IconButton, InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
-  Tabs,
   Tab,
-  Box,
-  Typography,
-  IconButton,
-  Tooltip,
-  Autocomplete,
-  InputAdornment,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Tabs,
+  TextField,
+  Typography
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Dimension, GroupedDimensions, Measurement, Person } from "../../types";
-import axios from "axios";
-import Grid from "@mui/material/Grid";
-import DateSelect from "../filtros/date";
 import dayjs, { Dayjs } from "dayjs";
-import { AnnotatedImage } from "../AnnotatedImage";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { createPerson, getPerson, updatePerson } from "../../service/service";
-import { countries } from "../../utils/countries";
-import CountrySelect from "../CountrySelect";
-import { useNotify } from "../../hooks/useNotifications";
-import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
+import React, { useEffect, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
-import React from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNotify } from "../../hooks/useNotifications";
+import { createPerson, getPerson, updatePerson } from "../../service/service";
+import {
+  Dimension,
+  GroupedDimensions,
+  Measurement,
+  MetaType,
+  Person,
+  SelectedDim
+} from "../../types";
+import { AnnotatedImage } from "../AnnotatedImage";
+import CountrySelect from "../CountrySelect";
+import DateSelect from "../filtros/date";
 // import helpDataDimenson from '@/../'
+import { TabPanel } from "../../hooks/useTabPanel";
 import helpDataDimension from "../../utils/helpDataDimension.json";
+
 interface PersonFormProps {
   open: boolean;
   onClose: () => void;
@@ -53,31 +53,36 @@ interface PersonFormProps {
   personId?: number; // ID de la persona (si se está editando)
   onRefresh: () => void;
 }
-interface SelectedDim {
-  id: number;
-  name: string;
-  category: string;
-  graphic: string;
-  coords: { xPct: number; yPct: number };
-}
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-function TabPanel({ children, value, index, ...props }: TabPanelProps) {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...props}
-    >
-      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
-    </div>
-  );
-}
+// type MetaType = {
+//   graphic: string[];
+//   coords: { xPct: number; yPct: number };
+//   // [key: string]: any; // Otros posibles campos
+// };
+// interface SelectedDim {
+//   id: number;
+//   name: string;
+//   category: string;
+//   graphic: string;
+//   coords: { xPct: number; yPct: number };
+// }
+// interface TabPanelProps {
+//   children?: React.ReactNode;
+//   index: number;
+//   value: number;
+// }
+// function TabPanel({ children, value, index, ...props }: TabPanelProps) {
+//   return (
+//     <div
+//       role="tabpanel"
+//       hidden={value !== index}
+//       id={`tabpanel-${index}`}
+//       aria-labelledby={`tab-${index}`}
+//       {...props}
+//     >
+//       {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+//     </div>
+//   );
+// }
 
 const PersonForm: React.FC<PersonFormProps> = ({
   open,
@@ -177,16 +182,30 @@ const PersonForm: React.FC<PersonFormProps> = ({
       }
       onRefresh();
 
-      onClose();
+      // onClose();
+      handleClose();
     } catch (error) {
       console.error("Error al guardar la persona:", error);
     } finally {
       setIsLoading(false);
     }
   };
-  useEffect(() => {
-    console.log("Selected Dimension:", selectedDimension?.name);
-  }, [selectedDimension, setSelectedDimension]);
+  const resetForm = () => {
+    setName("");
+    setGender("");
+    setCountry("");
+    setState("");
+    setProvince("");
+    setDateOfBirth(null);
+    setDateOfMeasurement(null);
+    setMeasurements([]);
+    setSelectedDimension(null);
+    setErrors({});
+  };
+  const handleClose = () => {
+    resetForm(); // Limpiar el formulario al cerrar
+    onClose();
+  };
   useEffect(() => {
     if (mode === "edit" && personId) {
       const fetchPerson = async () => {
@@ -227,20 +246,9 @@ const PersonForm: React.FC<PersonFormProps> = ({
           }
         );
         setMeasurements(flat);
-        // console.log(response.data);
-        // const initialMeasurements: Measurement[] = (
-        //   fullPersonData.measurements ?? []
-        // ).map((m: Measurement) => ({
-        //   dimension_id: m.dimension_id,
-        //   value: m.value,
-        //   position: m.position, // "P" o "S"
-        //   date: m.date.split("T")[0], // "YYYY-MM-DD"
-        // }));
-        // setMeasurements(initialMeasurements);
       };
 
       fetchPerson();
-      console.log("dim", dimensions);
       setIsLoading(true);
     }
   }, [personId, dimensions, mode, studyId]);
@@ -280,7 +288,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   };
   return (
     <>
-      <Dialog open={open} onClose={onClose} maxWidth="md">
+      <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle>
           {mode === "add" ? "Añadir nueva persona" : "Editar persona"}
         </DialogTitle>
@@ -490,13 +498,17 @@ const PersonForm: React.FC<PersonFormProps> = ({
 
                                   const items = helpDataDimension[categoryKey]
                                     .items as Record<string, unknown>;
-                                  const meta = items[dimension.name!];
+                                  // Define el tipo para meta
+
+                                  const meta = items[
+                                    dimension.name!
+                                  ] as MetaType;
 
                                   setSelectedDimension({
                                     id: dimension.id_dimension,
                                     name: dimension.name!,
                                     category: group.category,
-                                    graphic: "a",
+                                    graphic: meta.graphic[0],
                                     coords: meta.coords,
                                   });
                                 }}
@@ -525,7 +537,9 @@ const PersonForm: React.FC<PersonFormProps> = ({
 
                                   const items = helpDataDimension[categoryKey]
                                     .items as Record<string, unknown>;
-                                  const meta = items[dimension.name!];
+                                  const meta = items[
+                                    dimension.name!
+                                  ] as MetaType;
 
                                   setSelectedDimension({
                                     id: dimension.id_dimension,
@@ -546,27 +560,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
                                       handlePositionToggle(
                                         dimension.id_dimension
                                       );
-                                      // setSelectedDimension(
-                                      //   dimension.id_dimension
-                                      // );
-                                      // setSelectedDimension({
-                                      //   id: dimension.id_dimension,
-                                      //   name: dimension.name!,
-                                      //   category: group.category,
-                                      // });
-
-                                      // const meta =
-                                      //   helpDataDimension[group.category].items[
-                                      //     dimension.name
-                                      //   ];
-                                      // setSelectedDimension(meta);
-                                      //   setSelectedDimension({
-                                      //     id: dimension.id_dimension,
-                                      //     name: dimension.name!,
-                                      //     category: group.category,
-                                      //     graphic: meta.graphic,
-                                      //     coords: meta.coords,
-                                      //   });
                                     }}
                                   />
                                 }
@@ -624,21 +617,6 @@ const PersonForm: React.FC<PersonFormProps> = ({
                   >
                     <HelpOutlinedIcon fontSize="small" />
                   </IconButton>
-
-                  {/* Muestro la imagen anotada usando el nombre de la dimensión */}
-                  {/* {(() => {
-                    const allDims = groupedDimensions.flatMap(
-                      (g) => g.dimensions
-                    );
-                    const dim = allDims.find(
-                      (d) => d.id_dimension === selectedDimension
-                    );
-                    const label =
-                      measurements.find(
-                        (m) => m.dimension_id === selectedDimension
-                      )?.value ?? "";
-                    return (
-                      dim && ( */}
                   <AnnotatedImage
                     src={`../imagenes_dimensiones/${selectedDimension.category}/${selectedDimension.id}-${selectedDimension.name}.jpg`}
                     // src={`../imagenes_dimensiones/${selectedDimension.graphic}`}
@@ -647,7 +625,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
                       {
                         xPct: selectedDimension.coords.xPct,
                         yPct: selectedDimension.coords.yPct,
-                        // label: `${selectedDimension.name} mm`,
+
                         label: `${measurements.find((m) => m.dimension_id === selectedDimension.id)?.value ?? ""} ${selectedDimension.name === "Peso" ? "kg" : "mm"}`,
                       },
                     ]}

@@ -1,30 +1,13 @@
-// import React, { JSX } from 'react';
-// import { Navigate } from 'react-router-dom';
-// interface Props { children: JSX.Element; }
-// const ProtectedRoute: React.FC<Props> = ({ children }) => {
-//   const token = localStorage.getItem('access_token');
-//   return token ? children : <Navigate to="/login" replace />;
-// };
-// export default ProtectedRoute;
 
 import React,{JSX} from 'react';
 import { Navigate } from 'react-router-dom';
 import { parseJwt } from '../hooks/parseJwt';
 
-// Helper para extraer payload de JWT
-// function parseJwt(token: string) {
-//   try {
-//     console.log( JSON.parse(atob(token.split('.')[1])))
-//     return JSON.parse(atob(token.split('.')[1]));
-//   } catch {
-//     return null;
-//   }
-// }
-
 interface ProtectedProps {
   children: JSX.Element;
   roles?: string[]; // roles permitidos, opcional: si no se pasa, solo chequea autenticación
 }
+
 
 const ProtectedRoute: React.FC<ProtectedProps> = ({ children, roles }) => {
   const token = localStorage.getItem('access_token');
