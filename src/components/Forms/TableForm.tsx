@@ -162,22 +162,6 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   const handleGenerateTable = () => {
     const params = new URLSearchParams();
     if (!study.id) return;
-    // params.append("studyId", study.id.toString());
-    // if (genderFilter !== undefined && genderFilter != "MF")
-    //   params.append("gender", genderFilter);
-    // if (ageMin !== "") params.append("age_min", ageMin);
-    // if (ageMax !== "") params.append("age_max", ageMax);
-    // if (selectedDimensions.length)
-    //   params.append("dimensions", selectedDimensions.join(","));
-    // if (selectedPercentiles.length)
-    //   params.append("percentiles", selectedPercentiles.join(","));
-    // if (ageRangesList.length !== 0)
-    //   params.append("age_ranges", ageRangesList.toString());
-    // else params.append("age_ranges", `${ageMin}-${ageMax}`);
-    // params.append("size", study.size?.toString());
-    // params.append("name", study.name || "");
-    // params.append("location", `${study.country}  - ${study.location}`);
-
     const studyData = {
       id: study.id,
       name: study.name || "",
@@ -187,6 +171,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
       size: study.size || 0,
       start_date: study.start_date || "",
       end_date: study.end_date || "",
+      classification: study.classification || "",
     };
     const filters = {
       gender: genderFilter !== "MF" ? genderFilter : undefined,

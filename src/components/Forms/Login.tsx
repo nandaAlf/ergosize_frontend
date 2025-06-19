@@ -76,7 +76,6 @@ const LoginForm: React.FC = () => {
     const newMode = getInitialMode();
     if (newMode !== mode) {
       setMode(newMode);
-      resetForm();
     }
   }, [location.search]);
 

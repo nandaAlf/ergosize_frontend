@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   Box,
   Accordion,
@@ -23,7 +23,7 @@ interface DimensionDetail {
   definition: string;
   vestuario: string;
   posicion: string;
-  umidad: string;
+  unidad: string;
   instrumento: string;
   graphic: string;
 }
@@ -65,9 +65,10 @@ export default function HelpMenu() {
     const category = selectedCategory as keyof typeof helpDataDimension;
     const categoryData = helpDataDimension[category];
 
-    if (!categoryData?.items?.[selectedItem]) return null;
+    const itemKey = selectedItem as keyof typeof categoryData.items;
+    if (!categoryData?.items?.[itemKey]) return null;
 
-    return categoryData.items[selectedItem];
+    return categoryData.items[itemKey];
   }, [selectedCategory, selectedItem]);
   // 3. Normalizar imágenes siempre a array
   const images = detail ? normalizeGraphic(detail.graphic) : [];
@@ -264,7 +265,7 @@ export default function HelpMenu() {
                       <Typography
                         variant="subtitle1"
                         sx={{ fontWeight: 600, mb: 0.5 }}
-                        >
+                      >
                         Instrumento
                       </Typography>
                       <Typography variant="body1">
@@ -302,7 +303,7 @@ export default function HelpMenu() {
               }}
             >
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                Referencia Visual
+                Representación de la dimensión
               </Typography>
 
               {images.length > 0 ? (
@@ -326,12 +327,12 @@ export default function HelpMenu() {
                         target.style.display = "none";
                       }}
                     />
-                    <Typography
+                    {/* <Typography
                       variant="caption"
                       sx={{ mt: 1, display: "block", textAlign: "center" }}
                     >
                       Figura {index + 1}
-                    </Typography>
+                    </Typography> */}
                   </Box>
                 ))
               ) : (

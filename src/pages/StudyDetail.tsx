@@ -37,8 +37,6 @@ const StudyDetail: React.FC = () => {
       try {
         if (id) {
           const data = await getPersonStudyData(id);
-          // setDimensions((study?.dimensions as Dimension[]) || []);
-          console.log("dataRevisar", data);
           setPersons(data.persons);
         }
       } catch (error) {
@@ -49,9 +47,11 @@ const StudyDetail: React.FC = () => {
     fetchData();
   }, [refreshCounter]);
 
+
   if (!study) {
     return <div>Estudio no encontrado</div>;
   }
+
 
   return (
     <>
@@ -65,6 +65,7 @@ const StudyDetail: React.FC = () => {
         size={study.size ?? 0}
         current_size={study.current_size ?? 0}
         onRefresh={handleRefresh}
+   
       ></TableComponent>
     </>
   );

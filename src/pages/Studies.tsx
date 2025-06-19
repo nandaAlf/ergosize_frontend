@@ -197,7 +197,7 @@ const Studies: React.FC = () => {
 
   if (loading) {
     return (
-      <FullPageLoader open={loading} />
+      <FullPageLoader/>
     );
   }
 
@@ -208,7 +208,7 @@ const Studies: React.FC = () => {
         // height: "100vh",
         boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         // padding: 3,
-        margin: "0px 20px",
+        margin: "-10px 20px",
         // backgroundColor: "#f8f9fa",
         borderRadius: 2,
         // boxShadow: "0 4px 12px rgba(0,0,0,0.05)",

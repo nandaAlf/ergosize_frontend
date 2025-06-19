@@ -1,46 +1,45 @@
-import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-
+import React, { useEffect, useMemo, useState } from "react";
+import { CalendarMonth } from "@mui/icons-material";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import GroupsIcon from "@mui/icons-material/Groups";
+import PlaceIcon from "@mui/icons-material/Place";
 import {
   Box,
+  CircularProgress,
+  Divider,
+  FormControl,
+  Grid,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Paper,
+  Select,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
+  TableRow,
   TableSortLabel,
-  Paper,
-  CircularProgress,
-  Typography,
-  Button,
-  MenuItem,
-  Menu,
-  Chip,
-  FormControl,
-  Select,
   Tabs,
-  Tab,
-  InputLabel,
-  Grid,
-  Divider,
+  Typography,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import Search from "../components/filtros/Search";
-import GroupsIcon from "@mui/icons-material/Groups";
 import { getFile } from "../service/service";
-import { CalendarMonth } from "@mui/icons-material";
-import PlaceIcon from "@mui/icons-material/Place";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 // import HeaderCard from "../components/card/tableheaderCard"
 
 // import {
 //   GenderComparisonChart,
 // } from "../components/charts/barChart";
-import PercentilesLineChart from "../components/charts/LineChart";
-import { GenderComparisonChart } from "../components/charts/BarChart";
 import { HeaderCard } from "../components/card/tableheaderCard";
+import { GenderComparisonChart } from "../components/charts/BarChart";
+import PercentilesLineChart from "../components/charts/LineChart";
+import { populationTypes } from "../types";
+import { getPopulationLabel } from "../utils/getPopulationLabel";
 
 interface Stats {
   mean: number;
@@ -87,6 +86,7 @@ interface Props {
   description: string;
   start_date: string;
   end_date: string;
+  classification: string;
 }
 interface Series {
   id: string;
@@ -105,6 +105,7 @@ const AnthropometricTable: React.FC<Props> = ({
   description,
   start_date,
   end_date,
+  classification,
 }) => {
   const [data, setData] = useState<ApiEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -313,6 +314,11 @@ const AnthropometricTable: React.FC<Props> = ({
           metadata={[
             { icon: <PlaceIcon />, label: `Lugar: ${location}` },
             { icon: <GroupsIcon />, label: `Muestra: ${size}` },
+            {
+              icon: <CalendarMonth />,
+              label: `Tipo de población: ${getPopulationLabel(classification)}`,
+            },
+            // { icon: <CalendarMonth />, label: `Dimensiones en milímetros` },
             { icon: <CalendarMonth />, label: `${start_date} → ${end_date}` },
           ]}
         />
@@ -416,6 +422,13 @@ const AnthropometricTable: React.FC<Props> = ({
               size="small"
               sx={{ borderCollapse: "collapse" }}
             >
+              {/* <caption>Dimensiones en milímetros (mm), peso en kilogramos (kg). Fuente: ISO 7250-1</caption> */}
+              {/* <caption style={{ captionSide: 'bottom', textAlign: 'left', padding: '8px' }}>
+        <Typography variant="caption" color="text.secondary">
+          Dimensiones en milímetros (mm), peso en kilogramos (kg). Fuente: ISO 7250-1
+        </Typography>
+      </caption> */}
+
               <TableHead>
                 {/* Nivel 1: Género */}
                 <TableRow>
@@ -567,7 +580,19 @@ const AnthropometricTable: React.FC<Props> = ({
             </Table>
           </TableContainer>
 
-          <Box display="flex" justifyContent="flex-end" mt={1}>
+          <Box display="flex" justifyContent="space-between" mt={1}>
+            <caption
+              style={{
+                captionSide: "bottom",
+                textAlign: "left",
+                padding: "10px",
+              }}
+            >
+              <Typography variant="caption" color="text.secondary">
+                Dimensiones en milímetros (mm), peso en kilogramos (kg). Fuente:
+                ISO 7250-1
+              </Typography>
+            </caption>
             <TablePagination
               component="div"
               count={data.length}
