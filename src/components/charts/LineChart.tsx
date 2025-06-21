@@ -112,7 +112,7 @@ const PercentilesLineChart: React.FC<PercentilesLineChartProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bgcolor="#fafafa"
+          // bgcolor="#fafafa"
           border="1px dashed #e0e0e0"
           borderRadius={1}
         >

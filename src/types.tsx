@@ -104,6 +104,7 @@ export interface Measurement {
 
 export interface Person {
   id?: number;
+  identification: string;
   name: string;
   gender: string;
   date_of_birth: string;

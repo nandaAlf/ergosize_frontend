@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .
 /public/imagenes_dimensiones
+
+
+src/utils/ISO.json
+src/utils/ISO_2008.ts

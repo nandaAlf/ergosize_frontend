@@ -262,21 +262,31 @@ const CardStudy: React.FC<CardStudyProps> = memo(
 
     return (
       <Card
-        elevation={0}
-        onClick={onSelect}
+        // elevation={0}
+        // onClick={()=>alert("hola")}
         sx={{
-          width: "100%",
+          //   width: "100%",
+          //   height: "100%",
+          //   border: selected ? "2px solid" : "1px solid #E5E7EB",
+          //   borderColor: selected ? "primary.main" : undefined,
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   transition: "background-color 0.2s, border-color 0.2s",
+          //   "&:hover": { backgroundColor: "action.hover" },
+          cursor: "pointer",
           height: "100%",
-          border: selected ? "2px solid" : "1px solid #E5E7EB",
-          borderColor: selected ? "primary.main" : undefined,
+          // overflow:"hidden",
           display: "flex",
           flexDirection: "column",
-          transition: "background-color 0.2s, border-color 0.2s",
-          "&:hover": { backgroundColor: "rgba(229, 231, 235, 0.18)" },
+          "&:hover": {
+            boxShadow: 6,
+            // transform: "translateY(-4px)",
+            // transition: "all 0.3s ease",
+          },
         }}
       >
         <CardContent
-          sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
+          sx={{ flexGrow: 1 }}
         >
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
             {isOwner || isAdmin ? (
@@ -320,15 +330,16 @@ const CardStudy: React.FC<CardStudyProps> = memo(
           <Stack spacing={1.5} mt={1}>
             <StudyInfoItem
               icon={
+                <CalendarIcon sx={{ fontSize: 18, color: "text.disabled" }} />
+              }
+              text={`${study.start_date} / ${study.end_date || "--"}`}
+            />
+
+            <StudyInfoItem
+              icon={
                 <LocationIcon sx={{ fontSize: 18, color: "text.disabled" }} />
               }
               text={[study.location, study.country].filter(Boolean).join(", ")}
-            />
-            <StudyInfoItem
-              icon={
-                <GroupsIcon sx={{ fontSize: 18, color: "text.disabled" }} />
-              }
-              text={`Población ${getPopulationLabel(study.classification)} de ${study.age_min} a ${study.age_max} años`}
             />
 
             <StudyInfoItem
@@ -338,12 +349,12 @@ const CardStudy: React.FC<CardStudyProps> = memo(
               text={`${study.current_size} de ${study.size} participantes`}
               tooltip="Participantes registrados"
             />
-
             <StudyInfoItem
               icon={
-                <CalendarIcon sx={{ fontSize: 18, color: "text.disabled" }} />
+                <GroupsIcon sx={{ fontSize: 18, color: "text.disabled" }} />
               }
-              text={`${study.start_date} / ${study.end_date || "--"}`}
+              text={`Población ${getPopulationLabel(study.classification)} de ${study.age_min} a ${study.age_max} años`}
+              tooltip="Participantes registrados"
             />
 
             <Box display="flex" gap={1}>

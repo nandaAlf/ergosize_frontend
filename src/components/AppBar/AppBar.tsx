@@ -458,6 +458,7 @@ const NavBar: React.FC<NavBarProps> = ({ darkMode, toggleDarkMode }) => {
   const baseMenuItems = [
     { label: "Inicio", path: "/", icon: <Home /> },
     { label: "Ayudas Antropométricas", path: "/help", icon: <Help /> },
+    { label: "Tablas Antropométricas", path: "/reference_tables", icon: <Help /> },
     { label: "Estudios", path: "/studies", icon: <Dashboard /> },
   ];
   // Item adicional para ciertos roles

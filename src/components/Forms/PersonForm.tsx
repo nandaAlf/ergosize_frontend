@@ -93,6 +93,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   personId,
   onRefresh,
 }) => {
+  const [identification, setIdentification] = useState("");
   const [name, setName] = useState("");
   const [gender, setGender] = useState<string>("");
   const [country, setCountry] = useState("");
@@ -159,6 +160,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       }));
 
     const payload: Person = {
+      identification,
       name,
       gender,
       date_of_birth: dateOfBirth ? dateOfBirth.format("YYYY-MM-DD") : "",
@@ -192,6 +194,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
   };
   const resetForm = () => {
     setName("");
+    setIdentification("");
     setGender("");
     setCountry("");
     setState("");
@@ -211,6 +214,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       const fetchPerson = async () => {
         const fullPersonData = await getPerson(personId, studyId);
         setName(fullPersonData.name);
+        setIdentification(fullPersonData.identification)
         setGender(fullPersonData.gender);
         setDateOfBirth(dayjs(fullPersonData.date_of_birth));
         setCountry(fullPersonData.country);
@@ -300,6 +304,19 @@ const PersonForm: React.FC<PersonFormProps> = ({
           {/* Formulario para la persona */}
           <TabPanel value={tabIndex} index={0}>
             <Box maxWidth={500}>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Id"
+                fullWidth
+                value={identification}
+                type="number"
+                onChange={(e) => setIdentification(e.target.value)}
+                size="small"
+                required
+                error={!!errors.identification}
+                helperText={errors.identification}
+              />
               <TextField
                 autoFocus
                 margin="dense"

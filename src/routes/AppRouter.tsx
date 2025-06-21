@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ChangePasswordPage from "../components/Forms/ChangePassword";
 import ForgotPassword from "../components/Forms/ForgotPassword";
 import ResetPassword from "../components/Forms/ResetPassword";
+import StudyGallery from "../pages/StudyGallery";
 
 export default function AppRouter() {
   return (
@@ -24,6 +25,7 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />
+      <Route path="/reference_tables/" element={<StudyGallery />} />
       <Route path="/tables/:id" element={<Tables />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />

@@ -250,7 +250,8 @@ const Studies: React.FC = () => {
           <Grid container spacing={3} sx={{ padding: "5px", margin: "0 20px" }}>
             {studiesData?.map((study, index) => (
               <Grid
-                size={{ xs: 12, sm: 6, md: 4 }}
+                size={{ xs: 12, sm: 12, md: 4 }}
+                // size={{ xs: 12, sm: 6, md: 4 }}
                 key={study.id}
                 sx={{ minHeight: "65%" }}
               >

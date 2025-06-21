@@ -206,6 +206,7 @@ export default function DashboardLayoutBasic() {
   });
 
   const toggleDarkMode = () => {
+
     setDarkMode(!darkMode);
     const mode = darkMode ? "light" : "dark";
     localStorage.setItem("toolpad-mode", mode);

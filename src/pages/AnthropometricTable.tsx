@@ -55,6 +55,16 @@ interface ApiEntry {
     };
   };
 }
+interface DataEntry {
+  dimension: string;
+  dimension_id: string | number;
+  by_gender: {
+    [genderKey: string]: {
+      [ageRange: string]: Stats;
+    };
+  };
+}
+
 type Order = "asc" | "desc";
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,10 +84,24 @@ function TabPanel({ children, value, index, ...props }: TabPanelProps) {
     </div>
   );
 }
+// interface Props {
+//   studyId: number;
+//   gender?: "M" | "F" | "mixto" | "";
+//   dimensions: number[];
+//   percentilesList: number[];
+//   age_ranges: string;
+//   tableTitle: string;
+//   location: string;
+//   size: number;
+//   description: string;
+//   start_date: string;
+//   end_date: string;
+//   classification: string;
+// }
 interface Props {
-  studyId: number;
+  studyId?: number; // Hacerlo opcional para usar con datos locales
   gender?: "M" | "F" | "mixto" | "";
-  dimensions: number[];
+  dimensions?: number[];
   percentilesList: number[];
   age_ranges: string;
   tableTitle: string;
@@ -87,16 +111,33 @@ interface Props {
   start_date: string;
   end_date: string;
   classification: string;
+  // Props para datos locales
+  localData?: DataEntry[]; // Datos cargados localmente
+  loading?: boolean; // Estado de carga opcional
+  error?: string | null; // Error opcional
 }
+
 interface Series {
   id: string;
   data: { x: string; y: number }[];
 }
 
 const AnthropometricTable: React.FC<Props> = ({
+  // studyId,
+  // gender,
+  // dimensions,
+  // percentilesList,
+  // age_ranges,
+  // tableTitle,
+  // location,
+  // size,
+  // description,
+  // start_date,
+  // end_date,
+  // classification,
   studyId,
   gender,
-  dimensions,
+  dimensions = [],
   percentilesList,
   age_ranges,
   tableTitle,
@@ -106,8 +147,21 @@ const AnthropometricTable: React.FC<Props> = ({
   start_date,
   end_date,
   classification,
+  localData,
+  // loading: propLoading,
+  // error: propError,
 }) => {
-  const [data, setData] = useState<ApiEntry[]>([]);
+  // Estados internos (solo se usan si no se proveen datos locales)
+  const [internalData, setInternalData] = useState<DataEntry[]>([]);
+  // const [internalLoading, setInternalLoading] = useState(true);
+  // const [internalError, setInternalError] = useState<string | null>(null);
+
+  // Usamos datos de props si están disponibles, de lo contrario usamos el estado interno
+  // const data = localData || internalData;
+  const data = localData || internalData;
+  // const loading = propLoading !== undefined ? propLoading : internalLoading;
+  // const error = propError !== undefined ? propError : internalError;
+  // const [data, setData] = useState<ApiEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orderBy, setOrderBy] = useState<string>("dimension");
@@ -140,8 +194,38 @@ const AnthropometricTable: React.FC<Props> = ({
     handleExportClose();
   };
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   axios
+  //     .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
+  //       params: {
+  //         age_ranges,
+  //         gender,
+  //         dimensions: dimensions.join(","),
+  //         percentiles: percentilesList.join(","),
+  //       },
+  //     })
+  //     .then((res) => setData(res.data.results || []))
+  //     .catch(() => setError("Error al cargar datos"))
+  //     .finally(() => setLoading(false));
+  // }, [studyId, gender, dimensions, percentilesList, age_ranges]);
   useEffect(() => {
-    setLoading(true);
+    console.log("data", data);
+  }, [data]);
+  useEffect(() => {
+    if (localData) {
+      // Si hay datos locales, no hacemos fetch
+      // setInternalLoading(false);
+      setLoading(false)
+      return;
+    }
+
+    // if (!studyId) {
+    //   setInternalLoading(false);
+    //   return;
+    // }
+
+    // setInternalLoading(true);
     axios
       .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
         params: {
@@ -151,14 +235,13 @@ const AnthropometricTable: React.FC<Props> = ({
           percentiles: percentilesList.join(","),
         },
       })
-      .then((res) => setData(res.data.results || []))
-      .catch(() => setError("Error al cargar datos"))
+      .then((res) => {
+        setInternalData(res.data.results || []);
+        // setInternalError(null);
+      })
+      // .catch(() => setInternalError("Error al cargar datos"))
       .finally(() => setLoading(false));
-  }, [studyId, gender, dimensions, percentilesList, age_ranges]);
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
-
+  }, [studyId, gender, dimensions, percentilesList, age_ranges, localData]);
   // Géneros y rangos detectados
   const genders = useMemo(
     () => (data[0] ? Object.keys(data[0].by_gender) : []),
@@ -693,101 +776,20 @@ const AnthropometricTable: React.FC<Props> = ({
         </Box>
 
         {chartDim && (
-          <Paper elevation={3} sx={{ p: 2, mb: 4, borderRadius: 2 }}>
-            <GenderComparisonChart
-              data={comparisonData}
-              dimension={chartDim}
-              percentile={selectedPercentile}
-            />
-          </Paper>
+          // <Paper elevation={3} sx={{ p: 2, mb: 4, borderRadius: 2 }}>
+          <GenderComparisonChart
+            data={comparisonData}
+            dimension={chartDim}
+            percentile={selectedPercentile}
+            chartDim={chartDim}
+            location={location}
+            start_date={start_date}
+            end_date={end_date || "-"}
+            tableTitle={tableTitle}
+            size={size}
+          />
+          // </Paper>
         )}
-        {/* Leyenda profesional */}
-        <Box mt={3}>
-          <Divider sx={{ mb: 2 }} />
-
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Typography
-                variant="subtitle2"
-                color="textSecondary"
-                gutterBottom
-              >
-                <Box
-                  component="span"
-                  sx={{ color: "#1f77b4", fontWeight: "bold" }}
-                >
-                  ● Hombres
-                </Box>{" "}
-                vs
-                <Box
-                  component="span"
-                  sx={{ color: "#e377c2", fontWeight: "bold" }}
-                >
-                  {" "}
-                  ● Mujeres
-                </Box>
-              </Typography>
-
-              <Typography variant="body2" paragraph>
-                Comparación del percentil {selectedPercentile} para{" "}
-                {chartDim.toLowerCase()} en {location}. Los datos cubren el
-                período {new Date(start_date).toLocaleDateString()} al{" "}
-                {new Date(end_date).toLocaleDateString()}.
-              </Typography>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Paper variant="outlined" sx={{ p: 1.5, bgcolor: "#fafafa" }}>
-                {/* <Typography
-                  variant="caption"
-                  component="div"
-                  color="textSecondary"
-                >
-                  <strong>Patrón observado:</strong>{" "}
-                  {comparisonData.filter((d) => d.maleValue && d.femaleValue)
-                    .length > 0
-                    ? comparisonData.filter(
-                        (d) => d.maleValue! > d.femaleValue!
-                      ).length >
-                      comparisonData.filter(
-                        (d) => d.femaleValue! > d.maleValue!
-                      ).length
-                      ? "Valores consistentemente mayores en hombres"
-                      : "Valores consistentemente mayores en mujeres"
-                    : "Sin diferencias significativas"}
-                </Typography> */}
-                <Typography variant="caption" component="div">
-                  <strong>Patrón observado:</strong>{" "}
-                  {(() => {
-                    const validData = comparisonData.filter(
-                      (d) => d.maleValue && d.femaleValue
-                    );
-                    if (validData.length < 3) return "Datos insuficientes";
-
-                    const maleWins = validData.filter(
-                      (d) => d.maleValue! > d.femaleValue!
-                    ).length;
-                    const femaleWins = validData.length - maleWins;
-
-                    if (maleWins / validData.length >= 0.6)
-                      return "Valores consistentemente mayores en hombres";
-                    if (femaleWins / validData.length >= 0.6)
-                      return "Valores consistentemente mayores en mujeres";
-                    if (Math.abs(maleWins - femaleWins) <= 2)
-                      return "Sin diferencias significativas";
-                    return "Diferencias variables por edad";
-                  })()}
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          <Box mt={1} textAlign="right">
-            <Typography variant="caption" color="textSecondary">
-              Fuente: {tableTitle} | Muestra: {size} participantes
-            </Typography>
-          </Box>
-        </Box>
       </TabPanel>
     </Box>
   );
