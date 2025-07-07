@@ -139,7 +139,7 @@ const LoginForm: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%)",
+        background: "linear-gradient(135deg, backgroud.paper 0%, #e4edf5 100%)",
         p: 2,
       }}
     >
@@ -415,7 +415,7 @@ const LoginForm: React.FC = () => {
                   </Box>
                 )}
 
-                <Divider sx={{ my: 3 }}>o continúa con</Divider>
+                {/* <Divider sx={{ my: 3 }}>o continúa con</Divider>
 
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
                   <Button
@@ -453,7 +453,7 @@ const LoginForm: React.FC = () => {
                       sx={{ width: 24, height: 24 }}
                     />
                   </Button>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
           </Paper>

@@ -14,7 +14,8 @@ import {
   DialogTitle,
   FormControl,
   FormControlLabel,
-  IconButton, InputAdornment,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -22,7 +23,7 @@ import {
   Tab,
   Tabs,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
@@ -35,7 +36,7 @@ import {
   Measurement,
   MetaType,
   Person,
-  SelectedDim
+  SelectedDim,
 } from "../../types";
 import { AnnotatedImage } from "../AnnotatedImage";
 import CountrySelect from "../CountrySelect";
@@ -131,8 +132,19 @@ const PersonForm: React.FC<PersonFormProps> = ({
     );
   }, [dimensions]);
   const handleSave = async () => {
+    // Validar que no haya mediciones negativas
+    const hasNegativeMeasurements = measurements.some(
+      (m) => m.value !== null && m.value < 0
+    );
+
+    if (hasNegativeMeasurements) {
+      notify.warning("No se permiten valores negativos en las mediciones");
+      return;
+    }
     // Validaciones
     const newErrors: { [key: string]: string } = {};
+    if (!identification)
+      newErrors.identification = "El id de la persona es requerido";
     if (!name) newErrors.name = "El nombre es requerido";
     if (!gender) newErrors.gender = "El sexo es requerido";
     if (!dateOfBirth)
@@ -214,7 +226,7 @@ const PersonForm: React.FC<PersonFormProps> = ({
       const fetchPerson = async () => {
         const fullPersonData = await getPerson(personId, studyId);
         setName(fullPersonData.name);
-        setIdentification(fullPersonData.identification)
+        setIdentification(fullPersonData.identification);
         setGender(fullPersonData.gender);
         setDateOfBirth(dayjs(fullPersonData.date_of_birth));
         setCountry(fullPersonData.country);
@@ -480,16 +492,18 @@ const PersonForm: React.FC<PersonFormProps> = ({
                                 type="number"
                                 size="small"
                                 value={m.value}
-                                slotProps={{
-                                  input: {
-                                    endAdornment: (
-                                      <InputAdornment position="start">
-                                        {dimension.name !== "Peso"
-                                          ? "mm"
-                                          : "kg"}
-                                      </InputAdornment>
-                                    ),
-                                  },
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="start">
+                                      {dimension.name !== "Peso"
+                                        ? "mm"
+                                        : "kg"}
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                inputProps={{
+                                  min: 0, // Esto evita números negativos en el input
+                                  step: "0.01", // Para permitir decimales si es necesario
                                 }}
                                 onFocus={() => {
                                   type HelpCategory =

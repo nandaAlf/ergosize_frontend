@@ -51,7 +51,7 @@ const Home: React.FC = () => {
       }}
     >
       <Container maxWidth="xl">
-\
+
         {/* Hero Section */}
         <Slide direction="right" in={true} timeout={1000}>
           <Grid container spacing={4} alignItems="center" sx={{ mb: 6 }}>
@@ -98,9 +98,8 @@ const Home: React.FC = () => {
                   maxWidth: "90%",
                 }}
               >
-                Ergosizes es la solución definitiva para consultar información
-                antropométrica de diferentes poblaciones de manera eficiente,
-                precisa y segura.
+                Ergosizes es la solución para consultar, evaluar y diseñar productos a partir de información antropométrica de diferentes poblaciones de manera eficiente, precisa y segura.
+
               </Typography>
 
               <Stack
@@ -127,7 +126,7 @@ const Home: React.FC = () => {
                 >
                   Consultar Dimensiones
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   color="primary"
                   size="large"
@@ -144,7 +143,7 @@ const Home: React.FC = () => {
                   }}
                 >
                   Subir Datos
-                </Button>
+                </Button> */}
               </Stack>
 
               <Grid container spacing={2} sx={{ mt: 4 }}>
@@ -278,9 +277,9 @@ const Home: React.FC = () => {
               },
               {
                 icon: <CloudUpload fontSize="large" />,
-                title: "Integración Sencilla",
+                title: "Integración con estándares internacionales",
                 description:
-                  "Sube tus propios datos en múltiples formatos para enriquecer nuestra base de datos.",
+                  "La recolección de datos se lleva a cabo según la normas ISO 15535:2023 Requisitos generales para el establecimiento de bases de datos antropométricas",
               },
             ].map((feature, index) => (
               <Grid size={{ xs: 12, md: 6 }} key={index}>

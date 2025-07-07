@@ -8,7 +8,7 @@
         "posicion": "El sujeto debe estar de pie sobre una superficie plana, con los talones juntos y los pies formando un ángulo de 45º. Los talones, glúteos, espalda y región occipital deben de estar en contacto con la superficie vertical del antropómetro. El registro se toma en milímetros, en una inspiración forzada el sujeto y con una leve tracción del antropometrista desde el maxilar inferior, manteniendo al sujeto con la cabeza en el plano de Frankfort.",
         "instrumento": "Se mide con el tallímetro ó el antropómetro",
         "graphic": ["Alturas/1-Estatura.jpg"],
-        "coords": { "xPct": 50, "yPct": 10 },
+        "coords": { "xPct": 20, "yPct": 40 },
         "unidad": "El resultado se registra en milímetros."
       },
       "Altura sentado": {

@@ -194,38 +194,15 @@ const AnthropometricTable: React.FC<Props> = ({
     handleExportClose();
   };
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   axios
-  //     .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
-  //       params: {
-  //         age_ranges,
-  //         gender,
-  //         dimensions: dimensions.join(","),
-  //         percentiles: percentilesList.join(","),
-  //       },
-  //     })
-  //     .then((res) => setData(res.data.results || []))
-  //     .catch(() => setError("Error al cargar datos"))
-  //     .finally(() => setLoading(false));
-  // }, [studyId, gender, dimensions, percentilesList, age_ranges]);
   useEffect(() => {
     console.log("data", data);
   }, [data]);
   useEffect(() => {
     if (localData) {
-      // Si hay datos locales, no hacemos fetch
-      // setInternalLoading(false);
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
-    // if (!studyId) {
-    //   setInternalLoading(false);
-    //   return;
-    // }
-
-    // setInternalLoading(true);
     axios
       .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
         params: {
@@ -247,13 +224,27 @@ const AnthropometricTable: React.FC<Props> = ({
     () => (data[0] ? Object.keys(data[0].by_gender) : []),
     [data]
   );
-  const ageRanges = useMemo(
-    () =>
-      data[0] && genders.length
-        ? Object.keys(data[0].by_gender[genders[0]])
-        : [],
-    [data, genders]
-  );
+  // const ageRanges = useMemo(
+  //   () =>
+  //     data[0] && genders.length
+  //       ? Object.keys(data[0].by_gender[genders[0]])
+  //       : [],
+  //   [data, genders]
+  // );
+  const ageRanges = useMemo(() => {
+    if (!data.length || !genders.length) return [];
+
+    const allRanges = new Set();
+
+    genders.forEach((gender) => {
+      const genderData = data[0].by_gender[gender];
+      if (genderData) {
+        Object.keys(genderData).forEach((range) => allRanges.add(range));
+      }
+    });
+
+    return Array.from(allRanges).sort();
+  }, [data, genders]);
 
   // Estadísticas fijas
   const statsCols = useMemo(
