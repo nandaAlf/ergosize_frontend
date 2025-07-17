@@ -128,7 +128,12 @@ const PersonForm: React.FC<PersonFormProps> = ({
     }
     // Si dimensions es un objeto { [cat]: Dimension[] }
     return Object.entries(dimensions as Record<string, Dimension[]>).map(
-      ([category, dims]) => ({ category, dimensions: dims })
+      ([category, dims]) => ({
+        category,
+        id_dimension: dims[0]?.id_dimension ?? 0,
+        dimensions: dims,
+        name: dims[0]?.name ?? category, // Añade la propiedad 'name'
+      })
     );
   }, [dimensions]);
   const handleSave = async () => {

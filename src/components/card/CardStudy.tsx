@@ -256,7 +256,7 @@ const CardStudy: React.FC<CardStudyProps> = memo(
     const groupedDimensions = useMemo(() => {
       return Object.entries(study.dimensions ?? {}).map(([category, dims]) => ({
         category,
-        dims,
+        dims: dims as unknown as Dimension[],
       }));
     }, [study.dimensions]);
 

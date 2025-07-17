@@ -66,8 +66,8 @@ export const useTable = (persons: Person[]) => {
           if (orderBy === 'name') {
             return order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
           }
-          const aValue = a.dimensions?.[orderBy] || 0;
-          const bValue = b.dimensions?.[orderBy] || 0;
+          const aValue = a.dimensions?.[orderBy as keyof typeof a.dimensions] ?? 0;
+          const bValue = b.dimensions?.[orderBy as keyof typeof b.dimensions] ?? 0;
           return order === 'asc' ? (aValue > bValue ? 1 : -1) : bValue > aValue ? 1 : -1;
         })
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),

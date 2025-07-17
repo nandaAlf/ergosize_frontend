@@ -42,7 +42,7 @@ interface HeadCell {
 }
 
 interface TableProps {
-  dimensions: GroupedDimensions;
+  dimensions: GroupedDimensions[];
   persons: Person[];
   study_id: number;
   study_name: string;
@@ -384,7 +384,14 @@ export const TableComponent: React.FC<TableProps> = ({
                             //   : undefined,
                           }}
                         >
-                          {person.dimensions[dim.name!] || ""}
+                          {(() => {
+                            const value = person.dimensions && person.dimensions[dim.name as keyof typeof person.dimensions];
+                            return typeof value === "string" || typeof value === "number"
+                              ? value
+                              : value != null
+                              ? String(value)
+                              : "";
+                          })()}
                         </TableCell>
                       );
                     })}

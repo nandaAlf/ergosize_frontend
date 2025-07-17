@@ -42,11 +42,16 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
   const [ageMax, setAgeMax] = useState<number>(0);
 
   // 1) Prepara grouped y allDims como antes:
-  const grouped = useMemo(
+  type GroupedDimensions = {
+    category: string;
+    dimensions: Array<{ id_dimension: number; name: string }>;
+  };
+
+  const grouped: GroupedDimensions[] = useMemo(
     () =>
       Object.entries(study.dimensions).map(([category, dims]) => ({
         category,
-        dimensions: dims,
+        dimensions: Array.isArray(dims) ? dims : [],
       })),
     [study.dimensions]
   );
@@ -310,7 +315,7 @@ const TableForm: React.FC<TableFormProps> = ({ open, onClose, study }) => {
                 <ListSubheader key={`subheader-${group.category}`}>
                   {group.category}
                 </ListSubheader>,
-                group.dimensions.map((dim) => (
+                ...group.dimensions.map((dim) => (
                   <MenuItem key={dim.id_dimension} value={dim.id_dimension}>
                     <Checkbox
                       checked={selectedDimensions.includes(dim.id_dimension)}

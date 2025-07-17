@@ -7,9 +7,8 @@ import PlaceIcon from "@mui/icons-material/Place";
 import {
   Box,
   CircularProgress,
-  Divider,
+
   FormControl,
-  Grid,
   InputLabel,
   Menu,
   MenuItem,
@@ -38,7 +37,6 @@ import { getFile } from "../service/service";
 import { HeaderCard } from "../components/card/tableheaderCard";
 import { GenderComparisonChart } from "../components/charts/BarChart";
 import PercentilesLineChart from "../components/charts/LineChart";
-import { populationTypes } from "../types";
 import { getPopulationLabel } from "../utils/getPopulationLabel";
 
 interface Stats {
@@ -56,11 +54,22 @@ interface ApiEntry {
   };
 }
 interface DataEntry {
+  // dimension: string;
+  // dimension_id: string | number;
+  // by_gender: {
+  //   [genderKey: string]: {
+  //     [ageRange: string]: Stats;
+  //   };
+  // };
   dimension: string;
   dimension_id: string | number;
   by_gender: {
     [genderKey: string]: {
-      [ageRange: string]: Stats;
+      [ageRange: string]: {
+        mean: number | null;
+        sd: number | null;
+        percentiles: Record<string, number | null>;
+      };
     };
   };
 }
@@ -113,8 +122,11 @@ interface Props {
   classification: string;
   // Props para datos locales
   localData?: DataEntry[]; // Datos cargados localmente
-  loading?: boolean; // Estado de carga opcional
-  error?: string | null; // Error opcional
+  // loading?: boolean; // Estado de carga opcional
+  // error?: string | null; // Error opcional
+  data: DataEntry[];
+  loading: boolean;
+  error: string | null;
 }
 
 interface Series {
@@ -163,7 +175,7 @@ const AnthropometricTable: React.FC<Props> = ({
   // const error = propError !== undefined ? propError : internalError;
   // const [data, setData] = useState<ApiEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [orderBy, setOrderBy] = useState<string>("dimension");
   const [order, setOrder] = useState<Order>("asc");
   const [page, setPage] = useState(0);
@@ -190,7 +202,12 @@ const AnthropometricTable: React.FC<Props> = ({
       percentiles: percentilesList.join(","),
     });
 
-    await getFile(format, studyId.toString(), params);
+    if (studyId !== undefined) {
+      await getFile(format, studyId.toString(), params);
+    } else {
+      // Opcional: mostrar un mensaje de error o manejar el caso
+      console.error("studyId is undefined, cannot export file.");
+    }
     handleExportClose();
   };
 
@@ -253,29 +270,32 @@ const AnthropometricTable: React.FC<Props> = ({
   );
 
   // Función para obtener valor de ordenación
-  const getSortValue = (row: ApiEntry) => {
-    if (orderBy === "dimension") {
-      return row.dimension.toLowerCase();
-    }
-    // buscamos en el primer género y primer rango
-    const g = genders[0];
-    const r = ageRanges[0];
-    const stats = row.by_gender[g]?.[r];
-    if (!stats) return -Infinity;
-    if (orderBy === "mean") return stats.mean;
-    if (orderBy === "sd") return stats.sd;
-    // percentil
-    const pKey = orderBy.replace("p", "");
-    return stats.percentiles[pKey] ?? -Infinity;
-  };
+  const getSortValue = (row: DataEntry) => {
+      if (orderBy === "dimension") {
+        return row.dimension.toLowerCase();
+      }
+      // buscamos en el primer género y primer rango
+      const g: string = genders[0] as string;
+      const r: string = ageRanges[0] as string;
+      const stats = row.by_gender[g]?.[r];
+      if (!stats) return -Infinity;
+      if (orderBy === "mean") return stats.mean;
+      if (orderBy === "sd") return stats.sd;
+      // percentil
+      const pKey = orderBy.replace("p", "");
+      return stats.percentiles[pKey] ?? -Infinity;
+    };
 
   // Ordenamos
   const sorted = useMemo(() => {
     return [...data].sort((a, b) => {
       const aV = getSortValue(a);
       const bV = getSortValue(b);
-      if (aV < bV) return order === "asc" ? -1 : 1;
-      if (aV > bV) return order === "asc" ? 1 : -1;
+      if(aV && bV){
+
+        if (aV < bV) return order === "asc" ? -1 : 1;
+        if (aV > bV) return order === "asc" ? 1 : -1;
+      }
       return 0;
     });
   }, [data, order, orderBy]);
@@ -307,11 +327,13 @@ const AnthropometricTable: React.FC<Props> = ({
     const row = data.find((r) => r.dimension === chartDim);
     if (!row) return [];
     // Un objeto Series por percentil
-    return percentilesList.map((p) => ({
+    return percentilesList.map((p: number | string) => ({
       id: `p${p}`,
       data: ageRanges.map((age) => ({
-        x: age,
-        y: row.by_gender[chartGender]?.[age]?.percentiles[p] ?? null,
+        x: String(age),
+        y: Number(
+          row.by_gender[String(chartGender) as string]?.[String(age) as string]?.percentiles[p.toString()] ?? NaN
+        ),
       })),
     }));
   }, [data, chartDim, chartGender, percentilesList, ageRanges]);
@@ -327,7 +349,7 @@ const AnthropometricTable: React.FC<Props> = ({
 
   // Dentro de AnthropometricTable.tsx
   const comparisonData = useMemo(() => {
-    return ageRanges.map((age) => {
+    return (ageRanges as string[]).map((age) => {
       const row = data.find((d) => d.dimension === chartDim);
       const maleValue =
         row?.by_gender["M"]?.[age]?.percentiles[selectedPercentile] ?? null;
@@ -351,7 +373,7 @@ const AnthropometricTable: React.FC<Props> = ({
         <CircularProgress />
       </Box>
     );
-  if (error) return <Typography color="error">{error}</Typography>;
+  // if (error) return <Typography color="error">{error}</Typography>;
   if (!data.length) return <Typography>No hay datos</Typography>;
 
   return (
@@ -380,7 +402,7 @@ const AnthropometricTable: React.FC<Props> = ({
           buttons={[
             {
               label: "Exportar",
-              onClick: handleExportClick,
+              onClick: () => handleExportClick({} as React.MouseEvent<HTMLButtonElement>),
               icon: <FileDownloadIcon />,
               variant: "contained",
             },
@@ -564,7 +586,7 @@ const AnthropometricTable: React.FC<Props> = ({
                           bgcolor: "background.paper",
                         }}
                       >
-                        {r}
+                        {String(r)}
                       </TableCell>
                     ))
                   )}
@@ -623,7 +645,9 @@ const AnthropometricTable: React.FC<Props> = ({
                     {genders.map((g) =>
                       ageRanges.map((r) =>
                         statsCols.map((stat) => {
-                          const statsBlock = row.by_gender[g]?.[r];
+                          const genderKey: string = g as string;
+                          const rangeKey: string = r as string;
+                          const statsBlock = row.by_gender[genderKey]?.[rangeKey];
                           const value =
                             stat === "mean"
                               ? statsBlock?.mean

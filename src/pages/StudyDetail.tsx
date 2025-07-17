@@ -16,7 +16,6 @@ const StudyDetail: React.FC = () => {
   const location = useLocation();
   const study = location.state?.study as StudyData | undefined; // Obtener los datos del estudio
   const [persons, setPersons] = useState<Person[]>([]);
-  const [dimensions, setDimensions] = useState<Dimension[]>([]);
   const [refreshCounter, setRefreshCounter] = useState(0);
   //  ← Nuevo estado para búsqueda
 

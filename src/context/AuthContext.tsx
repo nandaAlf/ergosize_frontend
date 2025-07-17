@@ -22,7 +22,7 @@ const verifyToken = async (token: string) => {
 };
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
-  // const [loading, setLoading] = useState(true); // Estado de carga inicial
+  const [loadingAuth, setLoadingAuth] = useState(true); // Estado de carga inicial
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           logout();
         }
       }
-      // setLoading(false);
+      setLoadingAuth(false);
     };
     checkAuth();
   }, []);
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
-  const value = { user, setUser, logout };
+  const value = { user, setUser, logout, loading: loadingAuth };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

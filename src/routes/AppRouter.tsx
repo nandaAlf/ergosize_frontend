@@ -3,7 +3,7 @@ import Home from "../pages/Home";
 import Studies from "../pages/Studies";
 import StudyDetail from "../pages/StudyDetail";
 import HelpMenu from "../pages/Help";
-import Tables from "../pages/Tables";
+// import Tables from "../pages/Tables";
 import Login from "../components/Forms/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import ChangePasswordPage from "../components/Forms/ChangePassword";
@@ -26,7 +26,7 @@ export default function AppRouter() {
         }
       />
       {/* <Route path="/reference_tables/" element={<StudyGallery />} /> */}
-      <Route path="/tables/:id" element={<Tables />} />
+      {/* <Route path="/tables/:id" element={<Tables />} /> */}
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route

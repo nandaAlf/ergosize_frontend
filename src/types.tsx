@@ -47,7 +47,9 @@ export interface Dimension {
 // 3. Mapeo categoría → array de dimensiones
 export type GroupedDimensions = {
   category: string;
+  id_dimension:number;
   dimensions: Dimension[];
+  name: string;
 };
 export interface StudyBase {
   id?: number;

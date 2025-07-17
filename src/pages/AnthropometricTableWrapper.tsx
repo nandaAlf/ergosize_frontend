@@ -46,13 +46,37 @@ const AnthropometricTableWrapper: React.FC<AnthropometricTableWrapperProps> = ({
   const [loading, setLoading] = useState(!externalData);
   const [error, setError] = useState<string | null>(null);
 
+  // Helper to convert LocalDataEntry[] to DataEntry[] with no nulls
+  function sanitizeData(entries: LocalDataEntry[]): any[] {
+    return entries.map((entry) => ({
+      ...entry,
+      by_gender: Object.fromEntries(
+        Object.entries(entry.by_gender).map(([genderKey, ageObj]) => [
+          genderKey,
+          Object.fromEntries(
+            Object.entries(ageObj).map(([ageRange, stats]) => [
+              ageRange,
+              {
+                mean: stats.mean ?? 0,
+                sd: stats.sd ?? 0,
+                percentiles: Object.fromEntries(
+                  Object.entries(stats.percentiles).map(([p, v]) => [p, v ?? 0])
+                ),
+              },
+            ])
+          ),
+        ])
+      ),
+    }));
+  }
+
   useEffect(() => {
     if (externalData) {
       // Si nos pasan datos directamente, los usamos
       const formattedData = Array.isArray(externalData)
         ? externalData
         : externalData.results || [];
-      setData(formattedData);
+      setData(sanitizeData(formattedData));
       setLoading(false);
     } else if (studyId) {
       // Si no hay datos pero hay studyId, hacemos fetch a la API
@@ -66,7 +90,7 @@ const AnthropometricTableWrapper: React.FC<AnthropometricTableWrapperProps> = ({
             percentiles: props.percentilesList.join(","),
           },
         })
-        .then((res) => setData(res.data.results || []))
+        .then((res) => setData(sanitizeData(res.data.results || [])))
         .catch(() => setError("Error al cargar datos"))
         .finally(() => setLoading(false));
     }

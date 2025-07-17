@@ -23,8 +23,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import {
+  Dimension,
   genderOptions,
-  GroupedDimensions,
   POPULATION_AGE_RANGES,
   populationTypes,
   StudyData,
@@ -585,7 +585,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [availableDimensions, setAvailableDimensions] = useState<
-    GroupedDimensions[]
+    { category: string; dimensions: Dimension[] }[]
   >([]);
   const [selectedDimensionIds, setSelectedDimensionIds] = useState<number[]>(
     []
@@ -636,7 +636,7 @@ const StudyForm: React.FC<StudyFormProps> = ({
     const raw = await getAllDimensions();
     const grouped = Object.entries(raw).map(([category, dims]) => ({
       category,
-      dimensions: Array.isArray(dims) ? dims : [dims],
+      dimensions: Array.isArray(dims) ? dims as Dimension[] : [dims as Dimension],
     }));
     setAvailableDimensions(grouped);
   };
