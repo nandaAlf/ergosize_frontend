@@ -102,21 +102,25 @@ const Tables = () => {
   return (
     <div style={{ padding: "16px" }}>
       <AnthropometricTable
-              // Props comunes
-              percentilesList={currentFilters.percentiles || []}
-              age_ranges={(currentFilters.ageRanges || []).join(",")}
-              size={currentStudy.size}
-              location={`${currentStudy.country} / ${currentStudy.location}`}
-              tableTitle={currentStudy.name}
-              description={currentStudy.description}
-              start_date={currentStudy.start_date}
-              end_date={currentStudy.end_date}
-              classification={currentStudy.classification}
-              gender={currentFilters.gender || ""}
-              dimensions={currentFilters.dimensions || []} data={[]} loading={false} error={null}        // Props condicionales
+        // Props comunes
+        percentilesList={currentFilters.percentiles || []}
+        age_ranges={(currentFilters.ageRanges || []).join(",")}
+        size={currentStudy.size}
+        location={`${currentStudy.country} / ${currentStudy.location}`}
+        tableTitle={currentStudy.name}
+        description={currentStudy.description}
+        start_date={currentStudy.start_date}
+        end_date={currentStudy.end_date}
+        classification={currentStudy.classification}
+        gender={currentFilters.gender || ""}
+        dimensions={currentFilters.dimensions || []}
+        data={[]}
+        loading={false}
+        error={null} // Props condicionales
         // {...(apiStudy
         //   ? { studyId: apiStudy.id }
         //   : { localData: currentStudy.localData })}
+        {...(apiStudy ? { studyId: apiStudy.id } : {})}
       />
     </div>
   );
