@@ -221,7 +221,8 @@ const AnthropometricTable: React.FC<Props> = ({
     }
 
     axios
-      .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
+      // .get(`http://127.0.0.1:8000/api/test-percentiles/${studyId}`, {
+      .get(`https://ergosize-app.onrender.com/api/test-percentiles/${studyId}`, {
         params: {
           age_ranges,
           gender,
