@@ -212,7 +212,7 @@ const Studies: React.FC = () => {
         // backgroundColor: "#f8f9fa",
         borderRadius: 2,
         // boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <FilterPanelLayout
@@ -237,7 +237,7 @@ const Studies: React.FC = () => {
       {/* {PaginationControls} */}
       {/* </Box> */}
       {studiesData?.length === 0 ? (
-        <Box sx={{ p: 3, textAlign: "center" }}>
+        <Box sx={{ p: 3, textAlign: "center",  height: "100vh"}}>
           <Typography variant="h6">
             No se encontraron estudios con los filtros aplicados
           </Typography>

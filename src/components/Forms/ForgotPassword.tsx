@@ -105,7 +105,8 @@ const ForgotPasswordPage: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%)",
+        // background: "linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%)",
+          background: "linear-gradient(135deg, backgroud.paper 0%, #e4edf5 100%)",
         p: 2,
       }}
     >

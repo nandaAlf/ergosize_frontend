@@ -289,7 +289,7 @@ const LoginForm: React.FC = () => {
                 )}
 
                 <TextField
-                  label="Usuario"
+                  label="Usuario: (Jon)"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   fullWidth
@@ -326,7 +326,7 @@ const LoginForm: React.FC = () => {
                 )}
 
                 <TextField
-                  label="Contraseña"
+                  label="Contraseña: (1234)"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -337,6 +337,7 @@ const LoginForm: React.FC = () => {
                         <Lock sx={{ color: theme.palette.primary.main }} />
                       </InputAdornment>
                     ),
+           
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton

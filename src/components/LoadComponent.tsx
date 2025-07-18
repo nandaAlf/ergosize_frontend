@@ -6,13 +6,13 @@ export const FullPageLoader = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        // width: "100%",
         height: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         zIndex: 9999,
-        mt:-8,
+      
         backgroundColor: "background.default", // Usa el color de fondo del tema
       }}
     >
@@ -20,6 +20,7 @@ export const FullPageLoader = () => {
         color="inherit" // Hereda el color del contexto (o usa "primary"/"secondary")
         sx={{
           color: "text.primary", // Color de texto del tema (contraste automático)
+            mt:-8,
         }}
       />
     </Box>
