@@ -150,7 +150,14 @@ export default function HelpMenu() {
   );
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+    <Box   component="main"
+  sx={{
+    flex: 1,
+    overflow: "auto",
+    p: isMobile ? 3 : 2,
+    pt: isMobile ? "64px" : 2,
+    marginLeft: isMobile ? 0 : '280px', // Añade margen igual al ancho del menú
+  }}>
       {/* AppBar solo para móviles */}
       {isMobile && (
         <AppBar
@@ -172,21 +179,26 @@ export default function HelpMenu() {
 
       {/* Drawer para móviles */}
       <Drawer
-        variant={isMobile ? "temporary" : "permanent"}
-        open={isMobile ? mobileOpen : true}
-        onClose={() => setMobileOpen(false)}
-        ModalProps={{ keepMounted: true }} // Mejor rendimiento en móvil
-        sx={{
-          width: isMobile ? 280 : "auto",
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: isMobile ? 280 : "auto",
-            boxSizing: "border-box",
-            position: "relative",
-          },
-        }}
-      >
-        {drawer}
+         variant={isMobile ? "temporary" : "permanent"}
+  open={isMobile ? mobileOpen : true}
+  onClose={() => setMobileOpen(false)}
+  ModalProps={{ keepMounted: true }}
+  sx={{
+    width: isMobile ? 280 : "auto",
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+      width: isMobile ? 280 : "auto",
+      boxSizing: "border-box",
+      position: "fixed", // Cambia a posición fija
+      height: '100vh', // Ocupa toda la altura de la ventana
+      overflowY: 'auto', // Permite scroll interno si el contenido es muy largo
+      top: isMobile ? '34px' : '65px', // Ajusta según la AppBar en móvil
+      left: 0,
+      zIndex: (theme) => theme.zIndex.drawer - 1, // Asegura que esté debajo de la AppBar
+    },
+  }}
+>
+  {drawer}
       </Drawer>
 
       {/* Contenido principal */}
