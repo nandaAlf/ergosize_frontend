@@ -205,14 +205,14 @@ const Studies: React.FC = () => {
     <Box
       sx={{
         // width: "100%",
-        // height: "100vh",
+        height: "100vh",
         boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         // padding: 3,
         margin: "-10px 20px",
         // backgroundColor: "#f8f9fa",
         borderRadius: 2,
         // boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-        height: "100%",
+        // height: "100%",
       }}
     >
       <FilterPanelLayout

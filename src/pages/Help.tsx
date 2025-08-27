@@ -157,6 +157,7 @@ export default function HelpMenu() {
     p: isMobile ? 3 : 2,
     pt: isMobile ? "64px" : 2,
     marginLeft: isMobile ? 0 : '280px', // Añade margen igual al ancho del menú
+    height:"100vh"
   }}>
       {/* AppBar solo para móviles */}
       {isMobile && (
