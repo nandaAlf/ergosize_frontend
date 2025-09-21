@@ -289,7 +289,7 @@ const LoginForm: React.FC = () => {
                 )}
 
                 <TextField
-                  label="Usuario: (Jon)"
+                  label="Usuario"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   fullWidth
@@ -326,7 +326,7 @@ const LoginForm: React.FC = () => {
                 )}
 
                 <TextField
-                  label="Contraseña: (1234)"
+                  label="Contraseña"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
