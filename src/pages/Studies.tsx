@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { StudyData } from "../types";
 import CardStudy from "../components/card/CardStudy";
-// import Grid from "@mui/material/Grid2";
 import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

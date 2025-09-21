@@ -3,8 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import DashboardLayoutBasic from "./components/D";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { AuthProvider } from "./context/AuthContext";
-// import NavBar from './components/NavBar';
-// Define tu tema personalizado
+
 // const theme = createTheme({
 
 //   palette: {
@@ -41,8 +40,6 @@ import { AuthProvider } from "./context/AuthContext";
 // });
 
 function App() {
-  // const [count, setCount] = useState(0)
-
   return (
     <>
       <BrowserRouter>
@@ -55,20 +52,5 @@ function App() {
     </>
   );
 }
-
-// const App: React.FC = () => {
-//   return (
-//     <>
-//       <CssBaseline />
-//       <Box
-//         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-//       >
-//         <NavBar />
-//         <Home />
-//         <Footer />
-//       </Box>
-//     </>
-//   );
-// };
 
 export default App;

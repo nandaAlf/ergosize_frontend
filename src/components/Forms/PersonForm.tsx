@@ -54,37 +54,6 @@ interface PersonFormProps {
   personId?: number; // ID de la persona (si se está editando)
   onRefresh: () => void;
 }
-// type MetaType = {
-//   graphic: string[];
-//   coords: { xPct: number; yPct: number };
-//   // [key: string]: any; // Otros posibles campos
-// };
-// interface SelectedDim {
-//   id: number;
-//   name: string;
-//   category: string;
-//   graphic: string;
-//   coords: { xPct: number; yPct: number };
-// }
-// interface TabPanelProps {
-//   children?: React.ReactNode;
-//   index: number;
-//   value: number;
-// }
-// function TabPanel({ children, value, index, ...props }: TabPanelProps) {
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`tabpanel-${index}`}
-//       aria-labelledby={`tab-${index}`}
-//       {...props}
-//     >
-//       {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
-//     </div>
-//   );
-// }
-
 const PersonForm: React.FC<PersonFormProps> = ({
   open,
   onClose,

@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useLocation, useParams } from "react-router-dom";
-import { Dimension, Person, StudyData } from "../types";
-import { getData } from "../api/api";
+import { Person, StudyData } from "../types";
 import React, { useEffect, useState } from "react";
 import { TableComponent } from "../components/TableData/Table";
 import { getPersonStudyData } from "../service/service";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 // import { MyTable } from "../components/TableData/Table";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // Definir la interfaz para la respuesta de la API
 
 const StudyDetail: React.FC = () => {

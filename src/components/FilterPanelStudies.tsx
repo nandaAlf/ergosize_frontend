@@ -1,26 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  Box,
-  TextField,
-  IconButton,
-  Drawer,
+  Box, Drawer,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Stack,
+  FormControl, Stack,
   Chip,
   Button,
-  Divider,
+  Divider
 } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useTheme } from "@mui/material/styles";
 import { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Search from "./filtros/Search";
 import SelectFilter from "./filtros/Selct";
 import DateSelect from "./filtros/date";
@@ -118,21 +107,7 @@ export default function FilterPanelLayout({
             >
               <AddIcon /> Crear estudio
             </Button>
-          // ) : (
-          //   <>
-          //     <Button
-          //       variant="contained"
-          //       size="small"
-          //       // margin="dense"
-          //       onClick={() => onOpenStudyForm(true)}
-          //       sx={{
-          //         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-          //         p: "7px",
-          //       }}
-          //     >
-          //       <AddIcon /> Generar tabla
-          //     </Button>
-          //   </>
+
           )}
         </Stack>
       </Box>

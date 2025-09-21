@@ -1,32 +1,32 @@
-import * as React from "react";
-import { Suspense } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
+  IconButton,
   Paper,
   Stack,
   Typography,
   useTheme,
-  IconButton,
-  CircularProgress,
 } from "@mui/material";
+import * as React from "react";
+import { Suspense } from "react";
 
-import Fade from "@mui/material/Fade";
-import { Slide } from "@mui/material";
-// import ManiquiViewer from "../components/ManiquiViewer";
-const ManiquiViewer = React.lazy(() => import("../components/ManiquiViewer"));
 import {
-  People,
-  BarChart,
-  Public,
-  Description,
-  CloudUpload,
   ArrowForward,
+  BarChart,
+  CloudUpload,
+  Description,
+  People,
+  Public,
   Science,
 } from "@mui/icons-material";
+import { Slide } from "@mui/material";
+import Fade from "@mui/material/Fade";
 import useNavigation from "../hooks/useNavigation";
+// import ManiquiViewer from "../components/ManiquiViewer";
+const ManiquiViewer = React.lazy(() => import("../components/ManiquiViewer"));
 // import AuthPage from "./AuthPage";
 
 const Home: React.FC = () => {
@@ -126,24 +126,6 @@ const Home: React.FC = () => {
                 >
                   Consultar Dimensiones
                 </Button>
-                {/* <Button
-                  variant="outlined"
-                  color="primary"
-                  size="large"
-                  startIcon={<CloudUpload />}
-                  sx={{
-                    px: 4,
-                    py: 1.5,
-                    fontWeight: 600,
-                    borderRadius: "10px",
-                    borderWidth: "2px",
-                    "&:hover": {
-                      borderWidth: "2px",
-                    },
-                  }}
-                >
-                  Subir Datos
-                </Button> */}
               </Stack>
 
               <Grid container spacing={2} sx={{ mt: 4 }}>

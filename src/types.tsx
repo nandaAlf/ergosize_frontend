@@ -1,7 +1,5 @@
 import { Dayjs } from "dayjs";
 
-// types.ts (o donde tengas tus tipos)
-
 type Classification = "L" | "T" | "E" | "A" | "AD" | "ADM";
 type Gender = "F" | "M" | "MF";
 export const genderOptions = [
@@ -67,8 +65,6 @@ export interface StudyBase {
   end_date: string | Dayjs | null;
   supervisor?: number;
  
-  // dimensions: Dimension[];
-  // dimensions: GroupedDimensions;
 }
 
 // Lectura (GET):
@@ -78,20 +74,8 @@ export interface StudyData extends StudyBase {
 
 // Escritura (POST/PUT):
 export interface StudyPayload extends StudyBase {
-  // dimensions: { id_dimension: number }[];
-  //  dimensions: GroupedDimensions;
   dimensions: Dimension[];
 }
-// export interface Person {
-//   id: number;
-//   name: string;
-//   gender:string;
-//   date_of_birth:string;
-//   country:string;
-//   state:string;
-//   province:string;
-//   // dimensions: Record<string, number | null>;
-// }
 export interface PersonMeasurement {
   dimensions: Dimension[]; // Lista de todas las dimensiones
   persons: Person[]; // Lista de personas con sus mediciones
@@ -125,10 +109,6 @@ export interface CountryType {
   phone: string;
   suggested?: boolean;
 }
-
-
-//Person Type
-
 
 export interface MetaType {
   graphic: string[];

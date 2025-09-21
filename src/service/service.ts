@@ -10,22 +10,6 @@ import {
   StudyPayload,
 } from "../types";
 
-// export const getAllStudies = async (mine = false,currentPage:number,PAGE_SIZE:number): Promise<StudyData[]> => {
-//   try {
-//     // const response = await ApiService.get(
-//     //   "/studies/",
-//     //   mine ? { mine: "true" } : {}
-//     // );
-//       const response = await ApiService.get(
-//       `/studies/?page=${currentPage}&page_size=${PAGE_SIZE}`,
-//       mine ? { mine: "true" } : {}
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error en getAllStudies:", error);
-//     throw error;
-//   }
-// };
 export const getAllStudies = async (
   mine: boolean = false,
   currentPage: number = 1,
@@ -54,11 +38,6 @@ export const getAllStudies = async (
     if (filters.fechaHasta) params["start_date__lte"] = filters.fechaHasta;
     if (mine) params["mine"] = "true";
 
-    // const response = await ApiService.get(
-    //   `/studies/?page=${currentPage}&page_size=${pageSize}&sexo=${filters.sexoFilter}`,
-    //   mine ? { mine: "true" } : {}
-    // );
-    // En getAllStudies, antes de hacer la solicitud:
     console.log("Parámetros enviados:", new URLSearchParams(params).toString());
     const response = await ApiService.get(`/studies/`, params); // Pasar params aquí
 

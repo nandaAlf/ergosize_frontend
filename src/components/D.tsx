@@ -1,42 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 import {
-  BrowserRouter,
   useNavigate,
-  useLocation,
-  Routes,
-  Route,
+  useLocation
 } from "react-router-dom";
 
-import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
-import LayersIcon from "@mui/icons-material/Layers";
 
 import AppRouter from "../routes/AppRouter";
-import HelpMenu from "../pages/Help";
-import { DialogsProvider } from "@toolpad/core/useDialogs";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import {
   AppProvider,
   type Session,
   type Navigation,
 } from "@toolpad/core/AppProvider";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { parseJwt } from "../hooks/parseJwt";
 import ApiService from "../api/ApiService";
 import Navbar from "./AppBar/AppBar";
-import { CustomThemeProvider, useThemeContext } from "./ThemeContext";
+import { useThemeContext } from "./ThemeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Footer from "./Footer";
 const NAVIGATION: Navigation = [
   { kind: "header", title: "Main items" },
   // {

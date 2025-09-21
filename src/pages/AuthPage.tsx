@@ -2,32 +2,14 @@
 import React, { useState } from "react";
 // import ApiService from "../../api/ApiService";
 import {
-  Box,
-  TextField,
-  Button,
-  Alert,
-  Link,
-  Typography,
+  Box, Alert, Typography,
   Paper,
   Grid,
-  Fade,
-  InputAdornment,
-  IconButton,
-  Divider,
-  useTheme,
-  CircularProgress,
+  Fade, useTheme
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
-  AccountCircle,
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Person,
-  Badge,
-  Login,
-  HowToReg,
+  Person
 } from "@mui/icons-material";
 import LoginForm from "../components/Forms/Login";
 import RegisterForm from "../components/Forms/Register";

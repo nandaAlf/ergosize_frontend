@@ -1,54 +1,51 @@
-# React + TypeScript + Vite
+# 🚀 Frontend ErgoSize - React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📋 Descripción
+Frontend moderno para ErgoSize App construido con React 18, Vite 4, TypeScript y MUI. Interfaz de usuario responsive para la gestión y análisis de datos antropométricos.
 
-Currently, two official plugins are available:
+# ✨ Características
+⚡ Ultra rápido con Vite
+🎨 Diseño basado en estilo Material con MUI
+🔒 Autenticación JWT
+📱 Totalmente responsive
+🎯 TypeScript para mejor desarrollo
+🔄 Estado global con Context API
+🌐 Conexión API REST con Django Backend
+🎪 Componentes modulares y reutilizables
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Prerrequisitos
+Node.js 16+
+npm o yarn
+Backend Django ejecutándose
 
-## Expanding the ESLint configuration
+git clone <url-del-repositorio>
+cd ergosize-frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+npm install
+# o
+yarn install
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# Configurar variables de entorno
+url de la api, por defcto: 
+VITE_API_BASE_URL=http://localhost:8000/api
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Ejecutar en desarrollo
+npm run dev
+# o
+yarn dev
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# 🚀 Scripts Disponibles
+# Desarrollo
+npm run dev          # Servidor de desarrollo
+npm run dev --host   # Acceso desde red local
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+# Build
+npm run build        # Build para producción
+npm run preview      # Preview del build
+
+# Linting
+npm run lint         # Ejecutar ESLint
+npm run lint:fix     # Corregir problemas automáticamente
+
+# TypeScript
+npm run type-check   # Verificar tipos
